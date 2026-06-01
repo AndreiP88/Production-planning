@@ -1,0 +1,79 @@
+SET @start_date = '2024-10-01';
+SET @end_date   = '2024-10-31';
+
+WITH RECURSIVE calendar AS (
+    SELECT CAST(@start_date AS DATE) AS day_date
+    UNION ALL
+    SELECT day_date + INTERVAL 1 DAY FROM calendar WHERE day_date < @end_date
+),
+EmployeeBase AS (
+    -- Собираем сотрудников и их "родное" оборудование по истории
+    SELECT 
+        c.day_date,
+        e.id AS emp_id,
+        e.full_name,
+        (SELECT eqa.equipment_id FROM employee_equipment_assignments eqa 
+         WHERE eqa.employee_id = e.id AND eqa.valid_from <= c.day_date 
+         ORDER BY eqa.valid_from DESC LIMIT 1) AS default_eq_id
+    FROM calendar c
+    CROSS JOIN employees e
+    INNER JOIN employment_periods ep ON ep.employee_id = e.id
+        AND (c.day_date >= ep.hire_date AND (ep.fire_date IS NULL OR c.day_date <= ep.fire_date))
+)
+SELECT 
+    eb.day_date AS "Дата",
+    eb.full_name AS "Сотрудник",
+    
+    -- 1. ОПРЕДЕЛЯЕМ СМЕНУ
+    -- Приоритет: 1. Отсутствие, 2. Ручная правка в табеле сотрудника, 3. Плановая смена по его бригаде
+    COALESCE(abt.name, sd_ovr.name, sd_plan.name) AS "Статус_Смена",
+
+    -- 2. ОПРЕДЕЛЯЕМ ОБОРУДОВАНИЕ (Самое важное изменение!)
+    -- Приоритет: 
+    -- 1. Если сотрудника назначили на подмену в плане оборудования (equipment_daily_plan)
+    -- 2. Если в ручных правках сотрудника (schedule_overrides) указан другой станок
+    -- 3. Его родной станок из истории
+    COALESCE(
+        (SELECT name FROM equipment WHERE id = (
+            SELECT equipment_id FROM equipment_daily_plan 
+            WHERE assigned_employee_id = eb.emp_id AND plan_date = eb.day_date AND is_cancelled = FALSE LIMIT 1
+        )),
+        eq_ovr.name,
+        eq_def.name,
+        'Вне оборудования'
+    ) AS "Фактический_Станок",
+
+    CASE 
+        WHEN abt.id IS NOT NULL THEN 'Отсутствие'
+        WHEN edp_sub.id IS NOT NULL THEN '🔄 Назначен на подмену'
+        WHEN ovr.status = 2 THEN '✅ Утверждено'
+        WHEN ovr.status = 0 THEN '⏳ Черновик'
+        ELSE 'План'
+    END AS "Тип_Назначения"
+
+FROM EmployeeBase eb
+-- Привязываем план сотрудника по его бригаде
+LEFT JOIN employee_schedule_assignments esa ON esa.employee_id = eb.emp_id
+    AND esa.valid_from = (SELECT MAX(valid_from) FROM employee_schedule_assignments WHERE employee_id = eb.emp_id AND valid_from <= eb.day_date)
+LEFT JOIN schedule_templates st ON esa.template_id = st.id
+LEFT JOIN schedule_items si ON si.template_id = st.id 
+    AND si.day_number = (MOD(DATEDIFF(eb.day_date, st.base_date), st.cycle_length) + 1)
+LEFT JOIN shift_definitions sd_plan ON si.shift_id = sd_plan.id
+
+-- Ручные правки в личном графике сотрудника
+LEFT JOIN schedule_overrides ovr ON ovr.employee_id = eb.emp_id AND ovr.override_date = eb.day_date
+LEFT JOIN shift_definitions sd_ovr ON ovr.shift_id = sd_ovr.id
+LEFT JOIN equipment eq_ovr ON ovr.equipment_id = eq_ovr.id
+
+-- Родное оборудование из истории
+LEFT JOIN equipment eq_def ON eb.default_eq_id = eq_def.id
+
+-- Проверка на подмену (назначен ли он на другой станок сегодня)
+LEFT JOIN equipment_daily_plan edp_sub ON edp_sub.assigned_employee_id = eb.emp_id AND edp_sub.plan_date = eb.day_date
+
+-- Отсутствия
+LEFT JOIN absences abs ON abs.employee_id = eb.emp_id 
+    AND eb.day_date >= abs.start_date AND (abs.end_date IS NULL OR eb.day_date <= abs.end_date)
+LEFT JOIN absence_types abt ON abs.type_id = abt.id
+
+ORDER BY eb.day_date, eb.full_name;

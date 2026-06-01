@@ -1,0 +1,50 @@
+SET @target_date = '2024-10-05';
+
+WITH EquipmentPlan AS (
+    -- Определяем, какие станки должны работать сегодня по своим графикам
+    SELECT 
+        eq.id AS eq_id,
+        eq.name AS eq_name,
+        eq.code AS eq_code,
+        sd.id AS plan_shift_id,
+        sd.name AS plan_shift_name,
+        -- Находим, кто закреплен за этим станком на текущую дату
+        (SELECT eqa.employee_id FROM employee_equipment_assignments eqa 
+         WHERE eqa.equipment_id = eq.id AND eqa.valid_from <= @target_date 
+         ORDER BY eqa.valid_from DESC LIMIT 1) AS default_emp_id
+    FROM equipment eq
+    JOIN schedule_templates st ON eq.template_id = st.id
+    JOIN schedule_items si ON si.template_id = st.id 
+        AND si.day_number = (MOD(DATEDIFF(@target_date, st.base_date), st.cycle_length) + 1)
+    JOIN shift_definitions sd ON si.shift_id = sd.id
+    WHERE sd.shift_number > 0 -- Только рабочие смены оборудования
+)
+SELECT 
+    ep.eq_name AS "Оборудование",
+    ep.plan_shift_name AS "Смена",
+    e.full_name AS "Закрепленный_сотрудник",
+    
+    -- ПРОВЕРКА ДОСТУПНОСТИ И НАЗНАЧЕНИЙ
+    CASE 
+        -- 1. Если смена официально отменена начальником
+        WHEN edp.is_cancelled = TRUE THEN '🛑 ОТМЕНЕНО НАЧАЛЬНИКОМ'
+        
+        -- 2. Если назначен другой сотрудник (подмена)
+        WHEN edp.assigned_employee_id IS NOT NULL AND edp.assigned_employee_id != ep.default_emp_id 
+            THEN CONCAT('🔄 ЗАМЕНА: ', (SELECT full_name FROM employees WHERE id = edp.assigned_employee_id))
+            
+        -- 3. Если закрепленный сотрудник болеет/в отпуске
+        WHEN (SELECT 1 FROM absences abs WHERE abs.employee_id = ep.default_emp_id 
+              AND @target_date >= abs.start_date AND (abs.end_date IS NULL OR @target_date <= abs.end_date)) IS NOT NULL
+            THEN '⚠️ ALERT: СОТРУДНИК БОЛЕН/В ОТПУСКЕ!'
+            
+        -- 4. Если всё в порядке
+        WHEN ep.default_emp_id IS NOT NULL THEN '✅ Готов к работе'
+        
+        ELSE '🔴 КРИТИЧНО: СОТРУДНИК НЕ ЗАКРЕПЛЕН'
+    END AS "Статус_Смены"
+
+FROM EquipmentPlan ep
+LEFT JOIN employees e ON ep.default_emp_id = e.id
+LEFT JOIN equipment_daily_plan edp ON edp.equipment_id = ep.eq_id 
+    AND edp.plan_date = @target_date AND edp.shift_id = ep.plan_shift_id;

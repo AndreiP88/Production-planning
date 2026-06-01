@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="data/data.csproj" Id="387774be-c5b9-461c-8282-58bbba915b28" />
+  <Project Path="database/database.csproj" Id="f2faf9d2-2e03-444e-b460-b40170ed5299" />
+  <Project Path="Production planning/Production planning.csproj" Id="5b26db4d-273d-45bb-a9e8-e74f295f00cb" />
+</Solution>

@@ -1,0 +1,110 @@
+-- 1. Справочник участков
+CREATE TABLE work_areas (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    sort_order INT DEFAULT 0
+);
+
+-- 2. Справочник типов графиков (теперь и для людей, и для станков)
+CREATE TABLE schedule_templates (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    base_date DATE NOT NULL,      -- Точка отсчета цикла
+    cycle_length INT NOT NULL     -- Длина цикла (в днях)
+);
+
+-- 3. Справочник оборудования (теперь с привязкой к ГРАФИКУ работы станка)
+CREATE TABLE equipment (
+    id SERIAL PRIMARY KEY,
+    work_area_id INT NOT NULL REFERENCES work_areas(id),
+    template_id INT REFERENCES schedule_templates(id), -- ГРАФИК РАБОТЫ СТАНКА
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(50) UNIQUE,
+    sort_order INT DEFAULT 0
+);
+
+-- 4. Справочник должностей и сотрудников
+CREATE TABLE positions (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE employees (
+    id SERIAL PRIMARY KEY,
+    full_name VARCHAR(255) NOT NULL,
+    system_role ENUM('worker', 'master', 'chief') DEFAULT 'worker' NOT NULL
+);
+
+-- 5. История контрактов и должностей
+CREATE TABLE employment_periods (
+    id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL REFERENCES employees(id) ON DELETE CASCADE,
+    hire_date DATE NOT NULL,
+    fire_date DATE NULL,
+    CONSTRAINT check_employment_dates CHECK (fire_date IS NULL OR fire_date >= hire_date)
+);
+
+CREATE TABLE employee_position_assignments (
+    id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL REFERENCES employees(id) ON DELETE CASCADE,
+    position_id INT NOT NULL REFERENCES positions(id),
+    valid_from DATE NOT NULL,
+    UNIQUE(employee_id, valid_from)
+);
+
+-- 6. Закрепление сотрудников за станками (КТО ДОЛЖЕН РАБОТАТЬ ПО УМОЛЧАНИЮ)
+CREATE TABLE employee_equipment_assignments (
+    id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL REFERENCES employees(id) ON DELETE CASCADE,
+    equipment_id INT REFERENCES equipment(id),
+    valid_from DATE NOT NULL,
+    UNIQUE(employee_id, valid_from)
+);
+
+-- 7. Справочник смен и их наполнение в циклах
+CREATE TABLE shift_definitions (
+    id SERIAL PRIMARY KEY,
+    shift_number INT NOT NULL, 
+    name VARCHAR(50) NOT NULL,
+    is_work_day BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE schedule_items (
+    template_id INT NOT NULL REFERENCES schedule_templates(id) ON DELETE CASCADE,
+    day_number INT NOT NULL,
+    shift_id INT NOT NULL REFERENCES shift_definitions(id),
+    PRIMARY KEY (template_id, day_number)
+);
+
+-- 8. ГЛАВНАЯ ТАБЛИЦА: ПРОИЗВОДСТВЕННЫЙ ПЛАН (Корректировка работы оборудования)
+CREATE TABLE equipment_daily_plan (
+    id SERIAL PRIMARY KEY,
+    equipment_id INT NOT NULL REFERENCES equipment(id),
+    plan_date DATE NOT NULL,
+    shift_id INT NOT NULL REFERENCES shift_definitions(id),
+    is_cancelled BOOLEAN DEFAULT FALSE,      -- Начальник может отменить смену станка
+    assigned_employee_id INT REFERENCES employees(id), -- Замена сотрудника вручную
+    comment TEXT,
+    UNIQUE(equipment_id, plan_date, shift_id)
+);
+
+-- 9. Учет отсутствий (Больничные/Отпуска)
+CREATE TABLE absence_types (id SERIAL PRIMARY KEY, name VARCHAR(100));
+
+CREATE TABLE absences (
+    id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL REFERENCES employees(id) ON DELETE CASCADE,
+    type_id INT NOT NULL REFERENCES absence_types(id),
+    start_date DATE NOT NULL,
+    end_date DATE NULL, -- NULL = открытый больничный
+    CONSTRAINT check_absence_dates CHECK (end_date IS NULL OR end_date >= start_date)
+);
+
+-- 10. История графиков сотрудников (для тех, кто не привязан к станку напрямую)
+CREATE TABLE employee_schedule_assignments (
+    id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL REFERENCES employees(id) ON DELETE CASCADE,
+    template_id INT NOT NULL REFERENCES schedule_templates(id),
+    valid_from DATE NOT NULL,
+    UNIQUE(employee_id, valid_from)
+);

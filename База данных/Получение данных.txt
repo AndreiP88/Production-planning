@@ -1,0 +1,100 @@
+SET @start_date = '2026-04-01';
+SET @end_date   = '2026-04-30';
+
+WITH RECURSIVE calendar AS (
+    -- 1. Генерируем список дат выбранного месяца
+    SELECT CAST(@start_date AS DATE) AS day_date
+    UNION ALL
+    SELECT day_date + INTERVAL 1 DAY
+    FROM calendar
+    WHERE day_date < @end_date
+),
+EmployeeSchedule AS (
+    -- 2. Собираем сотрудников, работающих в эти даты, их графики и историю
+    SELECT 
+        c.day_date,
+        e.id AS emp_id,
+        e.full_name,
+        st.id AS template_id,
+        st.base_date,
+        st.cycle_length,
+        -- Актуальная должность на дату
+        (SELECT epa.position_id FROM employee_position_assignments epa 
+         WHERE epa.employee_id = e.id AND epa.valid_from <= c.day_date 
+         ORDER BY epa.valid_from DESC LIMIT 1) AS current_pos_id,
+        -- Актуальное оборудование по умолчанию
+        (SELECT eqa.equipment_id FROM employee_equipment_assignments eqa 
+         WHERE eqa.employee_id = e.id AND eqa.valid_from <= c.day_date 
+         ORDER BY eqa.valid_from DESC LIMIT 1) AS current_default_eq_id
+    FROM calendar c
+    CROSS JOIN employees e
+    -- Фильтр: сотрудник должен быть принят и не уволен на day_date
+    INNER JOIN employment_periods ep ON ep.employee_id = e.id
+        AND (c.day_date >= ep.hire_date AND (ep.fire_date IS NULL OR c.day_date <= ep.fire_date))
+    -- Актуальный график бригады
+    INNER JOIN employee_schedule_assignments esa ON esa.employee_id = e.id
+        AND esa.valid_from = (
+            SELECT MAX(valid_from) FROM employee_schedule_assignments 
+            WHERE employee_id = e.id AND valid_from <= c.day_date
+        )
+    INNER JOIN schedule_templates st ON esa.template_id = st.id
+)
+SELECT 
+    es.day_date AS "Дата",
+    es.full_name AS "Сотрудник",
+    pos.name AS "Должность",
+    
+    -- ПЛАНОВЫЙ ГРАФИК (Математический расчет по циклу)
+    CONCAT(sd_plan.shift_number, ' (', sd_plan.name, ')') AS "План_График",
+
+    -- ОТСУТСТВИЕ (Больничный/Отпуск). Учитываем открытые даты (IS NULL)
+    COALESCE(abt.name, '-') AS "Отсутствие",
+
+    -- ФАКТИЧЕСКАЯ СМЕНА (С учетом ручных правок)
+    CASE 
+        WHEN ovr.id IS NOT NULL THEN CONCAT(sd_ovr.shift_number, ' (', sd_ovr.name, ')')
+        ELSE CONCAT(sd_plan.shift_number, ' (', sd_plan.name, ')')
+    END AS "Смена_Факт",
+
+    -- СТАТУС СОГЛАСОВАНИЯ (Workflow)
+    CASE 
+        WHEN ovr.id IS NULL THEN 'Ок (По графику)'
+        WHEN ovr.status = 0 THEN '⏳ Черновик (Мастер)'
+        WHEN ovr.status = 1 THEN '👤 Подтверждено (Работник)'
+        WHEN ovr.status = 2 THEN '✅ Утверждено (Начальник)'
+        WHEN ovr.status = -1 THEN '❌ Отклонено'
+    END AS "Согласование",
+
+    -- УЧЕТ В ТАБЕЛЬ (Итоговая цифра для ЗП)
+    -- Если болен = 0. Если утверждено (статус 2) = номер из правки. Иначе = номер из плана.
+    CASE 
+        WHEN abs.id IS NOT NULL THEN 0
+        WHEN ovr.id IS NOT NULL AND ovr.status = 2 THEN sd_ovr.shift_number
+        ELSE sd_plan.shift_number
+    END AS "В_Табель",
+    
+    -- ОБОРУДОВАНИЕ (Ручное перекрытие или закрепленное по истории)
+    COALESCE(eq_ovr.name, eq_hist.name, 'Без привязки') AS "Оборудование"
+
+FROM EmployeeSchedule es
+LEFT JOIN positions pos ON es.current_pos_id = pos.id
+-- Связь с циклом смен
+INNER JOIN schedule_items si ON si.template_id = es.template_id 
+    AND si.day_number = (MOD(DATEDIFF(es.day_date, es.base_date), es.cycle_length) + 1)
+INNER JOIN shift_definitions sd_plan ON si.shift_id = sd_plan.id
+
+-- Ручные правки (Overrides)
+LEFT JOIN schedule_overrides ovr ON ovr.employee_id = es.emp_id AND ovr.override_date = es.day_date
+LEFT JOIN shift_definitions sd_ovr ON ovr.shift_id = sd_ovr.id
+LEFT JOIN equipment eq_ovr ON ovr.equipment_id = eq_ovr.id
+
+-- Оборудование из истории
+LEFT JOIN equipment eq_hist ON es.current_default_eq_id = eq_hist.id
+
+-- Больничные и отпуска (учитываем открытые больничные)
+LEFT JOIN absences abs ON abs.employee_id = es.emp_id 
+    AND es.day_date >= abs.start_date 
+    AND (abs.end_date IS NULL OR es.day_date <= abs.end_date)
+LEFT JOIN absence_types abt ON abs.type_id = abt.id
+
+ORDER BY es.day_date, es.full_name;

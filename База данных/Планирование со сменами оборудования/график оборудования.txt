@@ -1,0 +1,65 @@
+SET @start_date = '2024-10-01';
+SET @end_date   = '2024-10-31';
+
+WITH RECURSIVE calendar AS (
+    -- 1. Генерируем дни месяца
+    SELECT CAST(@start_date AS DATE) AS day_date
+    UNION ALL
+    SELECT day_date + INTERVAL 1 DAY
+    FROM calendar
+    WHERE day_date < @end_date
+),
+EquipmentWorkPlan AS (
+    -- 2. Определяем, когда оборудование ДОЛЖНО работать по графику
+    SELECT 
+        c.day_date,
+        eq.id AS eq_id,
+        eq.name AS eq_name,
+        sd.id AS plan_shift_id,
+        sd.name AS plan_shift_name,
+        -- Находим закрепленного сотрудника на конкретную дату
+        (SELECT eqa.employee_id FROM employee_equipment_assignments eqa 
+         WHERE eqa.equipment_id = eq.id AND eqa.valid_from <= c.day_date 
+         ORDER BY eqa.valid_from DESC LIMIT 1) AS default_emp_id
+    FROM calendar c
+    CROSS JOIN equipment eq
+    JOIN schedule_templates st ON eq.template_id = st.id
+    JOIN schedule_items si ON si.template_id = st.id 
+        AND si.day_number = (MOD(DATEDIFF(c.day_date, st.base_date), st.cycle_length) + 1)
+    JOIN shift_definitions sd ON si.shift_id = sd.id
+    WHERE sd.shift_number > 0 -- Берем только рабочие смены оборудования
+)
+SELECT 
+    p.day_date AS "Дата",
+    p.eq_name AS "Оборудование",
+    p.plan_shift_name AS "Смена",
+    e_def.full_name AS "Плановый_сотрудник",
+    e_fact.full_name AS "Фактический_исполнитель",
+    
+    -- ЛОГИКА ПРЕДУПРЕЖДЕНИЙ (ALERTS)
+    CASE 
+        WHEN edp.is_cancelled = TRUE THEN '🛑 СМЕНА ОТМЕНЕНА'
+        WHEN edp.assigned_employee_id IS NOT NULL THEN '🔄 РУЧНАЯ ЗАМЕНА'
+        WHEN (
+            SELECT 1 FROM absences abs 
+            WHERE abs.employee_id = p.default_emp_id 
+            AND p.day_date >= abs.start_date 
+            AND (abs.end_date IS NULL OR p.day_date <= abs.end_date)
+            LIMIT 1
+        ) IS NOT NULL THEN '⚠️ ALERT: СОТРУДНИК БОЛЕН/ОТСУТСТВУЕТ!'
+        WHEN p.default_emp_id IS NULL THEN '🔴 НЕТ ЗАКРЕПЛЕННОГО ПЕРСОНАЛА'
+        ELSE '✅ Готов'
+    END AS "Статус_Смены",
+    
+    edp.comment AS "Комментарий"
+
+FROM EquipmentWorkPlan p
+-- Привязываем данные планового сотрудника
+LEFT JOIN employees e_def ON p.default_emp_id = e_def.id
+-- Привязываем ручные правки плана (замены/отмены)
+LEFT JOIN equipment_daily_plan edp ON edp.equipment_id = p.eq_id 
+    AND edp.plan_date = p.day_date AND edp.shift_id = p.plan_shift_id
+-- Привязываем данные фактического сотрудника (если была замена)
+LEFT JOIN employees e_fact ON edp.assigned_employee_id = e_fact.id
+
+ORDER BY p.day_date, p.eq_name, p.plan_shift_id;
