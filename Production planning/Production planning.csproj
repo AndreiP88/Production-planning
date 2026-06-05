@@ -83,6 +83,24 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormAddArea.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAddArea.Designer.cs">
+      <DependentUpon>FormAddArea.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAddEquip.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAddEquip.Designer.cs">
+      <DependentUpon>FormAddEquip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAddBrigade.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAddBrigade.Designer.cs">
+      <DependentUpon>FormAddBrigade.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormAddCycle.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,6 +124,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAddArea.resx">
+      <DependentUpon>FormAddArea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAddEquip.resx">
+      <DependentUpon>FormAddEquip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAddBrigade.resx">
+      <DependentUpon>FormAddBrigade.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormAddCycle.resx">
       <DependentUpon>FormAddCycle.cs</DependentUpon>

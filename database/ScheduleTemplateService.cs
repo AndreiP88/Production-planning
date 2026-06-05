@@ -1,6 +1,7 @@
-﻿using data;
-using Dapper;
+﻿using Dapper;
+using data;
 using MySqlConnector;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -183,6 +184,81 @@ namespace database
             {
                 int rows = await connection.ExecuteAsync(sql, template);
                 return rows > 0;
+            }
+        }
+
+        /// <summary>
+        /// БЕЗОПАСНОЕ УДАЛЕНИЕ БРИГАДЫ (Шаблона с опорной датой)
+        /// </summary>
+        public async Task<DeleteResult> DeleteTemplateBindingAsync(int templateId)
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                // 1. Проверяем, назначен ли этот шаблон (бригада) хоть одному сотруднику
+                const string checkSql = "SELECT EXISTS(SELECT 1 FROM employee_schedule_assignments WHERE template_id = @Id);";
+                bool isUsedByEmployees = await connection.ExecuteScalarAsync<bool>(checkSql, new { Id = templateId });
+
+                if (isUsedByEmployees)
+                {
+                    return DeleteResult.Fail("Невозможно удалить бригаду. На неё всё еще назначены сотрудники в истории расписаний.");
+                }
+
+                // 2. Проверяем, привязан ли этот шаблон к какому-либо оборудованию
+                const string checkEquipmentSql = "SELECT EXISTS(SELECT 1 FROM equipment WHERE template_id = @Id OR id IN (SELECT equipment_id FROM equipment_schedule_history WHERE template_id = @Id));";
+                bool isUsedByEquipment = await connection.ExecuteScalarAsync<bool>(checkEquipmentSql, new { Id = templateId });
+
+                if (isUsedByEquipment)
+                {
+                    return DeleteResult.Fail("Невозможно удалить бригаду. Данный шаблон зафиксирован за производственным оборудованием.");
+                }
+
+                // Если проверок нет — удаляем
+                const string deleteSql = "DELETE FROM schedule_templates WHERE id = @Id;";
+                int rows = await connection.ExecuteAsync(deleteSql, new { Id = templateId });
+
+                return rows > 0 ? DeleteResult.Success() : DeleteResult.Fail("Запись не найдена в базе данных.");
+            }
+        }
+
+        /// <summary>
+        /// БЕЗОПАСНОЕ УДАЛЕНИЕ ЦИКЛИЧЕСКОГО ГРАФИКА (Схемы дней)
+        /// </summary>
+        public async Task<DeleteResult> DeleteScheduleCycleAsync(int cycleId)
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (var tx = await connection.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        // 1. Проверяем, созданы ли бригады (шаблоны) на основе этого циклического графика
+                        const string checkSql = "SELECT EXISTS(SELECT 1 FROM schedule_templates WHERE cycle_id = @Id);";
+                        bool isUsedInTemplates = await connection.ExecuteScalarAsync<bool>(checkSql, new { Id = cycleId }, tx);
+
+                        if (isUsedInTemplates)
+                        {
+                            return DeleteResult.Fail("Невозможно удалить схему графика. На её основе созданы и функционируют бригады.");
+                        }
+
+                        // 2. Сначала очищаем сетку дней в подчиненной таблице schedule_cycle_items
+                        const string deleteItemsSql = "DELETE FROM schedule_cycle_items WHERE cycle_id = @Id;";
+                        await connection.ExecuteAsync(deleteItemsSql, new { Id = cycleId }, tx);
+
+                        // 3. Удаляем сам циклический график из schedule_cycles
+                        const string deleteCycleSql = "DELETE FROM schedule_cycles WHERE id = @Id;";
+                        int rows = await connection.ExecuteAsync(deleteCycleSql, new { Id = cycleId }, tx);
+
+                        await tx.CommitAsync();
+
+                        return rows > 0 ? DeleteResult.Success() : DeleteResult.Fail("График не найден.");
+                    }
+                    catch (Exception ex)
+                    {
+                        await tx.RollbackAsync();
+                        return DeleteResult.Fail($"Ошибка транзакции базы данных: {ex.Message}");
+                    }
+                }
             }
         }
     }

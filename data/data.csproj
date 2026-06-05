@@ -75,7 +75,6 @@
   <ItemGroup>
     <Compile Include="EquipmentShift.cs" />
     <Compile Include="OrdersLoad.cs" />
-    <Compile Include="Equips.cs" />
     <Compile Include="ScheduleCycleModel.cs" />
     <Compile Include="ShiftDefinitionModel.cs" />
     <Compile Include="Staffing.cs" />

@@ -99,5 +99,49 @@ namespace database
                 return rowsAffected > 0; // Возвращает true, если запись была найдена и изменена
             }
         }
+
+        public async Task<DeleteResult> DeleteShiftAsync(int shiftId)
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                // 1. Проверяем использование в шаблонах циклических графиков
+                const string checkCycleSql = "SELECT EXISTS(SELECT 1 FROM schedule_cycle_items WHERE shift_id = @Id);";
+                bool isUsedInCycles = await connection.ExecuteScalarAsync<bool>(checkCycleSql, new { Id = shiftId });
+
+                if (isUsedInCycles)
+                {
+                    return DeleteResult.Fail("Невозможно удалить смену. Она назначена в днях циклического графика (схемы смен).");
+                }
+
+                // 2. Проверяем использование в ручных заменах и корректировках
+                const string checkOverridesSql = "SELECT EXISTS(SELECT 1 FROM schedule_overrides WHERE shift_id = @Id);";
+                bool isUsedInOverrides = await connection.ExecuteScalarAsync<bool>(checkOverridesSql, new { Id = shiftId });
+
+                if (isUsedInOverrides)
+                {
+                    return DeleteResult.Fail("Невозможно удалить смену. За ней закреплены ручные корректировки расписания сотрудников (замены/черновики).");
+                }
+
+                // 3. Проверяем использование в ежедневных планах станков
+                const string checkPlansSql = "SELECT EXISTS(SELECT 1 FROM equipment_daily_plan WHERE shift_id = @Id);";
+                bool isUsedInPlans = await connection.ExecuteScalarAsync<bool>(checkPlansSql, new { Id = shiftId });
+
+                if (isUsedInPlans)
+                {
+                    return DeleteResult.Fail("Невозможно удалить смену. На эту смену уже сформированы и сохранены планы работы производственного оборудования.");
+                }
+
+                // Если смена нигде не используется — выполняем физическое удаление
+                const string deleteSql = "DELETE FROM shift_definitions WHERE id = @Id;";
+                int rowsAffected = await connection.ExecuteAsync(deleteSql, new { Id = shiftId });
+
+                if (rowsAffected > 0)
+                {
+                    return DeleteResult.Success();
+                }
+
+                return DeleteResult.Fail("Смена не найдена в базе данных.");
+            }
+        }
     }
 }

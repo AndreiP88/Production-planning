@@ -81,7 +81,7 @@
     <Compile Include="ScheduleTemplateService.cs" />
     <Compile Include="ShiftService.cs" />
     <Compile Include="ValueOrders.cs" />
-    <Compile Include="ReportWorkAreas.cs" />
+    <Compile Include="WorkAreaService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -40,4 +40,13 @@ namespace data
         public string CycleName { get; set; } // Название используемой схемы
         public DateTime BaseDate { get; set; }
     }
+
+    public class DeleteResult
+    {
+        public bool IsSuccess { get; set; }
+        public string ErrorMessage { get; set; }
+
+        public static DeleteResult Success() => new DeleteResult { IsSuccess = true };
+        public static DeleteResult Fail(string msg) => new DeleteResult { IsSuccess = false, ErrorMessage = msg };
+    }
 }

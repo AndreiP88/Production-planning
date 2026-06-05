@@ -1,6 +1,7 @@
 ﻿using data;
 using data.Models;
 using database;
+using DevAge.Windows.Forms;
 using MaterialSkin;
 using MaterialSkin.Controls;
 using System;
@@ -12,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Production_planning
 {
@@ -57,16 +59,9 @@ namespace Production_planning
             materialTabControl1_SelectedIndexChangedAsync(sender, e);
         }
 
-        private async Task UpdateWorkAreasAsync()
-        {
-            workAreaInfo?.Clear();
+        
 
-            ConnectionParameter parameter = new ConnectionParameter();
 
-            var service = new ReportWorkAreas(parameter.GetMySQLConnectionString());
-
-            workAreaInfo = await service.GetWorkAreasWithEquipmentAsync();
-        }
 
         private async Task ViewPlanForEquipAsync()
         {
@@ -394,6 +389,9 @@ namespace Production_planning
             shiftDefinitions = await shiftsDefinitionService.GetAllShiftsAsync();
 
             await AddShiftsDefinitionToListView();
+
+            listViewShiftsDef.SelectedItems.Clear();
+            listViewShiftsDef.FocusedItem = null;
         }
 
         private async Task AddShiftsDefinitionToListView()
@@ -543,15 +541,7 @@ namespace Production_planning
 
             if (index == 4)
             {
-                materialListBox1.Items.Clear();
-                MaterialListBoxItem item = new MaterialListBoxItem();
-
-                for (int i = 0; i < workAreaInfo.Count; i++)
-                {
-                    item.Text = workAreaInfo[i].Name;
-
-                    materialListBox1.Items.Add(item);
-                }
+                await LoadAreaListToListBox();
             }
 
             if (index == 5)
@@ -562,10 +552,7 @@ namespace Production_planning
             }
         }
 
-        private void materialListBox1_SelectedIndexChanged(object sender, MaterialListBoxItem selectedItem)
-        {
-            MessageBox.Show(" " + materialListBox1.SelectedIndex);
-        }
+        
 
         private async void materialButton2_ClickAsync(object sender, EventArgs e)
         {
@@ -723,20 +710,9 @@ namespace Production_planning
             }
         }
 
-        private async void buttonShiftAdd_Click(object sender, EventArgs e)
-        {
-            FormAddShift formAddShift = new FormAddShift();
-            DialogResult result = formAddShift.ShowDialog();
+        
 
-            await Task.Delay(100);
-
-            if (result == DialogResult.OK)
-            {
-                await UpdateShiftsDefinitionAsync();
-            }
-        }
-
-        private async void listViewShiftsDef_MouseDoubleClick(object sender, MouseEventArgs e)
+        private async Task EditSiftDefinition()
         {
             DialogResult result = DialogResult.Cancel;
 
@@ -756,20 +732,69 @@ namespace Production_planning
             }
         }
 
-        private async void buttonTemplateAdd_Click(object sender, EventArgs e)
+        private async Task DeleteSiftDefinition()
         {
-            FormAddCycle form = new FormAddCycle();
-            DialogResult result = form.ShowDialog();
+            if (listViewShiftsDef.SelectedIndices.Count > 0)
+            {
+                ConnectionParameter parameter = new ConnectionParameter();
+
+                int clickedIndex = listViewShiftsDef.SelectedIndices[0];
+
+                DialogResult dialogResult = MessageBox.Show($"Вы действительно хотите удалить запись: {clickedIndex + 1}: {shiftDefinitions[clickedIndex].Name}", "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    var shiftService = new ShiftService(parameter.GetMySQLConnectionString());
+
+                    DeleteResult result = await shiftService.DeleteShiftAsync((int)shiftDefinitions[clickedIndex].Id);
+
+                    if (!result.IsSuccess)
+                    {
+                        MessageBox.Show($"Смена не была удалена \n{result.ErrorMessage}", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        listViewShiftsDef.Items.Remove(listViewShiftsDef.SelectedItems[0]);
+
+                        await Task.Delay(100);
+
+                        await UpdateShiftsDefinitionAsync();
+                    }
+                }
+            }
+        }
+
+        private async void listViewShiftsDef_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            await EditSiftDefinition();
+        }
+        private async void buttonShiftAdd_Click(object sender, EventArgs e)
+        {
+            FormAddShift formAddShift = new FormAddShift();
+            DialogResult result = formAddShift.ShowDialog();
 
             await Task.Delay(100);
 
             if (result == DialogResult.OK)
             {
-                await UpdateScheduleCycle();
+                await UpdateShiftsDefinitionAsync();
             }
         }
+        private async void buttonShiftEdit_Click(object sender, EventArgs e)
+        {
+            await EditSiftDefinition();
+        }
 
-        private async void listViewShiftCycle_MouseDoubleClick(object sender, MouseEventArgs e)
+        private async void buttonShiftDelete_Click(object sender, EventArgs e)
+        {
+            await DeleteSiftDefinition();
+        }
+
+
+
+
+
+        private async Task EditSiftCycle()
         {
             DialogResult result = DialogResult.Cancel;
 
@@ -788,5 +813,335 @@ namespace Production_planning
                 await UpdateScheduleCycle();
             }
         }
+        private async Task DeleteSiftCycle()
+        {
+            if (listViewShiftCycle.SelectedIndices.Count > 0)
+            {
+                ConnectionParameter parameter = new ConnectionParameter();
+
+                int clickedIndex = listViewShiftCycle.SelectedIndices[0];
+
+                DialogResult dialogResult = MessageBox.Show($"Вы действительно хотите удалить запись: {clickedIndex + 1}: {scheduleCycles[clickedIndex].Name}", "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    var templateService = new ScheduleTemplateService(parameter.GetMySQLConnectionString());
+
+                    DeleteResult result = await templateService.DeleteScheduleCycleAsync((int)scheduleCycles[clickedIndex].Id);
+
+                    if (!result.IsSuccess)
+                    {
+                        MessageBox.Show($"Шаблон не был удален \n{result.ErrorMessage}", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        listViewShiftCycle.Items.Remove(listViewShiftCycle.SelectedItems[0]);
+
+                        await Task.Delay(100);
+
+                        await UpdateScheduleCycle();
+                    }
+                }
+            }
+        }
+        private async void listViewShiftCycle_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            await EditSiftCycle();
+        }
+        private async void buttonTemplateAdd_Click(object sender, EventArgs e)
+        {
+            FormAddCycle form = new FormAddCycle();
+            DialogResult result = form.ShowDialog();
+
+            await Task.Delay(100);
+
+            if (result == DialogResult.OK)
+            {
+                await UpdateScheduleCycle();
+            }
+        }
+        private async void buttonTemplateEdit_Click(object sender, EventArgs e)
+        {
+            await EditSiftCycle();
+        }
+
+        private async void buttonTemplateDelete_Click(object sender, EventArgs e)
+        {
+            await DeleteSiftCycle();
+        }
+
+
+
+
+
+        private async Task EditTemplate()
+        {
+            DialogResult result = DialogResult.Cancel;
+
+            if (listViewShiftTemplate.SelectedIndices.Count > 0)
+            {
+                int clickedIndex = listViewShiftTemplate.SelectedIndices[0];
+
+                FormAddBrigade form = new FormAddBrigade(scheduleTemplates[clickedIndex]);
+                result = form.ShowDialog();
+            }
+
+            await Task.Delay(100);
+
+            if (result == DialogResult.OK)
+            {
+                await UpdateScheduleTemplate();
+            }
+        }
+        private async Task DeleteTemplate()
+        {
+            if (listViewShiftTemplate.SelectedIndices.Count > 0)
+            {
+                ConnectionParameter parameter = new ConnectionParameter();
+
+                int clickedIndex = listViewShiftTemplate.SelectedIndices[0];
+
+                DialogResult dialogResult = MessageBox.Show($"Вы действительно хотите удалить запись: {clickedIndex + 1}: {scheduleTemplates[clickedIndex].Name}", "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    var templateService = new ScheduleTemplateService(parameter.GetMySQLConnectionString());
+
+                    DeleteResult result = await templateService.DeleteTemplateBindingAsync((int)scheduleTemplates[clickedIndex].Id);
+
+                    if (!result.IsSuccess)
+                    {
+                        MessageBox.Show($"График не был удален \n{result.ErrorMessage}", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        listViewShiftTemplate.Items.Remove(listViewShiftTemplate.SelectedItems[0]);
+
+                        await Task.Delay(100);
+
+                        await UpdateScheduleTemplate();
+                    }
+                }
+            }
+        }
+        private async void listViewShiftTemplate_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            await EditTemplate();
+        }
+        private async void buttonBrigadeAdd_Click(object sender, EventArgs e)
+        {
+            FormAddBrigade form = new FormAddBrigade();
+            DialogResult result = form.ShowDialog();
+
+            await Task.Delay(100);
+
+            if (result == DialogResult.OK)
+            {
+                await UpdateScheduleTemplate();
+            }
+        }
+        private async void buttonBrigadeEdit_Click(object sender, EventArgs e)
+        {
+            await EditTemplate();
+        }
+
+        private async void buttonBrigadeDelete_Click(object sender, EventArgs e)
+        {
+            await DeleteTemplate();
+        }
+
+
+
+
+
+
+        private void listViewShiftsDef_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            bool status = listViewShiftsDef.SelectedItems.Count > 0;
+
+            buttonShiftEdit.Enabled = status;
+            buttonShiftDelete.Enabled = status;
+        }
+
+        private void listViewShiftCycle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            bool status = listViewShiftCycle.SelectedItems.Count > 0;
+
+            buttonTemplateEdit.Enabled = status;
+            buttonTemplateDelete.Enabled = status;
+        }
+
+        private void listViewShiftTemplate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            bool status = listViewShiftTemplate.SelectedItems.Count > 0;
+
+            buttonBrigadeEdit.Enabled = status;
+            buttonBrigadeDelete.Enabled = status;
+        }
+
+
+
+
+
+
+
+        //Работа с производственными участками
+        private async Task UpdateWorkAreasAsync()
+        {
+            workAreaInfo?.Clear();
+
+            ConnectionParameter parameter = new ConnectionParameter();
+
+            var service = new WorkAreaService(parameter.GetMySQLConnectionString());
+
+            workAreaInfo = await service.GetWorkAreasWithEquipmentAsync();
+        }
+        private async Task LoadAreaListToListBox()
+        {
+            listBoxAreas.Items.Clear();
+            //MaterialListBoxItem item = new MaterialListBoxItem();
+
+            for (int i = 0; i < workAreaInfo.Count; i++)
+            {
+                MaterialListBoxItem item = new MaterialListBoxItem
+                {
+                    Text = workAreaInfo[i].Name
+                };
+
+                listBoxAreas.Items.Add(item);
+            }
+        }
+        private async Task LoadEquipListToListView()
+        {
+            listViewEquips.Items.Clear();
+
+            int index = listBoxAreas.SelectedIndex;
+            bool status = index >= 0;
+
+            if (status)
+            {
+                foreach (EquipmentShortInfo shortInfo in workAreaInfo[index].Equipments)
+                {
+                    ListViewItem viewItem = new ListViewItem();
+
+                    viewItem.Text = (index + 1).ToString();
+                    viewItem.SubItems.Add(shortInfo.Name);
+                    viewItem.SubItems.Add(shortInfo.TemplateName);
+                    viewItem.SubItems.Add(shortInfo.StaffingMode.ToString());
+                    viewItem.SubItems.Add(shortInfo.IsActive ? "Активен" : "Остановлен");
+
+                    listViewEquips.Items.Add(viewItem);
+                }
+            }
+        }
+        private async Task WorkAreaEdit()
+        {
+            int index = listBoxAreas.SelectedIndex;
+
+            if (index >= 0)
+            {
+                FormAddArea form = new FormAddArea(workAreaInfo[index]);
+                DialogResult result = form.ShowDialog();
+
+                await Task.Delay(100);
+
+                if (result == DialogResult.OK)
+                {
+                    await UpdateWorkAreasAsync();
+                    await LoadAreaListToListBox();
+                }
+            }
+        }
+        private async Task WorkAreaDelete()
+        {
+            int index = listBoxAreas.SelectedIndex;
+
+            if (index >= 0)
+            {
+                ConnectionParameter parameter = new ConnectionParameter();
+
+                DialogResult dialogResult = MessageBox.Show($"Вы действительно хотите удалить запись: {index + 1}: {workAreaInfo[index].Name}", "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    var workAreaService = new WorkAreaService(parameter.GetMySQLConnectionString());
+
+                    DeleteResult result = await workAreaService.DeleteWorkAreaAsync(workAreaInfo[index].Id);
+
+                    if (!result.IsSuccess)
+                    {
+                        MessageBox.Show($"Производственный участок не был удален \n{result.ErrorMessage}", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        listBoxAreas.Items.Remove(listBoxAreas.SelectedItem);
+
+                        await Task.Delay(100);
+
+                        await UpdateWorkAreasAsync();
+                        await LoadAreaListToListBox();
+                    }
+                }
+            }
+        }
+        private async void listBoxAreas_SelectedIndexChanged(object sender, MaterialListBoxItem selectedItem)
+        {
+            await LoadEquipListToListView();
+
+            bool status = listBoxAreas.SelectedIndex >= 0;
+
+            buttonAreaEdit.Enabled = status;
+            buttonAreaDelete.Enabled = status;
+            //сот=ртировку добавить
+        }
+        private async void buttonAreaAdd_Click(object sender, EventArgs e)
+        {
+            FormAddArea form = new FormAddArea();
+            DialogResult result = form.ShowDialog();
+
+            await Task.Delay(100);
+
+            if (result == DialogResult.OK)
+            {
+                await UpdateWorkAreasAsync();
+                await LoadAreaListToListBox();
+            }
+        }
+        private async void buttonAreaEdit_Click(object sender, EventArgs e)
+        {
+            await WorkAreaEdit();
+        }
+        private async void buttonAreaDelete_Click(object sender, EventArgs e)
+        {
+            await WorkAreaDelete();
+        }
+        private void buttonAreaMoveUp_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void buttonAreaMoveDown_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+
+
+        private async void buttonEquipAdd_Click(object sender, EventArgs e)
+        {
+            FormAddEquip form = new FormAddEquip();
+            DialogResult result = form.ShowDialog();
+
+            await Task.Delay(100);
+
+            if (result == DialogResult.OK)
+            {
+                await UpdateWorkAreasAsync();
+                await LoadEquipListToListView();
+            }
+        }
+
+        ///
     }
 }
