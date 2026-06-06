@@ -35,21 +35,19 @@ namespace data
     /// </summary>
     public class EquipmentShortInfo : EquipmentModel
     {
-        // Свойства Id, Name, Code, WorkAreaId и т.д. унаследованы АВТОМАТИЧЕСКИ!
+        public bool IsActive => !DecommissionedAt.HasValue;
+        public string TemplateName { get; set; }
 
-        // Добавляем только то, чего нет в физической таблице станка:
-        public bool IsActive => !DecommissionedAt.HasValue; // Вычисляемое на лету свойство
-        public string TemplateName { get; set; } // Текстовое имя из LEFT JOIN
+        // НОВЫЕ ПОЛЯ ДЛЯ UI
+        public DateTime? StaffingModeValidFrom { get; set; }
+        public DateTime? TemplateValidFrom { get; set; }
     }
-
     // Вспомогательный класс для плоского чтения Dapper
     public class WorkAreaEquipmentRow
     {
         public int AreaId { get; set; }
         public string AreaName { get; set; }
         public int AreaSortOrder { get; set; }
-
-        // Поля станка
         public int? EquipId { get; set; }
         public string EquipName { get; set; }
         public string EquipCode { get; set; }
@@ -60,5 +58,9 @@ namespace data
         public DateTime? CommissionedAt { get; set; }
         public DateTime? DecommissionedAt { get; set; }
         public string StaffingMode { get; set; }
+
+        // НОВЫЕ ПОЛЯ ДЛЯ ДАТ НАЧАЛА ДЕЙСТВИЯ
+        public DateTime? StaffingModeValidFrom { get; set; }
+        public DateTime? TemplateValidFrom { get; set; }
     }
 }

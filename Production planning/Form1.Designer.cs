@@ -45,8 +45,8 @@ namespace Production_planning
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -213,18 +213,18 @@ namespace Production_planning
             // 
             this.dataGridPlanning.AllowUserToAddRows = false;
             this.dataGridPlanning.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dataGridPlanning.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dataGridPlanning.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridPlanning.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridPlanning.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridPlanning.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridPlanning.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridPlanning.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridPlanning.ColumnHeadersVisible = false;
             this.dataGridPlanning.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -877,6 +877,7 @@ namespace Production_planning
             this.buttonEquipAdd.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.buttonEquipAdd.Depth = 0;
             this.buttonEquipAdd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonEquipAdd.Enabled = false;
             this.buttonEquipAdd.HighEmphasis = true;
             this.buttonEquipAdd.Icon = null;
             this.buttonEquipAdd.Location = new System.Drawing.Point(4, 6);
@@ -919,6 +920,8 @@ namespace Production_planning
             this.listViewEquips.TabIndex = 8;
             this.listViewEquips.UseCompatibleStateImageBehavior = false;
             this.listViewEquips.View = System.Windows.Forms.View.Details;
+            this.listViewEquips.SelectedIndexChanged += new System.EventHandler(this.listViewEquips_SelectedIndexChanged);
+            this.listViewEquips.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listViewEquips_MouseDoubleClick);
             // 
             // columnHeader11
             // 

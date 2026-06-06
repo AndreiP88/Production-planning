@@ -330,6 +330,8 @@ namespace Production_planning
                 var shiftNames = eq.SelectMany(s => s.Shifts).Select(s => s.Number).Distinct().ToList();
                 int currentShiftNumber = 1;
 
+                int firstRow = 0;
+
                 foreach (var sName in shiftNames)
                 {
                     // Строка 1: Инфо о сотрудниках
@@ -342,12 +344,17 @@ namespace Production_planning
 
                     dataGridPlanning.Rows[r2].MinimumHeight = 60;
 
-                    if (shiftNames.Count == currentShiftNumber)
+                    if (currentShiftNumber == 1)
                     {
-                        GridHelper.MergeCells(dataGridPlanning, eq.Key.Name, r1 - 2, 0, shiftNames.Count * 2, 1, Color.Gray);
+                        firstRow = r1;
                     }
 
-                    GridHelper.MergeCells(dataGridPlanning, sName.ToString(), r1, 1, shiftNames.Count, 1, Color.Gray);
+                    if (shiftNames.Count == currentShiftNumber)
+                    {
+                        GridHelper.MergeCells(dataGridPlanning, eq.Key.Name, firstRow, 0, shiftNames.Count * 2, 1, Color.Gray);
+                    }
+
+                    GridHelper.MergeCells(dataGridPlanning, sName.ToString(), r1, 1, 2, 1, Color.Gray);
 
                     //dataGridPlanning.Rows[r1].Cells["Equip"].Value = eq.Key.Name;
                     dataGridPlanning.Rows[r1].Cells["Shift"].Value = sName;
@@ -1024,7 +1031,7 @@ namespace Production_planning
                 {
                     ListViewItem viewItem = new ListViewItem();
 
-                    viewItem.Text = (index + 1).ToString();
+                    viewItem.Text = (listViewEquips.Items.Count + 1).ToString();
                     viewItem.SubItems.Add(shortInfo.Name);
                     viewItem.SubItems.Add(shortInfo.TemplateName);
                     viewItem.SubItems.Add(shortInfo.StaffingMode.ToString());
@@ -1093,6 +1100,8 @@ namespace Production_planning
             buttonAreaEdit.Enabled = status;
             buttonAreaDelete.Enabled = status;
             //сот=ртировку добавить
+
+            buttonEquipAdd.Enabled = status;
         }
         private async void buttonAreaAdd_Click(object sender, EventArgs e)
         {
@@ -1127,10 +1136,30 @@ namespace Production_planning
 
 
 
+        private async Task EditEquip()
+        {
+            int index = listViewEquips.SelectedIndices[0];
 
+            if (index >= 0)
+            {
+                FormAddEquip form = new FormAddEquip(workAreaInfo[listBoxAreas.SelectedIndex].Id, workAreaInfo[listBoxAreas.SelectedIndex].Equipments[index].Id);
+                DialogResult result = form.ShowDialog();
+
+                await Task.Delay(100);
+
+                if (result == DialogResult.OK)
+                {
+                    await UpdateWorkAreasAsync();
+                    //await LoadAreaListToListBox();
+                    await LoadEquipListToListView();
+                }
+            }
+        }
         private async void buttonEquipAdd_Click(object sender, EventArgs e)
         {
-            FormAddEquip form = new FormAddEquip();
+            int areaID = workAreaInfo[listBoxAreas.SelectedIndex].Id;
+
+            FormAddEquip form = new FormAddEquip(areaID);
             DialogResult result = form.ShowDialog();
 
             await Task.Delay(100);
@@ -1140,6 +1169,21 @@ namespace Production_planning
                 await UpdateWorkAreasAsync();
                 await LoadEquipListToListView();
             }
+        }
+
+        private async void listViewEquips_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            await EditEquip();
+        }
+
+        private void listViewEquips_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            bool status = listViewEquips.SelectedItems.Count > 0;
+
+            buttonEquipEdit.Enabled = status;
+            buttonEquipDelete.Enabled = status;
+            buttonEquipMoveUp.Enabled = status;
+            buttonEquipMoveDown.Enabled = status;
         }
 
         ///

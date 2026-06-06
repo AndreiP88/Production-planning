@@ -27,29 +27,70 @@ namespace database
         /// </summary>
         public async Task<List<WorkAreaInfo>> GetWorkAreasWithEquipmentAsync()
         {
-            const string sql = @"
-                                SELECT 
-                                    wa.id AS AreaId, 
-                                    wa.name AS AreaName, 
-                                    wa.sort_order AS AreaSortOrder,
-                                    eq.id AS EquipId, 
-                                    eq.name AS EquipName, 
-                                    eq.code AS EquipCode,
-                                    eq.sort_order AS EquipSortOrder,
-                                    eq.work_area_id AS WorkAreaId,
-                                    eq.template_id AS TemplateId,
-                                    eq.commissioned_at AS CommissionedAt,
-                                    eq.decommissioned_at AS DecommissionedAt,
-                                    eq.staffing_mode AS StaffingMode,
-                                    st.name AS TemplateName
-                                FROM work_areas wa
-                                LEFT JOIN equipment eq ON wa.id = eq.work_area_id
-                                LEFT JOIN schedule_templates st ON eq.template_id = st.id
-                                ORDER BY wa.sort_order, wa.name, eq.sort_order, eq.name;";
+            var todayStr = DateTime.Today.ToString("yyyy-MM-dd");
+
+            string sql = $@"
+        SELECT 
+            wa.id AS AreaId, 
+            wa.name AS AreaName, 
+            wa.sort_order AS AreaSortOrder,
+            eq.id AS EquipId, 
+            eq.name AS EquipName, 
+            eq.code AS EquipCode,
+            eq.sort_order AS EquipSortOrder,
+            eq.work_area_id AS WorkAreaId,
+            eq.commissioned_at AS CommissionedAt,
+            eq.decommissioned_at AS DecommissionedAt,
+            
+            -- 1. Режим работы
+            COALESCE(
+                (SELECT staffing_mode FROM equipment_staffing_history 
+                 WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                 ORDER BY valid_from DESC LIMIT 1),
+                eq.staffing_mode
+            ) AS StaffingMode,
+            
+            -- Дата начала действия актуального режима работы
+            COALESCE(
+                (SELECT valid_from FROM equipment_staffing_history 
+                 WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                 ORDER BY valid_from DESC LIMIT 1),
+                eq.commissioned_at
+            ) AS StaffingModeValidFrom,
+            
+            -- 2. Шаблон/График
+            COALESCE(
+                (SELECT template_id FROM equipment_schedule_history 
+                 WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                 ORDER BY valid_from DESC LIMIT 1),
+                eq.template_id
+            ) AS TemplateId,
+            
+            -- Дата начала действия актуального графика
+            COALESCE(
+                (SELECT valid_from FROM equipment_schedule_history 
+                 WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                 ORDER BY valid_from DESC LIMIT 1),
+                eq.commissioned_at
+            ) AS TemplateValidFrom,
+            
+            -- Название шаблона
+            (SELECT name FROM schedule_templates 
+             WHERE id = COALESCE(
+                (SELECT template_id FROM equipment_schedule_history 
+                 WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                 ORDER BY valid_from DESC LIMIT 1),
+                eq.template_id
+             )
+            ) AS TemplateName
+            
+        FROM work_areas wa
+        LEFT JOIN equipment eq ON wa.id = eq.work_area_id
+        ORDER BY wa.sort_order, wa.name, eq.sort_order, eq.name;";
 
             using (var connection = new MySqlConnection(_connectionString))
             {
-                var rows = await connection.QueryAsync<WorkAreaEquipmentRow>(sql);
+                var rows = await connection.QueryAsync<WorkAreaEquipmentRow>(sql, commandType: CommandType.Text);
 
                 var result = rows
                     .GroupBy(r => new { r.AreaId, r.AreaName, r.AreaSortOrder })
@@ -62,7 +103,6 @@ namespace database
                             .Where(r => r.EquipId.HasValue)
                             .Select(r => new EquipmentShortInfo
                             {
-                                // Заполняем базовые свойства (наследованы от EquipmentModel)
                                 Id = r.EquipId.Value,
                                 WorkAreaId = r.WorkAreaId,
                                 TemplateId = r.TemplateId,
@@ -70,11 +110,13 @@ namespace database
                                 Code = r.EquipCode ?? "Б/К",
                                 CommissionedAt = r.CommissionedAt ?? DateTime.MinValue,
                                 DecommissionedAt = r.DecommissionedAt,
-                                StaffingMode = r.StaffingMode ?? "strict_schedule",
                                 SortOrder = r.EquipSortOrder,
+                                StaffingMode = r.StaffingMode ?? "strict_schedule",
 
-                                // Заполняем расширенные свойства (кастомные для UI)
-                                TemplateName = r.TemplateName ?? "График не назначен"
+                                // Передаем новые данные в расширенную модель
+                                TemplateName = r.TemplateName ?? "График не назначен",
+                                StaffingModeValidFrom = r.StaffingModeValidFrom,
+                                TemplateValidFrom = r.TemplateValidFrom
                             })
                             .ToList()
                     })
@@ -169,65 +211,304 @@ namespace database
         // 3. БЛОК УПРАВЛЕНИЯ ОБОРУДОВАНИЕМ (CRUD)
         // =========================================================================
 
-        /// <summary>
+        /*/// <summary>
         /// ДОБАВЛЕНИЕ: Создает новую единицу оборудования с авто-расчетом sort_order для своего участка
         /// </summary>
         public async Task<int> CreateEquipmentAsync(EquipmentModel model)
         {
+            // Мы обернули SELECT MAX во вложенный SELECT ... FROM ( ... ) AS temp
             const string sql = @"
                 INSERT INTO equipment (work_area_id, template_id, name, code, commissioned_at, decommissioned_at, staffing_mode, sort_order)
                 VALUES (@WorkAreaId, @TemplateId, @Name, @Code, @CommissionedAt, @DecommissionedAt, @StaffingMode, 
-                        COALESCE((SELECT MAX(sort_order) FROM equipment WHERE work_area_id = @WorkAreaId) + 1, 1));
+                        COALESCE((SELECT max_order FROM (SELECT MAX(sort_order) AS max_order FROM equipment WHERE work_area_id = @WorkAreaId) AS temp) + 1, 1));
                 SELECT LAST_INSERT_ID();";
 
             using (var connection = new MySqlConnection(_connectionString))
             {
                 return await connection.ExecuteScalarAsync<int>(sql, model);
             }
-        }
+        }*/
 
         /// <summary>
-        /// ПОЛУЧЕНИЕ ОДНОГО СТАНКА ПО ID: Если нужно открыть форму редактирования отдельно
+        /// ПОЛУЧЕНИЕ СТАНКА ПО ID: Возвращает полную информацию о станке, включая актуальный график, режим и даты их начала действия
         /// </summary>
-        public async Task<EquipmentModel> GetEquipmentByIdAsync(int id)
+        public async Task<EquipmentShortInfo> GetEquipmentByIdAsync(int id)
         {
-            const string sql = @"
-                SELECT id AS Id, work_area_id AS WorkAreaId, template_id AS TemplateId, 
-                       name AS Name, code AS Code, commissioned_at AS CommissionedAt, 
-                       decommissioned_at AS DecommissionedAt, staffing_mode AS StaffingMode, 
-                       sort_order AS SortOrder 
-                FROM equipment WHERE id = @Id;";
+            var todayStr = DateTime.Today.ToString("yyyy-MM-dd");
+
+            string sql = $@"
+                SELECT 
+                    eq.id AS EquipId, 
+                    eq.work_area_id AS WorkAreaId, 
+                    eq.name AS EquipName, 
+                    eq.code AS EquipCode, 
+                    eq.commissioned_at AS CommissionedAt, 
+                    eq.decommissioned_at AS DecommissionedAt, 
+                    eq.sort_order AS EquipSortOrder,
+                    
+                    -- Актуальный режим работы и дата его начала
+                    COALESCE(
+                        (SELECT staffing_mode FROM equipment_staffing_history 
+                         WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                         ORDER BY valid_from DESC LIMIT 1),
+                        eq.staffing_mode
+                    ) AS StaffingMode,
+                    COALESCE(
+                        (SELECT valid_from FROM equipment_staffing_history 
+                         WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                         ORDER BY valid_from DESC LIMIT 1),
+                        eq.commissioned_at
+                    ) AS StaffingModeValidFrom,
+                    
+                    -- Актуальный ID графика и дата его начала
+                    COALESCE(
+                        (SELECT template_id FROM equipment_schedule_history 
+                         WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                         ORDER BY valid_from DESC LIMIT 1),
+                        eq.template_id
+                    ) AS TemplateId,
+                    COALESCE(
+                        (SELECT valid_from FROM equipment_schedule_history 
+                         WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                         ORDER BY valid_from DESC LIMIT 1),
+                        eq.commissioned_at
+                    ) AS TemplateValidFrom,
+                    
+                    -- Текстовое название графика
+                    (SELECT name FROM schedule_templates 
+                     WHERE id = COALESCE(
+                        (SELECT template_id FROM equipment_schedule_history 
+                         WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                         ORDER BY valid_from DESC LIMIT 1),
+                        eq.template_id
+                     )
+                    ) AS TemplateName
+                FROM equipment eq 
+                WHERE eq.id = @Id;";
 
             using (var connection = new MySqlConnection(_connectionString))
             {
-                // Возвращает чистую базовую модель, готовую для отправки обратно через UPDATE
-                return await connection.QueryFirstOrDefaultAsync<EquipmentModel>(sql, new { Id = id });
+                // Читаем плоскую строку из базы данных
+                var row = await connection.QueryFirstOrDefaultAsync<WorkAreaEquipmentRow>(sql, new { Id = id });
+
+                if (row == null) return null;
+
+                // Маппим данные в расширенную модель с датами
+                return new EquipmentShortInfo
+                {
+                    Id = row.EquipId.Value,
+                    WorkAreaId = row.WorkAreaId,
+                    TemplateId = row.TemplateId,
+                    Name = row.EquipName ?? "Без названия",
+                    Code = row.EquipCode ?? "Б/К",
+                    CommissionedAt = row.CommissionedAt ?? DateTime.MinValue,
+                    DecommissionedAt = row.DecommissionedAt,
+                    SortOrder = row.EquipSortOrder,
+                    StaffingMode = row.StaffingMode ?? "strict_schedule",
+
+                    TemplateName = row.TemplateName ?? "График не назначен",
+                    StaffingModeValidFrom = row.StaffingModeValidFrom,
+                    TemplateValidFrom = row.TemplateValidFrom
+                };
             }
         }
 
         /// <summary>
-        /// СОХРАНЕНИЕ ИЗМЕНЕНИЙ: Принимает базовый класс и обновляет MySQL
+        /// ДОБАВЛЕНИЕ: Создает станок и сразу пишет начальную точку в историю на основе дат из модели
         /// </summary>
-        public async Task<bool> UpdateEquipmentAsync(EquipmentModel model)
+        public async Task<int> CreateEquipmentAsync(EquipmentShortInfo model)
         {
-            const string sql = @"
-                UPDATE equipment 
-                SET work_area_id = @WorkAreaId,
-                    template_id = @TemplateId,
-                    name = @Name,
-                    code = @Code,
-                    commissioned_at = @CommissionedAt,
-                    decommissioned_at = @DecommissionedAt,
-                    staffing_mode = @StaffingMode
-                WHERE id = @Id;";
-
             using (var connection = new MySqlConnection(_connectionString))
             {
-                // Сюда можно передавать как EquipmentModel, так и EquipmentShortInfo (благодаря наследованию!)
-                int rows = await connection.ExecuteAsync(sql, model);
-                return rows > 0;
+                await connection.OpenAsync();
+                using (var tx = await connection.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        // 1. Вставляем станок с авто-порядком
+                        const string insertEquipSql = @"
+                            INSERT INTO equipment (work_area_id, template_id, name, code, commissioned_at, decommissioned_at, staffing_mode, sort_order)
+                            VALUES (@WorkAreaId, @TemplateId, @Name, @Code, @CommissionedAt, @DecommissionedAt, @StaffingMode, 
+                                    COALESCE((SELECT max_order FROM (SELECT MAX(sort_order) AS max_order FROM equipment WHERE work_area_id = @WorkAreaId) AS temp) + 1, 1));
+                            SELECT LAST_INSERT_ID();";
+
+                        int equipmentId = await connection.ExecuteScalarAsync<int>(insertEquipSql, model, tx);
+
+                        // 2. Стартовая запись графиков (берем дату из TemplateValidFrom, если пустая — из ввода в эксплуатацию)
+                        const string insertSchedHistory = @"
+                            INSERT INTO equipment_schedule_history (equipment_id, template_id, valid_from)
+                            VALUES (@EquipmentId, @TemplateId, @ValidFrom);";
+
+                        await connection.ExecuteAsync(insertSchedHistory, new
+                        {
+                            EquipmentId = equipmentId,
+                            TemplateId = model.TemplateId,
+                            ValidFrom = model.TemplateValidFrom ?? model.CommissionedAt
+                        }, tx);
+
+                        // 3. Стартовая запись режимов (берем дату из StaffingModeValidFrom, если пустая — из ввода в эксплуатацию)
+                        const string insertStaffHistory = @"
+                            INSERT INTO equipment_staffing_history (equipment_id, staffing_mode, valid_from)
+                            VALUES (@EquipmentId, @StaffingMode, @ValidFrom);";
+
+                        await connection.ExecuteAsync(insertStaffHistory, new
+                        {
+                            EquipmentId = equipmentId,
+                            StaffingMode = model.StaffingMode,
+                            ValidFrom = model.StaffingModeValidFrom ?? model.CommissionedAt
+                        }, tx);
+
+                        await tx.CommitAsync();
+                        return equipmentId;
+                    }
+                    catch
+                    {
+                        await tx.RollbackAsync();
+                        throw;
+                    }
+                }
             }
         }
+
+        /// <summary>
+        /// ОБНОВЛЕНИЕ С УМНОЙ ИСТОРИЕЙ: Корректно обрабатывает создание новых точек истории, 
+        /// обновление значений на ту же дату и редактирование дат для существующих записей.
+        /// </summary>
+        public async Task<bool> UpdateEquipmentWithHistoryAsync(
+            EquipmentShortInfo model,
+            DateTime oldTemplateValidFrom,
+            DateTime oldStaffingModeValidFrom)
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (var tx = await connection.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        // 1. Получаем базовые дефолты из таблицы equipment на случай, если истории нет
+                        const string getBaseSql = "SELECT template_id, staffing_mode FROM equipment WHERE id = @Id;";
+                        var baseData = await connection.QueryFirstOrDefaultAsync(getBaseSql, new { Id = model.Id }, tx);
+
+                        // 2. Обновляем базовые текстовые поля станка
+                        const string updateEquipSql = @"
+                            UPDATE equipment 
+                            SET work_area_id = @WorkAreaId,
+                                name = @Name,
+                                code = @Code,
+                                commissioned_at = @CommissionedAt,
+                                decommissioned_at = @DecommissionedAt
+                            WHERE id = @Id;";
+                        await connection.ExecuteAsync(updateEquipSql, model, tx);
+
+                        // Целевые даты из UI формы
+                        DateTime newScheduleDate = model.TemplateValidFrom ?? DateTime.Today;
+                        DateTime newStaffingDate = model.StaffingModeValidFrom ?? DateTime.Today;
+
+                        // =========================================================================
+                        // БЛОК ГРАФИКА (SCHEDULE HISTORY)
+                        // =========================================================================
+
+                        // Пытаемся взять значение из истории по старой дате
+                        const string getActualSched = "SELECT template_id FROM equipment_schedule_history WHERE equipment_id = @Id AND valid_from = @OldValidFrom;";
+                        int? lastSavedTemplateId = await connection.QueryFirstOrDefaultAsync<int?>(getActualSched, new { Id = model.Id, OldValidFrom = oldTemplateValidFrom }, tx);
+
+                        // Если в истории записей нет — подставляем дефолтное значение из самого станка
+                        if (!lastSavedTemplateId.HasValue && baseData != null)
+                        {
+                            lastSavedTemplateId = baseData.template_id;
+                        }
+
+                        // Проверяем, есть ли запись в истории строго на НОВУЮ выбранную дату
+                        const string checkSchedSql = "SELECT template_id FROM equipment_schedule_history WHERE equipment_id = @Id AND valid_from = @ValidFrom;";
+                        int? existingTemplateId = await connection.QueryFirstOrDefaultAsync<int?>(checkSchedSql, new { Id = model.Id, ValidFrom = newScheduleDate }, tx);
+
+                        if (existingTemplateId.HasValue)
+                        {
+                            // Сценарий 1: На эту дату запись есть — обновляем (UPDATE)
+                            const string updateSched = "UPDATE equipment_schedule_history SET template_id = @TemplateId WHERE equipment_id = @EquipmentId AND valid_from = @ValidFrom;";
+                            await connection.ExecuteAsync(updateSched, new { TemplateId = model.TemplateId, EquipmentId = model.Id, ValidFrom = newScheduleDate }, tx);
+                        }
+                        else
+                        {
+                            // Сценарий 2: График ИЗМЕНИЛСЯ — создаем точку истории (INSERT)
+                            if (lastSavedTemplateId != model.TemplateId)
+                            {
+                                const string insertSched = "INSERT INTO equipment_schedule_history (equipment_id, template_id, valid_from) VALUES (@EquipmentId, @TemplateId, @ValidFrom);";
+                                await connection.ExecuteAsync(insertSched, new { EquipmentId = model.Id, TemplateId = model.TemplateId, ValidFrom = newScheduleDate }, tx);
+                            }
+                            // Сценарий 3: График тот же, но поменялась дата (и только если в истории БЫЛО что двигать!)
+                            else if (newScheduleDate != oldTemplateValidFrom && oldTemplateValidFrom != model.CommissionedAt)
+                            {
+                                const string shiftSchedDate = "UPDATE equipment_schedule_history SET valid_from = @NewValidFrom WHERE equipment_id = @EquipmentId AND valid_from = @OldValidFrom;";
+                                await connection.ExecuteAsync(shiftSchedDate, new { NewValidFrom = newScheduleDate, EquipmentId = model.Id, OldValidFrom = oldTemplateValidFrom }, tx);
+                            }
+                            // Сценарий 4: Истории не было вообще, график не менялся, но дату сдвинули — создаем ПЕРВУЮ запись истории
+                            else if (newScheduleDate != oldTemplateValidFrom && oldTemplateValidFrom == model.CommissionedAt)
+                            {
+                                const string insertFirstSched = "INSERT INTO equipment_schedule_history (equipment_id, template_id, valid_from) VALUES (@EquipmentId, @TemplateId, @ValidFrom);";
+                                await connection.ExecuteAsync(insertFirstSched, new { EquipmentId = model.Id, TemplateId = model.TemplateId, ValidFrom = newScheduleDate }, tx);
+                            }
+                        }
+
+                        // =========================================================================
+                        // БЛОК РЕЖИМА (STAFFING HISTORY)
+                        // =========================================================================
+
+                        // Пытаемся взять значение из истории по старой дате
+                        const string getActualStaff = "SELECT staffing_mode FROM equipment_staffing_history WHERE equipment_id = @Id AND valid_from = @OldValidFrom;";
+                        string lastSavedStaffMode = await connection.QueryFirstOrDefaultAsync<string>(getActualStaff, new { Id = model.Id, OldValidFrom = oldStaffingModeValidFrom }, tx);
+
+                        // Если в истории пусто — подставляем дефолтный режим работы из станка
+                        if (lastSavedStaffMode == null && baseData != null)
+                        {
+                            lastSavedStaffMode = baseData.staffing_mode;
+                        }
+
+                        // Проверяем существование записи на новую дату
+                        const string checkStaffSql = "SELECT staffing_mode FROM equipment_staffing_history WHERE equipment_id = @Id AND valid_from = @ValidFrom;";
+                        string existingStaffingMode = await connection.QueryFirstOrDefaultAsync<string>(checkStaffSql, new { Id = model.Id, ValidFrom = newStaffingDate }, tx);
+
+                        if (existingStaffingMode != null)
+                        {
+                            // Сценарий 1: На эту дату запись есть — обновляем (UPDATE)
+                            const string updateStaff = "UPDATE equipment_staffing_history SET staffing_mode = @StaffingMode WHERE equipment_id = @EquipmentId AND valid_from = @ValidFrom;";
+                            await connection.ExecuteAsync(updateStaff, new { StaffingMode = model.StaffingMode, EquipmentId = model.Id, ValidFrom = newStaffingDate }, tx);
+                        }
+                        else
+                        {
+                            // Сценарий 2: Режим ИЗМЕНИЛСЯ — создаем точку истории (INSERT)
+                            if (lastSavedStaffMode != model.StaffingMode)
+                            {
+                                const string insertStaff = "INSERT INTO equipment_staffing_history (equipment_id, staffing_mode, valid_from) VALUES (@EquipmentId, @StaffingMode, @ValidFrom);";
+                                await connection.ExecuteAsync(insertStaff, new { EquipmentId = model.Id, StaffingMode = model.StaffingMode, ValidFrom = newStaffingDate }, tx);
+                            }
+                            // Сценарий 3: Режим тот же, изменилась дата (если в истории была запись)
+                            else if (newStaffingDate != oldStaffingModeValidFrom && oldStaffingModeValidFrom != model.CommissionedAt)
+                            {
+                                const string shiftStaffDate = "UPDATE equipment_staffing_history SET valid_from = @NewValidFrom WHERE equipment_id = @EquipmentId AND valid_from = @OldValidFrom;";
+                                await connection.ExecuteAsync(shiftStaffDate, new { NewValidFrom = newStaffingDate, EquipmentId = model.Id, OldValidFrom = oldStaffingModeValidFrom }, tx);
+                            }
+                            // Сценарий 4: Истории не было, режим тот же, но дату изменили — создаем первую точку истории
+                            else if (newStaffingDate != oldStaffingModeValidFrom && oldStaffingModeValidFrom == model.CommissionedAt)
+                            {
+                                const string insertFirstStaff = "INSERT INTO equipment_staffing_history (equipment_id, staffing_mode, valid_from) VALUES (@EquipmentId, @StaffingMode, @ValidFrom);";
+                                await connection.ExecuteAsync(insertFirstStaff, new { EquipmentId = model.Id, StaffingMode = model.StaffingMode, ValidFrom = newStaffingDate }, tx);
+                            }
+                        }
+
+                        await tx.CommitAsync();
+                        return true;
+                    }
+                    catch
+                    {
+                        await tx.RollbackAsync(); return false;
+                    }
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// БЕЗОПАСНОЕ УДАЛЕНИЕ: Проверяет использование оборудования в планах, назначениях и истории до удаления
