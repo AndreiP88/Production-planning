@@ -1,17 +1,17 @@
 /*
  Navicat Premium Dump SQL
 
- Source Server         : om
+ Source Server         : localhost_3309
  Source Server Type    : MySQL
- Source Server Version : 80040 (8.0.40)
- Source Host           : versorpc:3309
+ Source Server Version : 80046 (8.0.46)
+ Source Host           : localhost:3309
  Source Schema         : workplan
 
  Target Server Type    : MySQL
- Target Server Version : 80040 (8.0.40)
+ Target Server Version : 80046 (8.0.46)
  File Encoding         : 65001
 
- Date: 29/05/2026 15:45:40
+ Date: 19/06/2026 15:55:58
 */
 
 SET NAMES utf8mb4;
@@ -54,6 +54,42 @@ CREATE TABLE `absences`  (
 -- ----------------------------
 INSERT INTO `absences` VALUES (1, 4, 1, '2026-05-05', '2026-05-14');
 INSERT INTO `absences` VALUES (2, 2, 2, '2026-05-07', '2026-05-21');
+
+-- ----------------------------
+-- Table structure for contact_types
+-- ----------------------------
+DROP TABLE IF EXISTS `contact_types`;
+CREATE TABLE `contact_types`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `code`(`code` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of contact_types
+-- ----------------------------
+INSERT INTO `contact_types` VALUES (1, 'phone', 'Телефон');
+INSERT INTO `contact_types` VALUES (2, 'email', 'Электронная почта');
+INSERT INTO `contact_types` VALUES (3, 'address', 'Адрес проживания');
+
+-- ----------------------------
+-- Table structure for employee_contacts
+-- ----------------------------
+DROP TABLE IF EXISTS `employee_contacts`;
+CREATE TABLE `employee_contacts`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `employee_id` int NOT NULL,
+  `contact_type_id` int UNSIGNED NOT NULL,
+  `contact_value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `emp_contact`(`employee_id` ASC, `contact_type_id` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of employee_contacts
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for employee_equipment_assignments
@@ -130,6 +166,9 @@ INSERT INTO `employee_schedule_assignments` VALUES (5, 5, 2, '2019-01-01');
 DROP TABLE IF EXISTS `employees`;
 CREATE TABLE `employees`  (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `last_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `first_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `patronymic` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `full_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `system_role` enum('worker','master','chief') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'worker',
   PRIMARY KEY (`id`) USING BTREE,
@@ -139,11 +178,11 @@ CREATE TABLE `employees`  (
 -- ----------------------------
 -- Records of employees
 -- ----------------------------
-INSERT INTO `employees` VALUES (1, 'Павельчук', 'worker');
-INSERT INTO `employees` VALUES (2, 'Коськин', 'worker');
-INSERT INTO `employees` VALUES (3, 'Михалевич', 'worker');
-INSERT INTO `employees` VALUES (4, 'Гудков', 'worker');
-INSERT INTO `employees` VALUES (5, 'Петров', 'worker');
+INSERT INTO `employees` VALUES (1, 'Павельчук', 'Андрей', 'Анатольевич', 'Павельчук А. А.', 'worker');
+INSERT INTO `employees` VALUES (2, 'Коськин', 'Кирилл', 'Сергеевич', 'Коськин К. С.', 'worker');
+INSERT INTO `employees` VALUES (3, 'Михалевич', 'Алексей', 'Сергеевич', 'Михалевич А. С.', 'worker');
+INSERT INTO `employees` VALUES (4, 'Гудков', 'Даниил', 'Владимирович', 'Гудков Д. В.', 'worker');
+INSERT INTO `employees` VALUES (5, 'Петров', 'Петр', 'Петрович', 'Петров П. П.', 'worker');
 
 -- ----------------------------
 -- Table structure for employment_periods
@@ -184,14 +223,18 @@ CREATE TABLE `equipment`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `code`(`code` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of equipment
 -- ----------------------------
-INSERT INTO `equipment` VALUES (1, 1, 7, 'Versor', '15', '2013-01-01', NULL, 'strict_schedule', 0);
-INSERT INTO `equipment` VALUES (2, 1, 7, 'Diana', '9', '2010-01-01', NULL, 'strict_schedule', 0);
-INSERT INTO `equipment` VALUES (3, 1, 7, 'Bobst', '38', '2020-01-01', NULL, 'manual_only', 0);
+INSERT INTO `equipment` VALUES (1, 1, 7, 'Versor P/S 100k3/4/6', '15', '2013-01-01', NULL, 'strict_schedule', 0);
+INSERT INTO `equipment` VALUES (2, 1, 7, 'Diana', '9', '2010-01-01', NULL, 'strict_schedule', 1);
+INSERT INTO `equipment` VALUES (3, 1, 7, 'Bobst', '38', '2020-01-01', NULL, 'manual_only', 2);
+INSERT INTO `equipment` VALUES (4, 1, 7, 'Versor Pasio', '44', '2026-06-01', NULL, 'strict_schedule', 3);
+INSERT INTO `equipment` VALUES (5, 1, 7, 'L1000', '55', '2026-06-01', NULL, 'strict_schedule', 4);
+INSERT INTO `equipment` VALUES (6, 1, 7, 'L1000 (2)', '45', '2026-06-01', NULL, 'strict_schedule', 5);
+INSERT INTO `equipment` VALUES (7, 1, 10, 'Окна', '666', '2026-06-06', NULL, 'strict_schedule', 6);
 
 -- ----------------------------
 -- Table structure for equipment_daily_plan
@@ -226,14 +269,21 @@ CREATE TABLE `equipment_schedule_history`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `equipment_id`(`equipment_id` ASC, `valid_from` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of equipment_schedule_history
 -- ----------------------------
-INSERT INTO `equipment_schedule_history` VALUES (1, 1, 7, '2010-01-01');
+INSERT INTO `equipment_schedule_history` VALUES (1, 1, 7, '2026-06-06');
 INSERT INTO `equipment_schedule_history` VALUES (2, 2, 7, '2010-01-01');
 INSERT INTO `equipment_schedule_history` VALUES (3, 3, 7, '2010-01-01');
+INSERT INTO `equipment_schedule_history` VALUES (5, 5, 7, '2026-06-01');
+INSERT INTO `equipment_schedule_history` VALUES (6, 5, 8, '2025-06-06');
+INSERT INTO `equipment_schedule_history` VALUES (7, 2, 7, '2025-06-06');
+INSERT INTO `equipment_schedule_history` VALUES (8, 6, 7, '2026-06-01');
+INSERT INTO `equipment_schedule_history` VALUES (9, 4, 7, '2026-06-02');
+INSERT INTO `equipment_schedule_history` VALUES (10, 4, 8, '2026-06-06');
+INSERT INTO `equipment_schedule_history` VALUES (11, 7, 10, '2026-06-06');
 
 -- ----------------------------
 -- Table structure for equipment_staffing_history
@@ -247,14 +297,21 @@ CREATE TABLE `equipment_staffing_history`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `equipment_id`(`equipment_id` ASC, `valid_from` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of equipment_staffing_history
 -- ----------------------------
-INSERT INTO `equipment_staffing_history` VALUES (1, 1, 'strict_schedule', '2010-01-01');
+INSERT INTO `equipment_staffing_history` VALUES (1, 1, 'strict_schedule', '2020-01-03');
 INSERT INTO `equipment_staffing_history` VALUES (2, 2, 'strict_schedule', '2010-01-01');
 INSERT INTO `equipment_staffing_history` VALUES (3, 3, 'manual_only', '2010-01-01');
+INSERT INTO `equipment_staffing_history` VALUES (7, 1, 'strict_schedule', '2021-05-05');
+INSERT INTO `equipment_staffing_history` VALUES (8, 5, 'strict_schedule', '2026-06-01');
+INSERT INTO `equipment_staffing_history` VALUES (9, 5, 'manual_only', '2025-06-06');
+INSERT INTO `equipment_staffing_history` VALUES (10, 1, 'strict_schedule', '2026-06-06');
+INSERT INTO `equipment_staffing_history` VALUES (11, 6, 'strict_schedule', '2026-06-01');
+INSERT INTO `equipment_staffing_history` VALUES (12, 4, 'strict_schedule', '2026-06-03');
+INSERT INTO `equipment_staffing_history` VALUES (13, 7, 'strict_schedule', '2026-06-06');
 
 -- ----------------------------
 -- Table structure for positions
@@ -263,6 +320,7 @@ DROP TABLE IF EXISTS `positions`;
 CREATE TABLE `positions`  (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `system_role` enum('worker','master','chief') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'worker',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
@@ -270,7 +328,7 @@ CREATE TABLE `positions`  (
 -- ----------------------------
 -- Records of positions
 -- ----------------------------
-INSERT INTO `positions` VALUES (1, 'Машинист');
+INSERT INTO `positions` VALUES (1, 'Машинист', 'worker');
 
 -- ----------------------------
 -- Table structure for schedule_cycle_items
@@ -308,6 +366,9 @@ INSERT INTO `schedule_cycle_items` VALUES (3, 7, 3);
 INSERT INTO `schedule_cycle_items` VALUES (4, 1, 1);
 INSERT INTO `schedule_cycle_items` VALUES (4, 1, 2);
 INSERT INTO `schedule_cycle_items` VALUES (5, 1, 1);
+INSERT INTO `schedule_cycle_items` VALUES (10, 1, 11);
+INSERT INTO `schedule_cycle_items` VALUES (10, 1, 12);
+INSERT INTO `schedule_cycle_items` VALUES (10, 1, 13);
 
 -- ----------------------------
 -- Table structure for schedule_cycles
@@ -319,16 +380,17 @@ CREATE TABLE `schedule_cycles`  (
   `cycle_length` int NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of schedule_cycles
 -- ----------------------------
-INSERT INTO `schedule_cycles` VALUES (1, '2 через 2 (с ночными)', 8);
-INSERT INTO `schedule_cycles` VALUES (2, '2/2 дневные', 4);
+INSERT INTO `schedule_cycles` VALUES (1, '2/2 (день, ночь)', 8);
+INSERT INTO `schedule_cycles` VALUES (2, '2/2 (день)', 4);
 INSERT INTO `schedule_cycles` VALUES (3, '5/2', 7);
 INSERT INTO `schedule_cycles` VALUES (4, 'Круглосуточно', 1);
 INSERT INTO `schedule_cycles` VALUES (5, 'Ежедневно', 1);
+INSERT INTO `schedule_cycles` VALUES (10, 'Станок 3 смены', 1);
 
 -- ----------------------------
 -- Table structure for schedule_overrides
@@ -373,19 +435,20 @@ CREATE TABLE `schedule_templates`  (
   `base_date` date NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of schedule_templates
 -- ----------------------------
-INSERT INTO `schedule_templates` VALUES (1, 'Бригада А (Старт с Дневной)', 1, '2009-12-31');
-INSERT INTO `schedule_templates` VALUES (2, 'Бригада Б (Старт с Выходных)', 1, '2010-01-02');
-INSERT INTO `schedule_templates` VALUES (3, 'Бригада В (Старт с Ночной)', 1, '2010-01-04');
-INSERT INTO `schedule_templates` VALUES (4, 'Бригада Г (Старт со 2-х Выходных)', 1, '2010-01-06');
-INSERT INTO `schedule_templates` VALUES (5, '1 Дневные 2/2', 2, '2010-01-02');
-INSERT INTO `schedule_templates` VALUES (6, '2 Дневные 2/2', 2, '2010-01-04');
-INSERT INTO `schedule_templates` VALUES (7, 'Станок круглосуточно', 4, '2010-01-01');
-INSERT INTO `schedule_templates` VALUES (8, 'Станок день', 5, '2010-01-01');
+INSERT INTO `schedule_templates` VALUES (1, 'Сменный 1', 1, '2009-12-31');
+INSERT INTO `schedule_templates` VALUES (2, 'Сменный 2', 1, '2010-01-02');
+INSERT INTO `schedule_templates` VALUES (3, 'Сменный 3', 1, '2010-01-04');
+INSERT INTO `schedule_templates` VALUES (4, 'Сменный 4', 1, '2010-01-06');
+INSERT INTO `schedule_templates` VALUES (5, 'Сменный 5', 2, '2010-01-02');
+INSERT INTO `schedule_templates` VALUES (6, 'Сменный 6', 2, '2010-01-04');
+INSERT INTO `schedule_templates` VALUES (7, 'Круглосуточно, оборудование', 4, '2010-01-01');
+INSERT INTO `schedule_templates` VALUES (8, 'Оборудование день', 5, '2010-01-01');
+INSERT INTO `schedule_templates` VALUES (10, '3 смены круглосуточно', 10, '2026-05-31');
 
 -- ----------------------------
 -- Table structure for shift_definitions
@@ -400,7 +463,7 @@ CREATE TABLE `shift_definitions`  (
   `end_time` time NOT NULL DEFAULT '20:00:00',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of shift_definitions
@@ -408,9 +471,9 @@ CREATE TABLE `shift_definitions`  (
 INSERT INTO `shift_definitions` VALUES (1, 1, 'Дневная смена', 'worker', '08:00:00', '20:00:00');
 INSERT INTO `shift_definitions` VALUES (2, 2, 'Ночная смена', 'worker', '20:00:00', '08:00:00');
 INSERT INTO `shift_definitions` VALUES (3, 0, 'Выходной', 'universal', '00:00:00', '00:00:00');
-INSERT INTO `shift_definitions` VALUES (4, 3, '3 Смена', 'worker', '00:00:00', '00:00:00');
-INSERT INTO `shift_definitions` VALUES (5, 4, '4 Смена', 'worker', '00:00:00', '00:00:00');
-INSERT INTO `shift_definitions` VALUES (6, 5, '5 cvtyf', 'universal', '00:00:00', '00:00:00');
+INSERT INTO `shift_definitions` VALUES (11, 1, '1 Смена', 'universal', '07:00:00', '15:30:00');
+INSERT INTO `shift_definitions` VALUES (12, 2, '2 Смена', 'universal', '15:30:00', '23:30:00');
+INSERT INTO `shift_definitions` VALUES (13, 3, '3 Смена', 'universal', '23:30:00', '07:00:00');
 
 -- ----------------------------
 -- Table structure for work_areas
@@ -422,19 +485,21 @@ CREATE TABLE `work_areas`  (
   `sort_order` int NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of work_areas
 -- ----------------------------
 INSERT INTO `work_areas` VALUES (1, 'Участок склейки', 0);
+INSERT INTO `work_areas` VALUES (2, 'Участок вырубки', 1);
+INSERT INTO `work_areas` VALUES (4, 'Участок плоской печати', 3);
 
 -- ----------------------------
 -- Procedure structure for GetEquipmentShiftCard
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `GetEquipmentShiftCard`;
 delimiter ;;
-CREATE PROCEDURE `GetEquipmentShiftCard`(IN p_target_date DATE,
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetEquipmentShiftCard`(IN p_target_date DATE,
     IN p_target_shift_number INT,
     IN p_target_equipment_id INT)
 BEGIN
@@ -579,7 +644,7 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `GetEquipmentStaffingReport`;
 delimiter ;;
-CREATE PROCEDURE `GetEquipmentStaffingReport`(IN p_start_date DATE,
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetEquipmentStaffingReport`(IN p_start_date DATE,
     IN p_end_date DATE,
     IN p_target_area_id INT)
 BEGIN

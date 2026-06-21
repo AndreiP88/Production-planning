@@ -230,6 +230,24 @@ namespace database
         }*/
 
         /// <summary>
+        /// Возвращает список всего несписанного оборудования с указанием их участков
+        /// </summary>
+        public async Task<List<EquipmentLookupDto>> GetEquipmentLookupAsync()
+        {
+            string sql = "SELECT e.id AS Id, e.name AS Name, e.code AS Code, e.work_area_id AS WorkAreaId, wa.name AS WorkAreaName " +
+                         "FROM equipment e " +
+                         "JOIN work_areas wa ON e.work_area_id = wa.id " +
+                         "WHERE e.decommissioned_at IS NULL OR e.decommissioned_at > CURDATE() " +
+                         "ORDER BY wa.name ASC, e.sort_order, e.name ASC;";
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                var res = await conn.QueryAsync<EquipmentLookupDto>(sql);
+                return res.ToList();
+            }
+        }
+
+        /// <summary>
         /// ПОЛУЧЕНИЕ СТАНКА ПО ID: Возвращает полную информацию о станке, включая актуальный график, режим и даты их начала действия
         /// </summary>
         public async Task<EquipmentShortInfo> GetEquipmentByIdAsync(int id)
@@ -314,9 +332,62 @@ namespace database
         }
 
         /// <summary>
+        /// ПОЛНАЯ КАРТОЧКА ПО ID: Считывает все данные станка с актуальной историей на сегодня
+        /// </summary>
+        public async Task<EquipmentFullCard> GetEquipmentFullCardAsync(int id)
+        {
+            var todayStr = DateTime.Today.ToString("yyyy-MM-dd");
+
+            string sql = $@"
+                SELECT 
+                    eq.id AS Id, eq.work_area_id AS WorkAreaId, eq.name AS Name, eq.code AS Code, 
+                    eq.commissioned_at AS CommissionedAt, eq.decommissioned_at AS DecommissionedAt, 
+                    eq.sort_order AS SortOrder,
+                    COALESCE(
+                        (SELECT staffing_mode FROM equipment_staffing_history 
+                         WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                         ORDER BY valid_from DESC LIMIT 1),
+                        eq.staffing_mode
+                    ) AS StaffingMode,
+                    COALESCE(
+                        (SELECT valid_from FROM equipment_staffing_history 
+                         WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                         ORDER BY valid_from DESC LIMIT 1),
+                        eq.commissioned_at
+                    ) AS StaffingModeValidFrom,
+                    COALESCE(
+                        (SELECT template_id FROM equipment_schedule_history 
+                         WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                         ORDER BY valid_from DESC LIMIT 1),
+                        eq.template_id
+                    ) AS TemplateId,
+                    COALESCE(
+                        (SELECT valid_from FROM equipment_schedule_history 
+                         WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                         ORDER BY valid_from DESC LIMIT 1),
+                        eq.commissioned_at
+                    ) AS TemplateValidFrom,
+                    (SELECT name FROM schedule_templates 
+                     WHERE id = COALESCE(
+                        (SELECT template_id FROM equipment_schedule_history 
+                         WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                         ORDER BY valid_from DESC LIMIT 1),
+                        eq.template_id
+                     )
+                    ) AS TemplateName
+                FROM equipment eq 
+                WHERE eq.id = @Id;";
+
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                return await connection.QueryFirstOrDefaultAsync<EquipmentFullCard>(sql, new { Id = id });
+            }
+        }
+
+        /// <summary>
         /// ДОБАВЛЕНИЕ: Создает станок и сразу пишет начальную точку в историю на основе дат из модели
         /// </summary>
-        public async Task<int> CreateEquipmentAsync(EquipmentShortInfo model)
+        public async Task<int> CreateEquipmentAsync(EquipmentFullCard model)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -371,13 +442,14 @@ namespace database
         }
 
         /// <summary>
-        /// ОБНОВЛЕНИЕ С УМНОЙ ИСТОРИЕЙ: Корректно обрабатывает создание новых точек истории, 
-        /// обновление значений на ту же дату и редактирование дат для существующих записей.
+        /// ГЛОБАЛЬНОЕ СОХРАНЕНИЕ КАРТОЧКИ СТАНКА С УМНЫМ УЧЕТОМ БУФЕРА
         /// </summary>
-        public async Task<bool> UpdateEquipmentWithHistoryAsync(
-            EquipmentShortInfo model,
+        public async Task<bool> SaveEquipmentTransactionAsync(
+            EquipmentFullCard card,
             DateTime oldTemplateValidFrom,
-            DateTime oldStaffingModeValidFrom)
+            DateTime oldStaffingValidFrom,
+            List<PendingScheduleAssignment> pendingSchedules,
+            List<PendingStaffingAssignment> pendingStaffing)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -386,129 +458,80 @@ namespace database
                 {
                     try
                     {
-                        // 1. Получаем базовые дефолты из таблицы equipment на случай, если истории нет
-                        const string getBaseSql = "SELECT template_id, staffing_mode FROM equipment WHERE id = @Id;";
-                        var baseData = await connection.QueryFirstOrDefaultAsync(getBaseSql, new { Id = model.Id }, tx);
-
-                        // 2. Обновляем базовые текстовые поля станка
+                        // 1. Обновляем анкетные поля
                         const string updateEquipSql = @"
-                            UPDATE equipment 
-                            SET work_area_id = @WorkAreaId,
-                                name = @Name,
-                                code = @Code,
-                                commissioned_at = @CommissionedAt,
-                                decommissioned_at = @DecommissionedAt
-                            WHERE id = @Id;";
-                        await connection.ExecuteAsync(updateEquipSql, model, tx);
+                            UPDATE equipment SET work_area_id = @WorkAreaId, name = @Name, code = @Code,
+                                commissioned_at = @CommissionedAt, decommissioned_at = @DecommissionedAt WHERE id = @Id;";
+                        await connection.ExecuteAsync(updateEquipSql, card, tx);
 
-                        // Целевые даты из UI формы
-                        DateTime newScheduleDate = model.TemplateValidFrom ?? DateTime.Today;
-                        DateTime newStaffingDate = model.StaffingModeValidFrom ?? DateTime.Today;
+                        bool hasNewSchedules = pendingSchedules != null && pendingSchedules.Any();
+                        bool hasNewStaffing = pendingStaffing != null && pendingStaffing.Any();
 
-                        // =========================================================================
-                        // БЛОК ГРАФИКА (SCHEDULE HISTORY)
-                        // =========================================================================
-
-                        // Пытаемся взять значение из истории по старой дате
-                        const string getActualSched = "SELECT template_id FROM equipment_schedule_history WHERE equipment_id = @Id AND valid_from = @OldValidFrom;";
-                        int? lastSavedTemplateId = await connection.QueryFirstOrDefaultAsync<int?>(getActualSched, new { Id = model.Id, OldValidFrom = oldTemplateValidFrom }, tx);
-
-                        // Если в истории записей нет — подставляем дефолтное значение из самого станка
-                        if (!lastSavedTemplateId.HasValue && baseData != null)
+                        // 2. ГРАФИК: Исправляем старую запись, только если буфер пуст
+                        if (!hasNewSchedules)
                         {
-                            lastSavedTemplateId = baseData.template_id;
+                            const string correctSchedSql = @"
+                                UPDATE equipment_schedule_history SET template_id = @TemplateId, valid_from = @NewValidFrom 
+                                WHERE equipment_id = @EquipmentId AND valid_from = @OldValidFrom;";
+                            await connection.ExecuteAsync(correctSchedSql, new { TemplateId = card.TemplateId, NewValidFrom = card.TemplateValidFrom?.Date, EquipmentId = card.Id, OldValidFrom = oldTemplateValidFrom.Date }, tx);
                         }
 
-                        // Проверяем, есть ли запись в истории строго на НОВУЮ выбранную дату
-                        const string checkSchedSql = "SELECT template_id FROM equipment_schedule_history WHERE equipment_id = @Id AND valid_from = @ValidFrom;";
-                        int? existingTemplateId = await connection.QueryFirstOrDefaultAsync<int?>(checkSchedSql, new { Id = model.Id, ValidFrom = newScheduleDate }, tx);
-
-                        if (existingTemplateId.HasValue)
+                        // 3. РЕЖИМ: Исправляем старую запись, только если буфер пуст
+                        if (!hasNewStaffing)
                         {
-                            // Сценарий 1: На эту дату запись есть — обновляем (UPDATE)
-                            const string updateSched = "UPDATE equipment_schedule_history SET template_id = @TemplateId WHERE equipment_id = @EquipmentId AND valid_from = @ValidFrom;";
-                            await connection.ExecuteAsync(updateSched, new { TemplateId = model.TemplateId, EquipmentId = model.Id, ValidFrom = newScheduleDate }, tx);
+                            const string correctStaffSql = @"
+                                UPDATE equipment_staffing_history SET staffing_mode = @StaffingMode, valid_from = @NewValidFrom 
+                                WHERE equipment_id = @EquipmentId AND valid_from = @OldValidFrom;";
+                            await connection.ExecuteAsync(correctStaffSql, new { StaffingMode = card.StaffingMode, NewValidFrom = card.StaffingModeValidFrom?.Date, EquipmentId = card.Id, OldValidFrom = oldStaffingValidFrom.Date }, tx);
                         }
-                        else
+
+                        // 4. Накатываем новые независимые ГРАФИКИ из буфера
+                        if (hasNewSchedules)
                         {
-                            // Сценарий 2: График ИЗМЕНИЛСЯ — создаем точку истории (INSERT)
-                            if (lastSavedTemplateId != model.TemplateId)
+                            const string insSched = "INSERT INTO equipment_schedule_history (equipment_id, template_id, valid_from) VALUES (@EquipmentId, @TemplateId, @ValidFrom) ON DUPLICATE KEY UPDATE template_id = @TemplateId;";
+                            foreach (var sched in pendingSchedules)
                             {
-                                const string insertSched = "INSERT INTO equipment_schedule_history (equipment_id, template_id, valid_from) VALUES (@EquipmentId, @TemplateId, @ValidFrom);";
-                                await connection.ExecuteAsync(insertSched, new { EquipmentId = model.Id, TemplateId = model.TemplateId, ValidFrom = newScheduleDate }, tx);
-                            }
-                            // Сценарий 3: График тот же, но поменялась дата (и только если в истории БЫЛО что двигать!)
-                            else if (newScheduleDate != oldTemplateValidFrom && oldTemplateValidFrom != model.CommissionedAt)
-                            {
-                                const string shiftSchedDate = "UPDATE equipment_schedule_history SET valid_from = @NewValidFrom WHERE equipment_id = @EquipmentId AND valid_from = @OldValidFrom;";
-                                await connection.ExecuteAsync(shiftSchedDate, new { NewValidFrom = newScheduleDate, EquipmentId = model.Id, OldValidFrom = oldTemplateValidFrom }, tx);
-                            }
-                            // Сценарий 4: Истории не было вообще, график не менялся, но дату сдвинули — создаем ПЕРВУЮ запись истории
-                            else if (newScheduleDate != oldTemplateValidFrom && oldTemplateValidFrom == model.CommissionedAt)
-                            {
-                                const string insertFirstSched = "INSERT INTO equipment_schedule_history (equipment_id, template_id, valid_from) VALUES (@EquipmentId, @TemplateId, @ValidFrom);";
-                                await connection.ExecuteAsync(insertFirstSched, new { EquipmentId = model.Id, TemplateId = model.TemplateId, ValidFrom = newScheduleDate }, tx);
+                                await connection.ExecuteAsync(insSched, new { EquipmentId = card.Id, TemplateId = sched.TemplateId, ValidFrom = sched.ValidFrom.Date }, tx);
                             }
                         }
 
-                        // =========================================================================
-                        // БЛОК РЕЖИМА (STAFFING HISTORY)
-                        // =========================================================================
-
-                        // Пытаемся взять значение из истории по старой дате
-                        const string getActualStaff = "SELECT staffing_mode FROM equipment_staffing_history WHERE equipment_id = @Id AND valid_from = @OldValidFrom;";
-                        string lastSavedStaffMode = await connection.QueryFirstOrDefaultAsync<string>(getActualStaff, new { Id = model.Id, OldValidFrom = oldStaffingModeValidFrom }, tx);
-
-                        // Если в истории пусто — подставляем дефолтный режим работы из станка
-                        if (lastSavedStaffMode == null && baseData != null)
+                        // 5. Накатываем новые независимые РЕЖИМЫ из буфера
+                        if (hasNewStaffing)
                         {
-                            lastSavedStaffMode = baseData.staffing_mode;
-                        }
-
-                        // Проверяем существование записи на новую дату
-                        const string checkStaffSql = "SELECT staffing_mode FROM equipment_staffing_history WHERE equipment_id = @Id AND valid_from = @ValidFrom;";
-                        string existingStaffingMode = await connection.QueryFirstOrDefaultAsync<string>(checkStaffSql, new { Id = model.Id, ValidFrom = newStaffingDate }, tx);
-
-                        if (existingStaffingMode != null)
-                        {
-                            // Сценарий 1: На эту дату запись есть — обновляем (UPDATE)
-                            const string updateStaff = "UPDATE equipment_staffing_history SET staffing_mode = @StaffingMode WHERE equipment_id = @EquipmentId AND valid_from = @ValidFrom;";
-                            await connection.ExecuteAsync(updateStaff, new { StaffingMode = model.StaffingMode, EquipmentId = model.Id, ValidFrom = newStaffingDate }, tx);
-                        }
-                        else
-                        {
-                            // Сценарий 2: Режим ИЗМЕНИЛСЯ — создаем точку истории (INSERT)
-                            if (lastSavedStaffMode != model.StaffingMode)
+                            const string insStaff = "INSERT INTO equipment_staffing_history (equipment_id, staffing_mode, valid_from) VALUES (@EquipmentId, @StaffingMode, @ValidFrom) ON DUPLICATE KEY UPDATE staffing_mode = @StaffingMode;";
+                            foreach (var staff in pendingStaffing)
                             {
-                                const string insertStaff = "INSERT INTO equipment_staffing_history (equipment_id, staffing_mode, valid_from) VALUES (@EquipmentId, @StaffingMode, @ValidFrom);";
-                                await connection.ExecuteAsync(insertStaff, new { EquipmentId = model.Id, StaffingMode = model.StaffingMode, ValidFrom = newStaffingDate }, tx);
-                            }
-                            // Сценарий 3: Режим тот же, изменилась дата (если в истории была запись)
-                            else if (newStaffingDate != oldStaffingModeValidFrom && oldStaffingModeValidFrom != model.CommissionedAt)
-                            {
-                                const string shiftStaffDate = "UPDATE equipment_staffing_history SET valid_from = @NewValidFrom WHERE equipment_id = @EquipmentId AND valid_from = @OldValidFrom;";
-                                await connection.ExecuteAsync(shiftStaffDate, new { NewValidFrom = newStaffingDate, EquipmentId = model.Id, OldValidFrom = oldStaffingModeValidFrom }, tx);
-                            }
-                            // Сценарий 4: Истории не было, режим тот же, но дату изменили — создаем первую точку истории
-                            else if (newStaffingDate != oldStaffingModeValidFrom && oldStaffingModeValidFrom == model.CommissionedAt)
-                            {
-                                const string insertFirstStaff = "INSERT INTO equipment_staffing_history (equipment_id, staffing_mode, valid_from) VALUES (@EquipmentId, @StaffingMode, @ValidFrom);";
-                                await connection.ExecuteAsync(insertFirstStaff, new { EquipmentId = model.Id, StaffingMode = model.StaffingMode, ValidFrom = newStaffingDate }, tx);
+                                await connection.ExecuteAsync(insStaff, new { EquipmentId = card.Id, StaffingMode = staff.StaffingMode, ValidFrom = staff.ValidFrom.Date }, tx);
                             }
                         }
 
                         await tx.CommitAsync();
                         return true;
                     }
-                    catch
-                    {
-                        await tx.RollbackAsync(); return false;
-                    }
+                    catch { await tx.RollbackAsync(); return false; }
                 }
             }
         }
 
+        /// <summary>
+        /// ЗАПРОС ВОЗРАСТА ЗАПИСЕЙ: Считает возраст записей в днях от даты их valid_from
+        /// </summary>
+        public async Task<(int ScheduleAge, int StaffingAge)> GetCurrentAssignmentsAgeAsync(int equipmentId, DateTime scheduleDate, DateTime staffingDate)
+        {
+            const string qSched = "SELECT id FROM equipment_schedule_history WHERE equipment_id = @Id AND valid_from = @OldDate;";
+            const string qStaff = "SELECT id FROM equipment_staffing_history WHERE equipment_id = @Id AND valid_from = @OldDate;";
 
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                var schedRow = await connection.QueryFirstOrDefaultAsync<int?>(qSched, new { Id = equipmentId, OldDate = scheduleDate.Date });
+                var staffRow = await connection.QueryFirstOrDefaultAsync<int?>(qStaff, new { Id = equipmentId, OldDate = staffingDate.Date });
+
+                int schedAge = schedRow.HasValue ? (DateTime.Today - scheduleDate.Date).Days : 0;
+                int staffAge = staffRow.HasValue ? (DateTime.Today - staffingDate.Date).Days : 0;
+
+                return (schedAge, staffAge);
+            }
+        }
 
         /// <summary>
         /// БЕЗОПАСНОЕ УДАЛЕНИЕ: Проверяет использование оборудования в планах, назначениях и истории до удаления
@@ -628,6 +651,54 @@ namespace database
                     }
                     catch { await tx.RollbackAsync(); return false; }
                 }
+            }
+        }
+
+        // =========================================================================
+        // РАЗДЕЛ 5: ПРОСМОТР ПОЛНОЙ ИСТОРИИ ИЗМЕНЕНИЙ СТАНКА (ТАБЛИЦЫ ИСТОРИИ)
+        // =========================================================================
+
+        /// <summary>
+        /// ИСТОРИЯ ГРАФИКОВ: Возвращает хронологический список всех назначенных станoutput графиков
+        /// </summary>
+        public async Task<List<EquipmentScheduleHistoryRow>> GetEquipmentScheduleHistoryAsync(int equipmentId)
+        {
+            const string sql = @"
+                SELECT 
+                    esh.id AS Id,
+                    esh.template_id AS TemplateId,
+                    st.name AS TemplateName,
+                    esh.valid_from AS ValidFrom
+                FROM equipment_schedule_history esh
+                JOIN schedule_templates st ON esh.template_id = st.id
+                WHERE esh.equipment_id = @EquipmentId
+                ORDER BY esh.valid_from DESC, esh.id DESC;";
+
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                var result = await connection.QueryAsync<EquipmentScheduleHistoryRow>(sql, new { EquipmentId = equipmentId });
+                return result.ToList();
+            }
+        }
+
+        /// <summary>
+        /// ИСТОРИЯ РЕЖИМОВ: Возвращает хронологический список всех изменений режима работы станка
+        /// </summary>
+        public async Task<List<EquipmentStaffingHistoryRow>> GetEquipmentStaffingHistoryAsync(int equipmentId)
+        {
+            const string sql = @"
+                SELECT 
+                    id AS Id,
+                    staffing_mode AS StaffingMode,
+                    valid_from AS ValidFrom
+                FROM equipment_staffing_history
+                WHERE equipment_id = @EquipmentId
+                ORDER BY valid_from DESC, id DESC;";
+
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                var result = await connection.QueryAsync<EquipmentStaffingHistoryRow>(sql, new { EquipmentId = equipmentId });
+                return result.ToList();
             }
         }
 

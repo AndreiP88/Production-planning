@@ -53,13 +53,13 @@
             this.tableLayoutPanel1.Controls.Add(this.materialCheckbox1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 88);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 81);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(634, 218);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(634, 201);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel2
@@ -74,12 +74,12 @@
             this.tableLayoutPanel2.Controls.Add(this.textBoxShiftName, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.maskedTextBoxShiftStart, 2, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(13, 46);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(13, 43);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(608, 113);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(608, 104);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // maskedTextBoxShiftEnd
@@ -225,7 +225,7 @@
             this.materialCheckbox1.Name = "materialCheckbox1";
             this.materialCheckbox1.ReadOnly = false;
             this.materialCheckbox1.Ripple = true;
-            this.materialCheckbox1.Size = new System.Drawing.Size(614, 43);
+            this.materialCheckbox1.Size = new System.Drawing.Size(614, 40);
             this.materialCheckbox1.TabIndex = 1;
             this.materialCheckbox1.Text = "Выходной";
             this.materialCheckbox1.UseVisualStyleBackColor = true;
@@ -240,11 +240,11 @@
             this.tableLayoutPanel3.Controls.Add(this.materialButton1, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.materialButton2, 2, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 165);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 153);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(608, 50);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(608, 45);
             this.tableLayoutPanel3.TabIndex = 2;
             // 
             // materialButton1
@@ -260,7 +260,7 @@
             this.materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton1.Name = "materialButton1";
             this.materialButton1.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton1.Size = new System.Drawing.Size(112, 38);
+            this.materialButton1.Size = new System.Drawing.Size(112, 33);
             this.materialButton1.TabIndex = 0;
             this.materialButton1.Text = "Добавить";
             this.materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -281,7 +281,7 @@
             this.materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton2.Name = "materialButton2";
             this.materialButton2.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton2.Size = new System.Drawing.Size(112, 38);
+            this.materialButton2.Size = new System.Drawing.Size(112, 33);
             this.materialButton2.TabIndex = 1;
             this.materialButton2.Text = "Отмена";
             this.materialButton2.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -291,15 +291,15 @@
             // 
             // FormAddShift
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 309);
+            this.ClientSize = new System.Drawing.Size(640, 285);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormStyle = MaterialSkin.Controls.MaterialForm.FormStyles.ActionBar_64;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormAddShift";
-            this.Padding = new System.Windows.Forms.Padding(3, 88, 3, 3);
+            this.Padding = new System.Windows.Forms.Padding(3, 81, 3, 3);
             this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Смена";

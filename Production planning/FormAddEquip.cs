@@ -3,17 +3,28 @@ using database;
 using MaterialSkin.Controls;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Production_planning
 {
     public partial class FormAddEquip : MaterialForm
     {
+        List<PendingScheduleAssignment> _scheduleBuffer;
+        List<PendingStaffingAssignment> _staffingBuffer;
+
+        DateTime _originalTemplateDate;
+        DateTime _originalStaffingDate;
+        int? _oldTemplateId;
+        string _oldStaffingMode;
+
         private readonly bool _edit;
         private List<ScheduleTemplateModel> _scheduleTemplates;
         private List<WorkAreaInfo> _workAreas;
-        private EquipmentShortInfo _equipment;
+        private EquipmentFullCard _equipment;
         private int _equipmentID;
         private int _areaID;
         private bool _isActive;
@@ -28,10 +39,10 @@ namespace Production_planning
             _areaID = areaID;
             _equipmentID = equipmentID;
             _edit = equipmentID != -1;
-            _equipment = _equipment ?? new EquipmentShortInfo();
+            _equipment = _equipment ?? new EquipmentFullCard();
             materialButton1.Text = _edit ? "Сохранить" : "Добавить";
             
-            materialButton1.DialogResult = DialogResult.OK;
+            //materialButton1.DialogResult = DialogResult.OK;
             materialButton2.DialogResult = DialogResult.Cancel;
         }
 
@@ -103,7 +114,13 @@ namespace Production_planning
 
                 WorkAreaService workAreaService = new WorkAreaService(parameter.GetMySQLConnectionString());
 
-                _equipment = await workAreaService.GetEquipmentByIdAsync(_equipmentID);
+                _equipment = await workAreaService.GetEquipmentFullCardAsync(_equipmentID);
+
+                _originalTemplateDate = _equipment.TemplateValidFrom ?? _equipment.CommissionedAt;
+                _originalStaffingDate = _equipment.StaffingModeValidFrom ?? _equipment.CommissionedAt;
+
+                _oldTemplateId = _equipment.TemplateId;
+                _oldStaffingMode = _equipment.StaffingMode;
 
                 textBoxEquipName.Text = _equipment.Name;
                 textBoxEquipCode.Text = _equipment.Code;
@@ -126,7 +143,7 @@ namespace Production_planning
 
                     textBoxDateDeComm.Visible = true;
                     buttonCalendarDeComm.Visible = true;
-                    //buttonDecommission.Visible = false;
+                    buttonDecommission.Visible = true;
                     buttonDecommission.Text = "Восстановить работу";
                     textBoxDateDeComm.Text = _equipment.DecommissionedAt?.ToString("dd.MM.yyyy");
                 }
@@ -143,8 +160,10 @@ namespace Production_planning
             _isLoad = false;
         }
 
-        private async Task SaveEquipment()
+        private async Task<bool> SaveEquipment()
         {
+            bool result = true;
+
             ConnectionParameter parameter = new ConnectionParameter();
 
             var workAreaService = new WorkAreaService(parameter.GetMySQLConnectionString());
@@ -153,8 +172,10 @@ namespace Production_planning
             _equipment.Name = textBoxEquipName.Text;
             _equipment.Code = textBoxEquipCode.Text;
             _equipment.TemplateId = _scheduleTemplates[comboBoxTemplates.SelectedIndex].Id;
-            _equipment.CommissionedAt = Convert.ToDateTime(textBoxDateComm.Text);
             _equipment.StaffingMode = _staffingMode[comboBoxStaffingMode.SelectedIndex];
+            _equipment.TemplateValidFrom = Convert.ToDateTime(textBoxDateTemplateStart.Text);
+            _equipment.StaffingModeValidFrom = Convert.ToDateTime(textBoxDateStaffingModeStart.Text);
+            _equipment.CommissionedAt = Convert.ToDateTime(textBoxDateComm.Text);
 
             if (!_isActive)
             {
@@ -168,21 +189,52 @@ namespace Production_planning
             if (!_edit)
             {
                 //_equipment.WorkAreaId = _areaID;
-                _equipment.TemplateValidFrom = Convert.ToDateTime(textBoxDateTemplateStart.Text);
-                _equipment.StaffingModeValidFrom = Convert.ToDateTime(textBoxDateStaffingModeStart.Text);
 
                 await workAreaService.CreateEquipmentAsync(_equipment);
             }
             else
             {
-                DateTime oldTemplateValidFrom = (DateTime)_equipment.TemplateValidFrom;
-                DateTime oldStaffingModeValidFrom = (DateTime)_equipment.StaffingModeValidFrom;
+                var (ScheduleAge, StaffingAge) = await workAreaService.GetCurrentAssignmentsAgeAsync(_equipmentID, _originalTemplateDate, _originalStaffingDate);
 
-                _equipment.TemplateValidFrom = Convert.ToDateTime(textBoxDateTemplateStart.Text);
-                _equipment.StaffingModeValidFrom = Convert.ToDateTime(textBoxDateStaffingModeStart.Text);
+                if (_scheduleBuffer ==  null || !_scheduleBuffer.Any())
+                {
+                    if (_oldTemplateId != _equipment.TemplateId)
+                    {
+                        if (ScheduleAge > 3)
+                        {
+                            DialogResult dialogResult = MessageBox.Show("С момента последнего назанение прошло 3 дня!\n\nОтредактировать актуальный график (Да)?\nЛибо создать новое назначение с текущей даты (Нет)", "Внимание", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
-                await workAreaService.UpdateEquipmentWithHistoryAsync(_equipment, oldTemplateValidFrom, oldStaffingModeValidFrom);
+                            if (dialogResult == DialogResult.No)
+                            {
+                                var newAssignment = new PendingScheduleAssignment
+                                {
+                                    TemplateId = (int)_equipment.TemplateId,
+                                    TemplateName = comboBoxTemplates.Text,
+                                    ValidFrom = DateTime.Now
+                                };
+
+                                _scheduleBuffer = new List<PendingScheduleAssignment>
+                                {
+                                    newAssignment
+                                };
+                            }
+
+                            if (dialogResult == DialogResult.Cancel)
+                            {
+                                result = false;
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+                /*_equipment.TemplateValidFrom = Convert.ToDateTime(textBoxDateTemplateStart.Text);
+                _equipment.StaffingModeValidFrom = Convert.ToDateTime(textBoxDateStaffingModeStart.Text);*/
+
+                await workAreaService.SaveEquipmentTransactionAsync(_equipment, _originalTemplateDate, _originalStaffingDate, _scheduleBuffer, _staffingBuffer);
             }
+
+            return result;
         }
 
 
@@ -190,10 +242,11 @@ namespace Production_planning
 
         private async void materialButton1_Click(object sender, EventArgs e)
         {
-            await SaveEquipment();
-
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            if (await SaveEquipment())
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
         }
 
         private void materialButton2_Click(object sender, EventArgs e)
@@ -268,8 +321,6 @@ namespace Production_planning
                 dateTimePicker1.Value = parsedDate;
             }
         }
-
-        
 
         private void materialButton3_Click(object sender, EventArgs e)
         {
@@ -357,7 +408,7 @@ namespace Production_planning
         {
             if (_edit && !_isLoad)
             {
-                textBoxDateTemplateStart.Text = DateTime.Now.ToString("dd.MM.yyyy");
+                //textBoxDateTemplateStart.Text = DateTime.Now.ToString("dd.MM.yyyy");
             }
         }
 
@@ -365,7 +416,74 @@ namespace Production_planning
         {
             if (_edit && !_isLoad)
             {
-                textBoxDateStaffingModeStart.Text = DateTime.Now.ToString("dd.MM.yyyy");
+                //textBoxDateStaffingModeStart.Text = DateTime.Now.ToString("dd.MM.yyyy");
+            }
+        }
+
+        private async void ButtonNewSchedules_ClickAsync(object sender, EventArgs e)
+        {
+            FormSelectSchedule selectSchedule = new FormSelectSchedule(_equipmentID);
+            selectSchedule.Owner = this;
+
+            DialogResult result = selectSchedule.ShowDialog();
+
+            await Task.Delay(100);
+
+            if (result == DialogResult.OK)
+            {
+                var newAssignment = new PendingScheduleAssignment
+                {
+                    TemplateId = selectSchedule.SelectedTemplateId,
+                    TemplateName = selectSchedule.SelectedTemplateName,
+                    ValidFrom = selectSchedule.SelectedDate
+                };
+
+                _scheduleBuffer = new List<PendingScheduleAssignment>
+                {
+                    newAssignment
+                };
+
+                comboBoxTemplates.SelectedIndex = _scheduleTemplates.FindIndex(s => s.Id == selectSchedule.SelectedTemplateId);
+                textBoxDateTemplateStart.Text = selectSchedule.SelectedDate.ToString("dd.MM.yyyy");
+
+                comboBoxTemplates.Refresh();
+
+                comboBoxTemplates.Enabled = false;
+                textBoxDateTemplateStart.Enabled = false;
+                buttonCalendarTemplate.Enabled = false;
+            }
+        }
+
+        private async void buttonNewStaffing_Click(object sender, EventArgs e)
+        {
+            FormSelectStaffingMode selectSchedule = new FormSelectStaffingMode(_equipmentID);
+            selectSchedule.Owner = this;
+
+            DialogResult result = selectSchedule.ShowDialog();
+
+            await Task.Delay(100);
+
+            if (result == DialogResult.OK)
+            {
+                var newAssignment = new PendingStaffingAssignment
+                {
+                    StaffingMode = selectSchedule.SelectedStaffingMode,
+                    ValidFrom = selectSchedule.SelectedDate
+                };
+
+                _staffingBuffer = new List<PendingStaffingAssignment>
+                {
+                    newAssignment
+                };
+
+                comboBoxStaffingMode.SelectedIndex = Array.IndexOf(_staffingMode, selectSchedule.SelectedStaffingMode);
+                textBoxDateStaffingModeStart.Text = selectSchedule.SelectedDate.ToString("dd.MM.yyyy");
+
+                comboBoxStaffingMode.Refresh();
+
+                comboBoxStaffingMode.Enabled = false;
+                textBoxDateStaffingModeStart.Enabled = false;
+                buttonCalendarStaffingMode.Enabled = false;
             }
         }
     }

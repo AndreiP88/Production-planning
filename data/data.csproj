@@ -73,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmployeeModel.cs" />
     <Compile Include="EquipmentShift.cs" />
     <Compile Include="OrdersLoad.cs" />
     <Compile Include="ScheduleCycleModel.cs" />

@@ -48,13 +48,13 @@
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 88);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 81);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(624, 179);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(624, 165);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel2
@@ -63,12 +63,12 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Controls.Add(this.textBoxWorkAreaName, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(13, 13);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(13, 12);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(598, 113);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(598, 104);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // textBoxWorkAreaName
@@ -99,11 +99,11 @@
             this.tableLayoutPanel3.Controls.Add(this.materialButton1, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.materialButton2, 2, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 132);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 122);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(598, 44);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(598, 40);
             this.tableLayoutPanel3.TabIndex = 2;
             // 
             // materialButton1
@@ -119,7 +119,7 @@
             this.materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton1.Name = "materialButton1";
             this.materialButton1.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton1.Size = new System.Drawing.Size(112, 32);
+            this.materialButton1.Size = new System.Drawing.Size(112, 28);
             this.materialButton1.TabIndex = 0;
             this.materialButton1.Text = "Добавить";
             this.materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -140,7 +140,7 @@
             this.materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton2.Name = "materialButton2";
             this.materialButton2.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton2.Size = new System.Drawing.Size(112, 32);
+            this.materialButton2.Size = new System.Drawing.Size(112, 28);
             this.materialButton2.TabIndex = 1;
             this.materialButton2.Text = "Отмена";
             this.materialButton2.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -150,15 +150,15 @@
             // 
             // FormAddArea
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(630, 270);
+            this.ClientSize = new System.Drawing.Size(630, 249);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormStyle = MaterialSkin.Controls.MaterialForm.FormStyles.ActionBar_64;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormAddArea";
-            this.Padding = new System.Windows.Forms.Padding(3, 88, 3, 3);
+            this.Padding = new System.Windows.Forms.Padding(3, 81, 3, 3);
             this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Производственный участок";

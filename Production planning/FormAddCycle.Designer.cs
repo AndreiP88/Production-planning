@@ -60,13 +60,13 @@
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 88);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 81);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(732, 410);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(732, 378);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel2
@@ -79,12 +79,12 @@
             this.tableLayoutPanel2.Controls.Add(this.labelCycleLeght, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel4, 1, 1);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(13, 13);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(13, 12);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(706, 344);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(706, 317);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // textBoxCycleName
@@ -121,14 +121,14 @@
             this.listViewCycleItem.FullRowSelect = true;
             this.listViewCycleItem.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewCycleItem.HideSelection = false;
-            this.listViewCycleItem.Location = new System.Drawing.Point(3, 57);
-            this.listViewCycleItem.MinimumSize = new System.Drawing.Size(200, 100);
+            this.listViewCycleItem.Location = new System.Drawing.Point(3, 53);
+            this.listViewCycleItem.MinimumSize = new System.Drawing.Size(200, 92);
             this.listViewCycleItem.MouseLocation = new System.Drawing.Point(-1, -1);
             this.listViewCycleItem.MouseState = MaterialSkin.MouseState.OUT;
             this.listViewCycleItem.MultiSelect = false;
             this.listViewCycleItem.Name = "listViewCycleItem";
             this.listViewCycleItem.OwnerDraw = true;
-            this.listViewCycleItem.Size = new System.Drawing.Size(412, 284);
+            this.listViewCycleItem.Size = new System.Drawing.Size(412, 261);
             this.listViewCycleItem.TabIndex = 2;
             this.listViewCycleItem.UseCompatibleStateImageBehavior = false;
             this.listViewCycleItem.View = System.Windows.Forms.View.Details;
@@ -165,7 +165,7 @@
             this.labelCycleLeght.Location = new System.Drawing.Point(421, 0);
             this.labelCycleLeght.MouseState = MaterialSkin.MouseState.HOVER;
             this.labelCycleLeght.Name = "labelCycleLeght";
-            this.labelCycleLeght.Size = new System.Drawing.Size(282, 54);
+            this.labelCycleLeght.Size = new System.Drawing.Size(282, 50);
             this.labelCycleLeght.TabIndex = 3;
             this.labelCycleLeght.Text = "0";
             this.labelCycleLeght.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -180,7 +180,7 @@
             this.tableLayoutPanel4.Controls.Add(this.buttonShiftAdd, 0, 2);
             this.tableLayoutPanel4.Controls.Add(this.buttonShiftLastDelete, 0, 3);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(421, 57);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(421, 53);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 5;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
@@ -188,7 +188,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(282, 284);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(282, 261);
             this.tableLayoutPanel4.TabIndex = 4;
             // 
             // comboBoxShifts
@@ -223,12 +223,12 @@
             this.buttonShiftAndDayAdd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonShiftAndDayAdd.HighEmphasis = true;
             this.buttonShiftAndDayAdd.Icon = null;
-            this.buttonShiftAndDayAdd.Location = new System.Drawing.Point(4, 62);
+            this.buttonShiftAndDayAdd.Location = new System.Drawing.Point(4, 58);
             this.buttonShiftAndDayAdd.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonShiftAndDayAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonShiftAndDayAdd.Name = "buttonShiftAndDayAdd";
             this.buttonShiftAndDayAdd.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonShiftAndDayAdd.Size = new System.Drawing.Size(274, 44);
+            this.buttonShiftAndDayAdd.Size = new System.Drawing.Size(274, 40);
             this.buttonShiftAndDayAdd.TabIndex = 1;
             this.buttonShiftAndDayAdd.Text = "Добавить смену в новый день";
             this.buttonShiftAndDayAdd.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -244,12 +244,12 @@
             this.buttonShiftAdd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonShiftAdd.HighEmphasis = true;
             this.buttonShiftAdd.Icon = null;
-            this.buttonShiftAdd.Location = new System.Drawing.Point(4, 118);
+            this.buttonShiftAdd.Location = new System.Drawing.Point(4, 110);
             this.buttonShiftAdd.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonShiftAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonShiftAdd.Name = "buttonShiftAdd";
             this.buttonShiftAdd.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonShiftAdd.Size = new System.Drawing.Size(274, 44);
+            this.buttonShiftAdd.Size = new System.Drawing.Size(274, 40);
             this.buttonShiftAdd.TabIndex = 2;
             this.buttonShiftAdd.Text = "Добавить смену в текущий день";
             this.buttonShiftAdd.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -265,12 +265,12 @@
             this.buttonShiftLastDelete.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonShiftLastDelete.HighEmphasis = true;
             this.buttonShiftLastDelete.Icon = null;
-            this.buttonShiftLastDelete.Location = new System.Drawing.Point(4, 174);
+            this.buttonShiftLastDelete.Location = new System.Drawing.Point(4, 162);
             this.buttonShiftLastDelete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonShiftLastDelete.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonShiftLastDelete.Name = "buttonShiftLastDelete";
             this.buttonShiftLastDelete.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonShiftLastDelete.Size = new System.Drawing.Size(274, 44);
+            this.buttonShiftLastDelete.Size = new System.Drawing.Size(274, 40);
             this.buttonShiftLastDelete.TabIndex = 3;
             this.buttonShiftLastDelete.Text = "Удалить последнюю (выбранную?) смену";
             this.buttonShiftLastDelete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -287,11 +287,11 @@
             this.tableLayoutPanel3.Controls.Add(this.materialButton1, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.materialButton2, 2, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 363);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 335);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(706, 44);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(706, 40);
             this.tableLayoutPanel3.TabIndex = 2;
             // 
             // materialButton1
@@ -307,7 +307,7 @@
             this.materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton1.Name = "materialButton1";
             this.materialButton1.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton1.Size = new System.Drawing.Size(112, 32);
+            this.materialButton1.Size = new System.Drawing.Size(112, 28);
             this.materialButton1.TabIndex = 0;
             this.materialButton1.Text = "Добавить";
             this.materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -328,7 +328,7 @@
             this.materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton2.Name = "materialButton2";
             this.materialButton2.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton2.Size = new System.Drawing.Size(112, 32);
+            this.materialButton2.Size = new System.Drawing.Size(112, 28);
             this.materialButton2.TabIndex = 1;
             this.materialButton2.Text = "Отмена";
             this.materialButton2.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -338,15 +338,15 @@
             // 
             // FormAddCycle
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(738, 501);
+            this.ClientSize = new System.Drawing.Size(738, 462);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormStyle = MaterialSkin.Controls.MaterialForm.FormStyles.ActionBar_64;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormAddCycle";
-            this.Padding = new System.Windows.Forms.Padding(3, 88, 3, 3);
+            this.Padding = new System.Windows.Forms.Padding(3, 81, 3, 3);
             this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Шаблоны смен";

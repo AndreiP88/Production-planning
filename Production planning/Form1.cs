@@ -35,6 +35,7 @@ namespace Production_planning
         List<ShiftDefinitionModel> shiftDefinitions;
         List<ScheduleCycleModel> scheduleCycles;
         List<ScheduleTemplateModel> scheduleTemplates;
+        List<EmployeeShortRow> employeeShorts;
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -546,6 +547,12 @@ namespace Production_planning
                 }
             }
 
+            if (index == 3)
+            {
+                await UpdateUsersShortInfo();
+                await LoadUserListToListBox();
+            }
+
             if (index == 4)
             {
                 await LoadAreaListToListBox();
@@ -1022,6 +1029,12 @@ namespace Production_planning
         {
             listViewEquips.Items.Clear();
 
+            buttonEquipAdd.Enabled = false;
+            buttonEquipEdit.Enabled = false;
+            buttonEquipDelete.Enabled = false;
+            buttonEquipMoveUp.Enabled = false;
+            buttonEquipMoveDown.Enabled = false;
+
             int index = listBoxAreas.SelectedIndex;
             bool status = index >= 0;
 
@@ -1184,6 +1197,188 @@ namespace Production_planning
             buttonEquipDelete.Enabled = status;
             buttonEquipMoveUp.Enabled = status;
             buttonEquipMoveDown.Enabled = status;
+        }
+
+        private async void buttonEquipEdit_Click(object sender, EventArgs e)
+        {
+            await EditEquip();
+        }
+
+        private async void buttonEquipDelete_Click(object sender, EventArgs e)
+        {
+            if (listViewEquips.SelectedIndices.Count > 0)
+            {
+                ConnectionParameter parameter = new ConnectionParameter();
+
+                int clickedIndex = listViewEquips.SelectedIndices[0];
+
+                DialogResult dialogResult = MessageBox.Show($"Вы действительно хотите удалить запись: {clickedIndex + 1}: {workAreaInfo[listBoxAreas.SelectedIndex].Equipments[clickedIndex].Name}", "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    var workAreaService = new WorkAreaService(parameter.GetMySQLConnectionString());
+
+                    DeleteResult result = await workAreaService.DeleteEquipmentAsync(workAreaInfo[listBoxAreas.SelectedIndex].Equipments[clickedIndex].Id);
+
+                    if (!result.IsSuccess)
+                    {
+                        MessageBox.Show($"График не был удален \n{result.ErrorMessage}", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        listViewEquips.Items.Remove(listViewEquips.SelectedItems[0]);
+
+                        await Task.Delay(100);
+
+                        await UpdateWorkAreasAsync();
+                        await LoadEquipListToListView();
+                    }
+                }
+            }
+        }
+
+        private async void buttonEquipMoveUp_Click(object sender, EventArgs e)
+        {
+            if (listViewEquips.SelectedIndices.Count > 0)
+            {
+                ConnectionParameter parameter = new ConnectionParameter();
+
+                int clickedIndex = listViewEquips.SelectedIndices[0];
+
+                var workAreaService = new WorkAreaService(parameter.GetMySQLConnectionString());
+
+                await workAreaService.MoveEquipmentUpAsync(workAreaInfo[listBoxAreas.SelectedIndex].Equipments[clickedIndex].Id, workAreaInfo[listBoxAreas.SelectedIndex].Id);
+
+                await UpdateWorkAreasAsync();
+                await LoadEquipListToListView();
+            }
+        }
+
+        private async void buttonEquipMoveDown_Click(object sender, EventArgs e)
+        {
+            if (listViewEquips.SelectedIndices.Count > 0)
+            {
+                ConnectionParameter parameter = new ConnectionParameter();
+
+                int clickedIndex = listViewEquips.SelectedIndices[0];
+
+                var workAreaService = new WorkAreaService(parameter.GetMySQLConnectionString());
+
+                await workAreaService.MoveEquipmentDownAsync(workAreaInfo[listBoxAreas.SelectedIndex].Equipments[clickedIndex].Id, workAreaInfo[listBoxAreas.SelectedIndex].Id);
+
+                await UpdateWorkAreasAsync();
+                await LoadEquipListToListView();
+            }
+        }
+
+        private async Task UpdateUsersShortInfo()
+        {
+            employeeShorts?.Clear();
+
+            ConnectionParameter parameter = new ConnectionParameter();
+
+            try
+            {
+                var service = new EmployeeManagementService(parameter.GetMySQLConnectionString());
+
+                employeeShorts = await service.GetEmployeeShortListAsync();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Ошибка получения списка сотрудников:\n {ex}");
+            }
+        }
+
+        private async Task LoadUserListToListBox()
+        {
+            listBoxUsers.Items.Clear();
+            //MaterialListBoxItem item = new MaterialListBoxItem();
+
+            for (int i = 0; i < employeeShorts?.Count; i++)
+            {
+                MaterialListBoxItem item = new MaterialListBoxItem
+                {
+                    Text = employeeShorts[i].FullName
+                };
+
+                listBoxUsers.Items.Add(item);
+            }
+
+            listBoxUsers.SelectedIndex = -1;
+            listBoxUsers.Refresh();
+            ClearUserShortInfo();
+        }
+
+        private void ClearUserShortInfo()
+        {
+            textBoxUserLastName.Text = "";
+            textBoxUserFirstName.Text = "";
+            textBoxUserPatronymic.Text = "";
+            textBoxUserContactPhone.Text = "";
+
+            textBoxUserStatus.Text = "";
+            textBoxUserPosition.Text = "";
+            textBoxUserAssigmentArea.Text = "";
+            textBoxUserAssigmentEquip.Text = "";
+            textBoxUserSchedule.Text = "";
+        }
+
+        private void listBoxUsers_SelectedIndexChanged(object sender, MaterialListBoxItem selectedItem)
+        {
+            try
+            {
+                int index = listBoxUsers.SelectedIndex;
+
+                textBoxUserLastName.Text = employeeShorts[index].LastName;
+                textBoxUserFirstName.Text = employeeShorts[index].FirstName;
+                textBoxUserPatronymic.Text = employeeShorts[index].Patronymic;
+                textBoxUserContactPhone.Text = employeeShorts[index].PrimaryPhone;
+
+                textBoxUserStatus.Text = employeeShorts[index].CurrentStatus;
+                textBoxUserPosition.Text = employeeShorts[index].CurrentPosition;
+                textBoxUserAssigmentArea.Text = employeeShorts[index].CurrentWorkArea;
+                textBoxUserAssigmentEquip.Text = employeeShorts[index].CurrentEquipment;
+                textBoxUserSchedule.Text = employeeShorts[index].CurrentSchedule;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка получения краткой информации сотрудника:\n {ex}");
+            }
+            
+
+
+        }
+
+        private void materialButtonUserViewFullCard_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int index = listBoxUsers.SelectedIndex;
+
+                FormAddUser form = new FormAddUser((int)employeeShorts[index].Id);
+                DialogResult = form.ShowDialog();
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка получения полной информации сотрудника:\n {ex}");
+            }
+        }
+
+        private void materialButtonUserAdd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                FormAddUser form = new FormAddUser();
+                DialogResult = form.ShowDialog();
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка получения полной информации сотрудника:\n {ex}");
+            }
         }
 
         ///
