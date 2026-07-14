@@ -40,6 +40,7 @@ namespace Production_planning
             -- Возвращаем 1 (работает) или 0 (уволен) без использования кириллицы
             CASE WHEN active_periods.employee_id IS NOT NULL THEN 1 ELSE 0 END AS IsActive,
             
+            p.id AS CurrentPositionID,
             p.name AS CurrentPosition,
             st.name AS CurrentSchedule,
             eq.name AS CurrentEquipment,
@@ -313,9 +314,9 @@ namespace Production_planning
 
             using (var connection = new MySqlConnection(_connectionString))
             {
-                int positionRow = (int)await connection.QueryFirstOrDefaultAsync<int?>(qPosition, new { Id = employeeId });
-                int equipmentRow = (int)await connection.QueryFirstOrDefaultAsync<int?>(qEquipment, new { Id = employeeId });
-                int scheduleRow = (int)await connection.QueryFirstOrDefaultAsync<int?>(qSchedule, new { Id = employeeId });
+                int positionRow = (int)await connection.QueryFirstOrDefaultAsync<int?>(qPosition, new { EmployeeId = employeeId });
+                int equipmentRow = (int)await connection.QueryFirstOrDefaultAsync<int?>(qEquipment, new { EmployeeId = employeeId });
+                int scheduleRow = (int)await connection.QueryFirstOrDefaultAsync<int?>(qSchedule, new { EmployeeId = employeeId });
 
                 return (positionRow, equipmentRow, scheduleRow);
             }
@@ -327,28 +328,28 @@ namespace Production_planning
         public async Task<List<EmployeeCareerEventRow>> GetEmployeeCareerTimelineAsync(ulong employeeId)
         {
             string sql =
-                // 1. События приема на работу
-                "SELECT hire_date AS EventDate, 'Прием' AS EventType, 'Принят в штат организации' AS Details FROM employment_periods WHERE employee_id = @EmployeeId " +
+                "SELECT hire_date AS EventDate, 'Прием' AS EventType, 'Принят в штат организации' AS Details " +
+                "FROM employment_periods WHERE employee_id = @EmployeeId " +
                 "UNION ALL " +
-                // 2. События увольнения
-                "SELECT fire_date AS EventDate, 'Увольнение' AS EventType, 'Трудовой договор расторгнут' AS Details FROM employment_periods WHERE employee_id = @EmployeeId AND fire_date IS NOT NULL " +
+                "SELECT fire_date AS EventDate, 'Увольнение' AS EventType, 'Трудовой договор расторгнут' AS Details " +
+                "FROM employment_periods WHERE employee_id = @EmployeeId AND fire_date IS NOT NULL " +
                 "UNION ALL " +
-                // 3. Вычисление Назначений отдельно внутри КАЖДОГО периода работы (emp.id)
-                "SELECT ordered_positions.valid_from AS EventDate, " +
-                "CASE WHEN ordered_positions.row_num = 1 THEN 'Назначение' ELSE 'Смена должности' END AS EventType, " +
-                "ordered_positions.pos_name AS Details " +
-                "FROM (" +
-                "  SELECT epa.valid_from, p.name AS pos_name, " +
-                "  ROW_NUMBER() OVER (PARTITION BY epa.employee_id, emp.id ORDER BY epa.valid_from ASC, epa.id ASC) AS row_num " +
-                "  FROM employee_position_assignments epa " +
-                "  JOIN positions p ON epa.position_id = p.id " +
-                "  -- Привязываем назначение к конкретному циклу контракта " +
-                "  JOIN employment_periods emp ON epa.employee_id = emp.employee_id " +
-                "    AND epa.valid_from >= emp.hire_date " +
-                "    AND (emp.fire_date IS NULL OR epa.valid_from <= emp.fire_date) " +
-                "  WHERE epa.employee_id = @EmployeeId" +
-                ") ordered_positions " +
-                // Сортировка всей финальной ленты от свежих событий к старым
+                "SELECT epa.valid_from AS EventDate, " +
+                "CASE WHEN epa.valid_from = (" +
+                "  SELECT MIN(epa_inner.valid_from) " +
+                "  FROM employee_position_assignments epa_inner " +
+                "  JOIN employment_periods emp_inner ON epa_inner.employee_id = emp_inner.employee_id " +
+                "    AND epa_inner.valid_from >= emp_inner.hire_date " +
+                "    AND (emp_inner.fire_date IS NULL OR epa_inner.valid_from <= emp_inner.fire_date) " +
+                "  WHERE epa_inner.employee_id = epa.employee_id AND emp_inner.id = emp.id" +
+                ") THEN 'Назначение' ELSE 'Смена должности' END AS EventType, " +
+                "p.name AS Details " +
+                "FROM employee_position_assignments epa " +
+                "JOIN positions p ON epa.position_id = p.id " +
+                "JOIN employment_periods emp ON epa.employee_id = emp.employee_id " +
+                "  AND epa.valid_from >= emp.hire_date " +
+                "  AND (emp.fire_date IS NULL OR epa.valid_from <= emp.fire_date) " +
+                "WHERE epa.employee_id = @EmployeeId " +
                 "ORDER BY EventDate DESC, FIELD(EventType, 'Увольнение', 'Смена должности', 'Назначение', 'Прием') ASC;";
 
             using (var conn = new MySqlConnection(_connectionString))
@@ -357,6 +358,7 @@ namespace Production_planning
                 return res.ToList();
             }
         }
+
 
         /// <summary>
         /// Возвращает полную историю всех периодов работы сотрудника (приемы/увольнения)
@@ -482,6 +484,7 @@ namespace Production_planning
         // 15. КОМПЛЕКСНОЕ СОХРАНЕНИЕ КАРТОЧКИ С ИСПОЛЬЗОВАНИЕМ КЛАССОВ-БУФЕРОВ СМЕНЫ ИСТОРИИ
         public async Task<bool> SaveEmployeeFullCardChangesAsync(
             EmployeeFullCard card,
+            PeriodUpdateBuffer perBuffer,
             PositionUpdateBuffer posBuffer,
             ScheduleUpdateBuffer schedBuffer,
             EquipmentUpdateBuffer eqBuffer)
@@ -500,16 +503,24 @@ namespace Production_planning
                         await conn.ExecuteAsync(sqlEmp, card, trans);
 
                         // 2. Обновляем текущий период найма
-                        if (card.CurrentPeriodId.HasValue)
+                        if (!perBuffer.IsNewAssignment)
                         {
-                            string sqlPeriod = "UPDATE employment_periods SET hire_date = @HireDate, fire_date = @FireDate WHERE id = @PeriodId;";
-                            await conn.ExecuteAsync(sqlPeriod, new { PeriodId = card.CurrentPeriodId.Value, HireDate = card.HireDate, FireDate = card.FireDate }, trans);
+                            if (card.CurrentPeriodId.HasValue)
+                            {
+                                string sqlPeriod = "UPDATE employment_periods SET hire_date = @HireDate, fire_date = @FireDate WHERE id = @PeriodId;";
+                                await conn.ExecuteAsync(sqlPeriod, new { PeriodId = card.CurrentPeriodId, HireDate = card.HireDate, FireDate = card.FireDate }, trans);
+                            }
+                        }
+                        else
+                        {
+                            string sqlIns = "INSERT INTO employment_periods (employee_id, hire_date) VALUES (@EmployeeId, @NewValidFrom);";
+                            await conn.ExecuteAsync(sqlIns, perBuffer, trans);
                         }
 
                         // 2. ИСТОРИЯ ДОЛЖНОСТЕЙ (Поиск строго по первичному ключу ID строки)
                         if (!posBuffer.IsNewAssignment) // Редактируем существующую запись (можно менять и должность, и саму дату!)
                         {
-                            string sqlUpd = "UPDATE employee_position_assignments SET position_id = @PositionId, valid_from = @PositionValidFrom WHERE id = @AssignmentId;";
+                            string sqlUpd = "UPDATE employee_position_assignments SET position_id = @PositionId, valid_from = @PositionValidFrom WHERE id = @CurrentPositionAssignmentId;";
                             await conn.ExecuteAsync(sqlUpd, card, trans);
                         }
                         else // Добавляем новую веху истории (если AssignmentId пустой)
@@ -521,7 +532,7 @@ namespace Production_planning
                         // 3. ИСТОРИЯ ГРАФИКОВ (Поиск строго по первичному ключу ID строки)
                         if (!schedBuffer.IsNewAssignment)
                         {
-                            string sqlUpd = "UPDATE employee_schedule_assignments SET template_id = @ScheduleTemplateId, valid_from = @ScheduleValidFrom WHERE id = @AssignmentId;";
+                            string sqlUpd = "UPDATE employee_schedule_assignments SET template_id = @ScheduleTemplateId, valid_from = @ScheduleValidFrom WHERE id = @CurrentScheduleAssignmentId;";
                             await conn.ExecuteAsync(sqlUpd, card, trans);
                         }
                         else
@@ -533,7 +544,7 @@ namespace Production_planning
                         // 4. ИСТОРИЯ ОБОРУДОВАНИЯ (Поиск строго по первичному ключу ID строки)
                         if (!eqBuffer.IsNewAssignment)
                         {
-                            string sqlUpd = "UPDATE employee_equipment_assignments SET equipment_id = @EquipmentId, valid_from = @EquipmentValidFrom WHERE id = @AssignmentId;";
+                            string sqlUpd = "UPDATE employee_equipment_assignments SET equipment_id = @EquipmentId, valid_from = @EquipmentValidFrom WHERE id = @CurrentEquipmentAssignmentId;";
                             await conn.ExecuteAsync(sqlUpd, card, trans);
                         }
                         else

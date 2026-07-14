@@ -1,6 +1,6 @@
 ﻿namespace Production_planning
 {
-    partial class FormSelectSchedule
+    partial class FormSelectUserPosition
     {
         /// <summary>
         /// Required designer variable.
@@ -32,13 +32,14 @@
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonCalendarTemplate = new MaterialSkin.Controls.MaterialButton();
             this.textBoxDateTemplateStart = new MaterialSkin.Controls.MaterialMaskedTextBox();
-            this.comboBoxTemplates = new MaterialSkin.Controls.MaterialComboBox();
+            this.comboBoxPositions = new MaterialSkin.Controls.MaterialComboBox();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.listViewScheduleHistory = new MaterialSkin.Controls.MaterialListView();
+            this.listViewPositionsHistory = new MaterialSkin.Controls.MaterialListView();
             this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader15 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.materialButton1 = new MaterialSkin.Controls.MaterialButton();
             this.materialButton2 = new MaterialSkin.Controls.MaterialButton();
@@ -82,7 +83,7 @@
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel4.Controls.Add(this.buttonCalendarTemplate, 3, 0);
             this.tableLayoutPanel4.Controls.Add(this.textBoxDateTemplateStart, 1, 0);
-            this.tableLayoutPanel4.Controls.Add(this.comboBoxTemplates, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.comboBoxPositions, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.dateTimePicker1, 2, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(13, 13);
@@ -159,29 +160,29 @@
             this.textBoxDateTemplateStart.ValidatingType = null;
             this.textBoxDateTemplateStart.Leave += new System.EventHandler(this.textBoxDateTemplateStart_Leave);
             // 
-            // comboBoxTemplates
+            // comboBoxPositions
             // 
-            this.comboBoxTemplates.AutoResize = false;
-            this.comboBoxTemplates.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.comboBoxTemplates.Depth = 0;
-            this.comboBoxTemplates.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.comboBoxTemplates.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.comboBoxTemplates.DropDownHeight = 174;
-            this.comboBoxTemplates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTemplates.DropDownWidth = 121;
-            this.comboBoxTemplates.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.comboBoxTemplates.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.comboBoxTemplates.FormattingEnabled = true;
-            this.comboBoxTemplates.Hint = "Рабочий график (фильтр в бд)";
-            this.comboBoxTemplates.IntegralHeight = false;
-            this.comboBoxTemplates.ItemHeight = 43;
-            this.comboBoxTemplates.Location = new System.Drawing.Point(3, 3);
-            this.comboBoxTemplates.MaxDropDownItems = 4;
-            this.comboBoxTemplates.MouseState = MaterialSkin.MouseState.OUT;
-            this.comboBoxTemplates.Name = "comboBoxTemplates";
-            this.comboBoxTemplates.Size = new System.Drawing.Size(453, 49);
-            this.comboBoxTemplates.StartIndex = 0;
-            this.comboBoxTemplates.TabIndex = 0;
+            this.comboBoxPositions.AutoResize = false;
+            this.comboBoxPositions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.comboBoxPositions.Depth = 0;
+            this.comboBoxPositions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxPositions.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.comboBoxPositions.DropDownHeight = 174;
+            this.comboBoxPositions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxPositions.DropDownWidth = 121;
+            this.comboBoxPositions.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.comboBoxPositions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.comboBoxPositions.FormattingEnabled = true;
+            this.comboBoxPositions.Hint = "Должность";
+            this.comboBoxPositions.IntegralHeight = false;
+            this.comboBoxPositions.ItemHeight = 43;
+            this.comboBoxPositions.Location = new System.Drawing.Point(3, 3);
+            this.comboBoxPositions.MaxDropDownItems = 4;
+            this.comboBoxPositions.MouseState = MaterialSkin.MouseState.OUT;
+            this.comboBoxPositions.Name = "comboBoxPositions";
+            this.comboBoxPositions.Size = new System.Drawing.Size(453, 49);
+            this.comboBoxPositions.StartIndex = 0;
+            this.comboBoxPositions.TabIndex = 0;
             // 
             // dateTimePicker1
             // 
@@ -195,7 +196,7 @@
             // 
             this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Controls.Add(this.listViewScheduleHistory, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.listViewPositionsHistory, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(13, 113);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -210,31 +211,32 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(670, 247);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
-            // listViewScheduleHistory
+            // listViewPositionsHistory
             // 
-            this.listViewScheduleHistory.AutoSizeTable = false;
-            this.listViewScheduleHistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.listViewScheduleHistory.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listViewScheduleHistory.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.listViewPositionsHistory.AutoSizeTable = false;
+            this.listViewPositionsHistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.listViewPositionsHistory.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewPositionsHistory.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader11,
             this.columnHeader12,
-            this.columnHeader15});
-            this.listViewScheduleHistory.Depth = 0;
-            this.listViewScheduleHistory.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewScheduleHistory.FullRowSelect = true;
-            this.listViewScheduleHistory.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listViewScheduleHistory.HideSelection = false;
-            this.listViewScheduleHistory.Location = new System.Drawing.Point(3, 3);
-            this.listViewScheduleHistory.MinimumSize = new System.Drawing.Size(200, 100);
-            this.listViewScheduleHistory.MouseLocation = new System.Drawing.Point(-1, -1);
-            this.listViewScheduleHistory.MouseState = MaterialSkin.MouseState.OUT;
-            this.listViewScheduleHistory.MultiSelect = false;
-            this.listViewScheduleHistory.Name = "listViewScheduleHistory";
-            this.listViewScheduleHistory.OwnerDraw = true;
-            this.listViewScheduleHistory.Size = new System.Drawing.Size(664, 241);
-            this.listViewScheduleHistory.TabIndex = 9;
-            this.listViewScheduleHistory.UseCompatibleStateImageBehavior = false;
-            this.listViewScheduleHistory.View = System.Windows.Forms.View.Details;
+            this.columnHeader15,
+            this.columnHeader1});
+            this.listViewPositionsHistory.Depth = 0;
+            this.listViewPositionsHistory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewPositionsHistory.FullRowSelect = true;
+            this.listViewPositionsHistory.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewPositionsHistory.HideSelection = false;
+            this.listViewPositionsHistory.Location = new System.Drawing.Point(3, 3);
+            this.listViewPositionsHistory.MinimumSize = new System.Drawing.Size(200, 100);
+            this.listViewPositionsHistory.MouseLocation = new System.Drawing.Point(-1, -1);
+            this.listViewPositionsHistory.MouseState = MaterialSkin.MouseState.OUT;
+            this.listViewPositionsHistory.MultiSelect = false;
+            this.listViewPositionsHistory.Name = "listViewPositionsHistory";
+            this.listViewPositionsHistory.OwnerDraw = true;
+            this.listViewPositionsHistory.Size = new System.Drawing.Size(664, 241);
+            this.listViewPositionsHistory.TabIndex = 9;
+            this.listViewPositionsHistory.UseCompatibleStateImageBehavior = false;
+            this.listViewPositionsHistory.View = System.Windows.Forms.View.Details;
             // 
             // columnHeader11
             // 
@@ -243,13 +245,18 @@
             // 
             // columnHeader12
             // 
-            this.columnHeader12.Text = "Название";
-            this.columnHeader12.Width = 400;
+            this.columnHeader12.Text = "Дата";
+            this.columnHeader12.Width = 120;
             // 
             // columnHeader15
             // 
-            this.columnHeader15.Text = "Начало действия";
+            this.columnHeader15.Text = "Событие";
             this.columnHeader15.Width = 200;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Описание";
+            this.columnHeader1.Width = 291;
             // 
             // tableLayoutPanel3
             // 
@@ -282,7 +289,7 @@
             this.materialButton1.NoAccentTextColor = System.Drawing.Color.Empty;
             this.materialButton1.Size = new System.Drawing.Size(232, 52);
             this.materialButton1.TabIndex = 0;
-            this.materialButton1.Text = "Применить новый график";
+            this.materialButton1.Text = "Назначить на новую должность";
             this.materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.materialButton1.UseAccentColor = false;
             this.materialButton1.UseVisualStyleBackColor = true;
@@ -320,10 +327,10 @@
             this.materialLabel1.Name = "materialLabel1";
             this.materialLabel1.Size = new System.Drawing.Size(670, 30);
             this.materialLabel1.TabIndex = 10;
-            this.materialLabel1.Text = "История изменений графика";
+            this.materialLabel1.Text = "История назначений";
             this.materialLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // FormSelectSchedule
+            // FormSelectUserPosition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -332,12 +339,12 @@
             this.FormStyle = MaterialSkin.Controls.MaterialForm.FormStyles.ActionBar_64;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FormSelectSchedule";
+            this.Name = "FormSelectUserPosition";
             this.Padding = new System.Windows.Forms.Padding(3, 88, 3, 3);
             this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Назначение нового графика";
-            this.Load += new System.EventHandler(this.FormAddCycle_Load);
+            this.Text = "Назначение на новую должность";
+            this.Load += new System.EventHandler(this.FormSelectUserPosition_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel4.ResumeLayout(false);
@@ -356,15 +363,16 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private MaterialSkin.Controls.MaterialButton materialButton1;
         private MaterialSkin.Controls.MaterialButton materialButton2;
-        private MaterialSkin.Controls.MaterialComboBox comboBoxTemplates;
+        private MaterialSkin.Controls.MaterialComboBox comboBoxPositions;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private MaterialSkin.Controls.MaterialButton buttonCalendarTemplate;
         private MaterialSkin.Controls.MaterialMaskedTextBox textBoxDateTemplateStart;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
-        private MaterialSkin.Controls.MaterialListView listViewScheduleHistory;
+        private MaterialSkin.Controls.MaterialListView listViewPositionsHistory;
         private System.Windows.Forms.ColumnHeader columnHeader11;
         private System.Windows.Forms.ColumnHeader columnHeader12;
         private System.Windows.Forms.ColumnHeader columnHeader15;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
     }
 }

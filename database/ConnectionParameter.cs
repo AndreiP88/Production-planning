@@ -2,7 +2,7 @@
 {
     public class ConnectionParameter
     {
-        public string Host = "versorpc";
+        public string Host = "localhost";
         public readonly int Port = 3309;
         public string Database = "workplan";
         public string Username = "oxyfox";

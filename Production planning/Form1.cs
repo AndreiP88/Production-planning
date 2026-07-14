@@ -13,7 +13,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Production_planning
 {
@@ -30,6 +29,9 @@ namespace Production_planning
         }
 
         CancellationTokenSource cancelTokenSource;
+
+        private List<PositionLookupDto> _positions;
+        private List<int> _employeeShortsIndexes = new List<int>();
 
         List<WorkAreaInfo> workAreaInfo;
         List<ShiftDefinitionModel> shiftDefinitions;
@@ -271,10 +273,10 @@ namespace Production_planning
             dataGridPlanning.Rows[columnFirst].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridPlanning.Rows[columnSecond].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-            GridHelper.MergeCells(dataGridPlanning, "Оборудование", 0, 0, 2, 1, Color.Gray);
+            GridHelper.MergeCells(dataGridPlanning, "Рабочее место", 0, 0, 2, 1, Color.Gray);
             GridHelper.MergeCells(dataGridPlanning, "Смена", 0, 1, 2, 1, Color.Gray);
 
-            dataGridPlanning.Rows[columnFirst].Cells[0].Value = "Оборудование";
+            dataGridPlanning.Rows[columnFirst].Cells[0].Value = "Рабочее место";
             dataGridPlanning.Rows[columnSecond].Cells[1].Value = "Смена";
 
             // 2. Создаем динамические столбцы для дней месяца (1, 2, 3...)
@@ -335,50 +337,53 @@ namespace Production_planning
 
                 foreach (var sName in shiftNames)
                 {
-                    // Строка 1: Инфо о сотрудниках
-                    int r1 = dataGridPlanning.Rows.Add(eq.Key.Id);
-                    dataGridPlanning.Rows[r1].HeaderCell.Value = eq.Key.Id;
-
-                    // Строка 2: Пустая (для будущего)
-                    int r2 = dataGridPlanning.Rows.Add(eq.Key.Id);
-                    dataGridPlanning.Rows[r2].HeaderCell.Value = eq.Key.Id;
-
-                    dataGridPlanning.Rows[r2].MinimumHeight = 60;
-
-                    if (currentShiftNumber == 1)
+                    if (sName != 0)
                     {
-                        firstRow = r1;
-                    }
+                        // Строка 1: Инфо о сотрудниках
+                        int r1 = dataGridPlanning.Rows.Add(eq.Key.Id);
+                        dataGridPlanning.Rows[r1].HeaderCell.Value = eq.Key.Id;
 
-                    if (shiftNames.Count == currentShiftNumber)
-                    {
-                        GridHelper.MergeCells(dataGridPlanning, eq.Key.Name, firstRow, 0, shiftNames.Count * 2, 1, Color.Gray);
-                    }
+                        // Строка 2: Пустая (для будущего)
+                        int r2 = dataGridPlanning.Rows.Add(eq.Key.Id);
+                        dataGridPlanning.Rows[r2].HeaderCell.Value = eq.Key.Id;
 
-                    GridHelper.MergeCells(dataGridPlanning, sName.ToString(), r1, 1, 2, 1, Color.Gray);
+                        dataGridPlanning.Rows[r2].MinimumHeight = 60;
 
-                    //dataGridPlanning.Rows[r1].Cells["Equip"].Value = eq.Key.Name;
-                    dataGridPlanning.Rows[r1].Cells["Shift"].Value = sName;
-                    dataGridPlanning.Rows[r1].DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 255);
-
-                    //dataGridPlanning.Rows[r2].Cells["Equip"].Value = eq.Key.Name;
-                    dataGridPlanning.Rows[r2].Cells["Shift"].Value = sName;
-                    dataGridPlanning.Rows[r2].DefaultCellStyle.BackColor = Color.FromArgb(245, 245, 245);
-
-                    // Заполняем данные по дням для этой смены
-                    foreach (var dayData in reportData)
-                    {
-                        int dayNum = dayData.Date.Day;
-                        var currentEq = dayData.Equipments.FirstOrDefault(e => e.Id == eq.Key.Id);
-                        var currentShift = currentEq?.Shifts.FirstOrDefault(s => s.Number == sName);
-
-                        if (currentShift != null)
+                        if (currentShiftNumber == 1)
                         {
-                            dataGridPlanning.Rows[r1].Cells[$"day_{dayNum}"].Value = PrepareCellText(currentShift);
+                            firstRow = r1;
                         }
-                    }
 
-                    currentShiftNumber++;
+                        if (shiftNames.Count(x => x != 0) == currentShiftNumber)
+                        {
+                            GridHelper.MergeCells(dataGridPlanning, eq.Key.Name, firstRow, 0, shiftNames.Count(x => x != 0) * 2, 1, Color.Gray);
+                        }
+
+                        GridHelper.MergeCells(dataGridPlanning, sName.ToString(), r1, 1, 2, 1, Color.Gray);
+
+                        //dataGridPlanning.Rows[r1].Cells["Equip"].Value = eq.Key.Name;
+                        dataGridPlanning.Rows[r1].Cells["Shift"].Value = sName;
+                        dataGridPlanning.Rows[r1].DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 255);
+
+                        //dataGridPlanning.Rows[r2].Cells["Equip"].Value = eq.Key.Name;
+                        dataGridPlanning.Rows[r2].Cells["Shift"].Value = sName;
+                        dataGridPlanning.Rows[r2].DefaultCellStyle.BackColor = Color.FromArgb(245, 245, 245);
+
+                        // Заполняем данные по дням для этой смены
+                        foreach (var dayData in reportData)
+                        {
+                            int dayNum = dayData.Date.Day;
+                            var currentEq = dayData.Equipments.FirstOrDefault(e => e.Id == eq.Key.Id);
+                            var currentShift = currentEq?.Shifts.FirstOrDefault(s => s.Number == sName);
+
+                            if (currentShift != null)
+                            {
+                                dataGridPlanning.Rows[r1].Cells[$"day_{dayNum}"].Value = PrepareCellText(currentShift);
+                            }
+                        }
+
+                        currentShiftNumber++;
+                    }
                 }
             }
 
@@ -550,6 +555,7 @@ namespace Production_planning
             if (index == 3)
             {
                 await UpdateUsersShortInfo();
+                await LoadPositions();
                 await LoadUserListToListBox();
             }
 
@@ -1289,24 +1295,59 @@ namespace Production_planning
             }
         }
 
+        private async Task LoadPositions()
+        {
+            ConnectionParameter parameter = new ConnectionParameter();
+
+            _positions?.Clear();
+
+            EmployeeManagementService employeeService = new EmployeeManagementService(parameter.GetMySQLConnectionString());
+
+            try
+            {
+                _positions = await employeeService.GetPositionsLookupAsync();
+
+                comboBoxUserPosition.Items.Clear();
+
+                foreach (PositionLookupDto position in _positions)
+                {
+                    comboBoxUserPosition.Items.Add(position.Name);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         private async Task LoadUserListToListBox()
         {
             listBoxUsers.Items.Clear();
+            _employeeShortsIndexes?.Clear();
+
             //MaterialListBoxItem item = new MaterialListBoxItem();
 
-            for (int i = 0; i < employeeShorts?.Count; i++)
+            if (comboBoxUserPosition.SelectedIndex != -1)
             {
-                MaterialListBoxItem item = new MaterialListBoxItem
+                for (int i = 0; i < employeeShorts?.Count; i++)
                 {
-                    Text = employeeShorts[i].FullName
-                };
+                    if (employeeShorts[i].CurrentPositionID == _positions[comboBoxUserPosition.SelectedIndex].Id)
+                    {
+                        _employeeShortsIndexes.Add(i);
 
-                listBoxUsers.Items.Add(item);
+                        MaterialListBoxItem item = new MaterialListBoxItem
+                        {
+                            Text = employeeShorts[i].FullName
+                        };
+
+                        listBoxUsers.Items.Add(item);
+                    }
+                }
+
+                listBoxUsers.SelectedIndex = -1;
+                listBoxUsers.Refresh();
+                ClearUserShortInfo();
             }
-
-            listBoxUsers.SelectedIndex = -1;
-            listBoxUsers.Refresh();
-            ClearUserShortInfo();
         }
 
         private void ClearUserShortInfo()
@@ -1327,7 +1368,7 @@ namespace Production_planning
         {
             try
             {
-                int index = listBoxUsers.SelectedIndex;
+                int index = _employeeShortsIndexes[listBoxUsers.SelectedIndex];
 
                 textBoxUserLastName.Text = employeeShorts[index].LastName;
                 textBoxUserFirstName.Text = employeeShorts[index].FirstName;
@@ -1344,21 +1385,25 @@ namespace Production_planning
             {
                 MessageBox.Show($"Ошибка получения краткой информации сотрудника:\n {ex}");
             }
-            
-
-
         }
 
-        private void materialButtonUserViewFullCard_Click(object sender, EventArgs e)
+        private async void materialButtonUserViewFullCard_Click(object sender, EventArgs e)
         {
             try
             {
-                int index = listBoxUsers.SelectedIndex;
+                int index = _employeeShortsIndexes[listBoxUsers.SelectedIndex];
 
                 FormAddUser form = new FormAddUser((int)employeeShorts[index].Id);
                 DialogResult = form.ShowDialog();
 
+                if (DialogResult == DialogResult.OK)
+                {
+                    await LoadUserListToListBox();
 
+                    listBoxUsers.SelectedIndex = index;
+                    listBoxUsers.Update();
+                    listBoxUsers.Refresh();
+                }
             }
             catch (Exception ex)
             {
@@ -1366,14 +1411,48 @@ namespace Production_planning
             }
         }
 
-        private void materialButtonUserAdd_Click(object sender, EventArgs e)
+        private async void materialButtonUserAdd_Click(object sender, EventArgs e)
         {
             try
             {
                 FormAddUser form = new FormAddUser();
                 DialogResult = form.ShowDialog();
 
+                if (DialogResult == DialogResult.OK)
+                {
+                    Thread.Sleep(200);
 
+                    await LoadUserListToListBox();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка получения полной информации сотрудника:\n {ex}");
+            }
+        }
+
+        private async void comboBoxUserPosition_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            await LoadUserListToListBox();
+        }
+
+        private async void listBoxUsers_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                int index = _employeeShortsIndexes[listBoxUsers.SelectedIndex];
+
+                FormAddUser form = new FormAddUser((int)employeeShorts[index].Id);
+                DialogResult = form.ShowDialog();
+
+                if (DialogResult == DialogResult.OK)
+                {
+                    await LoadUserListToListBox();
+
+                    listBoxUsers.SelectedIndex = index;
+                    listBoxUsers.Update();
+                    listBoxUsers.Refresh();
+                }
             }
             catch (Exception ex)
             {

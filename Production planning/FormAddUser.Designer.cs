@@ -94,12 +94,12 @@
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel8, 2, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(13, 63);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(13, 68);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(904, 544);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(904, 589);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel2
@@ -111,17 +111,17 @@
             this.tableLayoutPanel2.Controls.Add(this.textBoxPatronymic, 0, 4);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel10, 0, 6);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 12);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 13);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 7;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(441, 529);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(441, 573);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // textBoxLastName
@@ -152,7 +152,7 @@
             this.textBoxFirstName.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textBoxFirstName.Hint = "Имя";
             this.textBoxFirstName.LeadingIcon = null;
-            this.textBoxFirstName.Location = new System.Drawing.Point(3, 59);
+            this.textBoxFirstName.Location = new System.Drawing.Point(3, 63);
             this.textBoxFirstName.MaxLength = 50;
             this.textBoxFirstName.MouseState = MaterialSkin.MouseState.OUT;
             this.textBoxFirstName.Multiline = false;
@@ -171,7 +171,7 @@
             this.textBoxPatronymic.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textBoxPatronymic.Hint = "Отчество";
             this.textBoxPatronymic.LeadingIcon = null;
-            this.textBoxPatronymic.Location = new System.Drawing.Point(3, 115);
+            this.textBoxPatronymic.Location = new System.Drawing.Point(3, 123);
             this.textBoxPatronymic.MaxLength = 50;
             this.textBoxPatronymic.MouseState = MaterialSkin.MouseState.OUT;
             this.textBoxPatronymic.Multiline = false;
@@ -189,12 +189,12 @@
             this.tableLayoutPanel10.Controls.Add(this.listViewContacts, 0, 1);
             this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel11, 0, 0);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel10.Location = new System.Drawing.Point(3, 175);
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(3, 188);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
             this.tableLayoutPanel10.RowCount = 2;
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(435, 351);
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(435, 382);
             this.tableLayoutPanel10.TabIndex = 4;
             // 
             // listViewContacts
@@ -210,14 +210,14 @@
             this.listViewContacts.FullRowSelect = true;
             this.listViewContacts.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewContacts.HideSelection = false;
-            this.listViewContacts.Location = new System.Drawing.Point(3, 58);
-            this.listViewContacts.MinimumSize = new System.Drawing.Size(200, 92);
+            this.listViewContacts.Location = new System.Drawing.Point(3, 63);
+            this.listViewContacts.MinimumSize = new System.Drawing.Size(200, 100);
             this.listViewContacts.MouseLocation = new System.Drawing.Point(-1, -1);
             this.listViewContacts.MouseState = MaterialSkin.MouseState.OUT;
             this.listViewContacts.MultiSelect = false;
             this.listViewContacts.Name = "listViewContacts";
             this.listViewContacts.OwnerDraw = true;
-            this.listViewContacts.Size = new System.Drawing.Size(429, 290);
+            this.listViewContacts.Size = new System.Drawing.Size(429, 316);
             this.listViewContacts.TabIndex = 2;
             this.listViewContacts.UseCompatibleStateImageBehavior = false;
             this.listViewContacts.View = System.Windows.Forms.View.Details;
@@ -249,7 +249,7 @@
             this.tableLayoutPanel11.Name = "tableLayoutPanel11";
             this.tableLayoutPanel11.RowCount = 1;
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel11.Size = new System.Drawing.Size(429, 49);
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(429, 54);
             this.tableLayoutPanel11.TabIndex = 0;
             // 
             // materialButton8
@@ -265,7 +265,7 @@
             this.materialButton8.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton8.Name = "materialButton8";
             this.materialButton8.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton8.Size = new System.Drawing.Size(47, 37);
+            this.materialButton8.Size = new System.Drawing.Size(47, 42);
             this.materialButton8.TabIndex = 12;
             this.materialButton8.Text = "➡️";
             this.materialButton8.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -285,7 +285,7 @@
             this.materialButton7.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton7.Name = "materialButton7";
             this.materialButton7.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton7.Size = new System.Drawing.Size(47, 37);
+            this.materialButton7.Size = new System.Drawing.Size(47, 42);
             this.materialButton7.TabIndex = 11;
             this.materialButton7.Text = "➡️";
             this.materialButton7.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -305,7 +305,7 @@
             this.materialButton6.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton6.Name = "materialButton6";
             this.materialButton6.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton6.Size = new System.Drawing.Size(47, 37);
+            this.materialButton6.Size = new System.Drawing.Size(47, 42);
             this.materialButton6.TabIndex = 10;
             this.materialButton6.Text = "➡️";
             this.materialButton6.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -325,7 +325,7 @@
             this.materialButton5.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton5.Name = "materialButton5";
             this.materialButton5.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton5.Size = new System.Drawing.Size(47, 37);
+            this.materialButton5.Size = new System.Drawing.Size(47, 42);
             this.materialButton5.TabIndex = 9;
             this.materialButton5.Text = "➡️";
             this.materialButton5.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -345,22 +345,22 @@
             this.tableLayoutPanel8.Controls.Add(this.tableLayoutPanel7, 0, 7);
             this.tableLayoutPanel8.Controls.Add(this.tableLayoutPanel5, 0, 0);
             this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel8.Location = new System.Drawing.Point(460, 12);
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(460, 13);
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 12;
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(441, 529);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(441, 573);
             this.tableLayoutPanel8.TabIndex = 3;
             // 
             // tableLayoutPanel4
@@ -374,11 +374,11 @@
             this.tableLayoutPanel4.Controls.Add(this.maskedTextBoxTemplateDate, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.ButtonTemplateAssignNew, 3, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 426);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 463);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(435, 49);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(435, 54);
             this.tableLayoutPanel4.TabIndex = 2;
             // 
             // buttonCalendarTemplate
@@ -395,7 +395,7 @@
             this.buttonCalendarTemplate.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonCalendarTemplate.Name = "buttonCalendarTemplate";
             this.buttonCalendarTemplate.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonCalendarTemplate.Size = new System.Drawing.Size(42, 37);
+            this.buttonCalendarTemplate.Size = new System.Drawing.Size(42, 42);
             this.buttonCalendarTemplate.TabIndex = 5;
             this.buttonCalendarTemplate.Text = "🗓️";
             this.buttonCalendarTemplate.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -459,13 +459,13 @@
             this.ButtonTemplateAssignNew.MouseState = MaterialSkin.MouseState.HOVER;
             this.ButtonTemplateAssignNew.Name = "ButtonTemplateAssignNew";
             this.ButtonTemplateAssignNew.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.ButtonTemplateAssignNew.Size = new System.Drawing.Size(220, 37);
+            this.ButtonTemplateAssignNew.Size = new System.Drawing.Size(220, 42);
             this.ButtonTemplateAssignNew.TabIndex = 6;
             this.ButtonTemplateAssignNew.Text = "➡️ новый график";
             this.ButtonTemplateAssignNew.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.ButtonTemplateAssignNew.UseAccentColor = false;
             this.ButtonTemplateAssignNew.UseVisualStyleBackColor = true;
-            this.ButtonTemplateAssignNew.Click += new System.EventHandler(this.ButtonNewSchedules_ClickAsync);
+            this.ButtonTemplateAssignNew.Click += new System.EventHandler(this.ButtonTemplateAssignNew_Click);
             // 
             // buttonFire
             // 
@@ -475,12 +475,12 @@
             this.buttonFire.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonFire.HighEmphasis = true;
             this.buttonFire.Icon = null;
-            this.buttonFire.Location = new System.Drawing.Point(4, 61);
+            this.buttonFire.Location = new System.Drawing.Point(4, 66);
             this.buttonFire.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonFire.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonFire.Name = "buttonFire";
             this.buttonFire.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonFire.Size = new System.Drawing.Size(433, 39);
+            this.buttonFire.Size = new System.Drawing.Size(433, 43);
             this.buttonFire.TabIndex = 8;
             this.buttonFire.Text = "Уволить";
             this.buttonFire.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -505,7 +505,7 @@
             this.comboBoxTemplates.Hint = "Рабочий график (фильтр в бд)";
             this.comboBoxTemplates.IntegralHeight = false;
             this.comboBoxTemplates.ItemHeight = 43;
-            this.comboBoxTemplates.Location = new System.Drawing.Point(3, 375);
+            this.comboBoxTemplates.Location = new System.Drawing.Point(3, 408);
             this.comboBoxTemplates.MaxDropDownItems = 4;
             this.comboBoxTemplates.MouseState = MaterialSkin.MouseState.OUT;
             this.comboBoxTemplates.Name = "comboBoxTemplates";
@@ -530,7 +530,7 @@
             this.comboBoxPositions.Hint = "Должность";
             this.comboBoxPositions.IntegralHeight = false;
             this.comboBoxPositions.ItemHeight = 43;
-            this.comboBoxPositions.Location = new System.Drawing.Point(3, 127);
+            this.comboBoxPositions.Location = new System.Drawing.Point(3, 138);
             this.comboBoxPositions.MaxDropDownItems = 4;
             this.comboBoxPositions.MouseState = MaterialSkin.MouseState.OUT;
             this.comboBoxPositions.Name = "comboBoxPositions";
@@ -554,7 +554,7 @@
             this.comboBoxEquipments.Hint = "Закрепление за рабочим местом";
             this.comboBoxEquipments.IntegralHeight = false;
             this.comboBoxEquipments.ItemHeight = 43;
-            this.comboBoxEquipments.Location = new System.Drawing.Point(3, 251);
+            this.comboBoxEquipments.Location = new System.Drawing.Point(3, 273);
             this.comboBoxEquipments.MaxDropDownItems = 4;
             this.comboBoxEquipments.MouseState = MaterialSkin.MouseState.OUT;
             this.comboBoxEquipments.Name = "comboBoxEquipments";
@@ -575,11 +575,11 @@
             this.tableLayoutPanel9.Controls.Add(this.maskedTextBoxPositionDate, 0, 0);
             this.tableLayoutPanel9.Controls.Add(this.dateTimePicker3, 1, 0);
             this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel9.Location = new System.Drawing.Point(3, 178);
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(3, 193);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
             this.tableLayoutPanel9.RowCount = 1;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(435, 49);
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(435, 54);
             this.tableLayoutPanel9.TabIndex = 5;
             // 
             // buttonPositionAssignNew
@@ -595,7 +595,7 @@
             this.buttonPositionAssignNew.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonPositionAssignNew.Name = "buttonPositionAssignNew";
             this.buttonPositionAssignNew.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonPositionAssignNew.Size = new System.Drawing.Size(217, 37);
+            this.buttonPositionAssignNew.Size = new System.Drawing.Size(217, 42);
             this.buttonPositionAssignNew.TabIndex = 8;
             this.buttonPositionAssignNew.Text = "➡️ Новое назначение";
             this.buttonPositionAssignNew.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -617,7 +617,7 @@
             this.buttonCalendarPosition.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonCalendarPosition.Name = "buttonCalendarPosition";
             this.buttonCalendarPosition.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonCalendarPosition.Size = new System.Drawing.Size(47, 37);
+            this.buttonCalendarPosition.Size = new System.Drawing.Size(47, 42);
             this.buttonCalendarPosition.TabIndex = 7;
             this.buttonCalendarPosition.Text = "🗓️";
             this.buttonCalendarPosition.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -672,7 +672,7 @@
             // 
             this.dateTimePicker3.Location = new System.Drawing.Point(153, 3);
             this.dateTimePicker3.Name = "dateTimePicker3";
-            this.dateTimePicker3.Size = new System.Drawing.Size(1, 21);
+            this.dateTimePicker3.Size = new System.Drawing.Size(1, 20);
             this.dateTimePicker3.TabIndex = 6;
             // 
             // tableLayoutPanel7
@@ -686,11 +686,11 @@
             this.tableLayoutPanel7.Controls.Add(this.maskedTextBoxEquipmentDate, 0, 0);
             this.tableLayoutPanel7.Controls.Add(this.buttonEquipmentAssignNew, 3, 0);
             this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel7.Location = new System.Drawing.Point(3, 302);
+            this.tableLayoutPanel7.Location = new System.Drawing.Point(3, 328);
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(435, 49);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(435, 54);
             this.tableLayoutPanel7.TabIndex = 7;
             // 
             // buttonCalendarEquipmentAssign
@@ -707,7 +707,7 @@
             this.buttonCalendarEquipmentAssign.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonCalendarEquipmentAssign.Name = "buttonCalendarEquipmentAssign";
             this.buttonCalendarEquipmentAssign.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonCalendarEquipmentAssign.Size = new System.Drawing.Size(42, 37);
+            this.buttonCalendarEquipmentAssign.Size = new System.Drawing.Size(42, 42);
             this.buttonCalendarEquipmentAssign.TabIndex = 5;
             this.buttonCalendarEquipmentAssign.Text = "🗓️";
             this.buttonCalendarEquipmentAssign.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -771,13 +771,13 @@
             this.buttonEquipmentAssignNew.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonEquipmentAssignNew.Name = "buttonEquipmentAssignNew";
             this.buttonEquipmentAssignNew.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonEquipmentAssignNew.Size = new System.Drawing.Size(220, 37);
+            this.buttonEquipmentAssignNew.Size = new System.Drawing.Size(220, 42);
             this.buttonEquipmentAssignNew.TabIndex = 6;
             this.buttonEquipmentAssignNew.Text = "➡️ новое рабочее место";
             this.buttonEquipmentAssignNew.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.buttonEquipmentAssignNew.UseAccentColor = false;
             this.buttonEquipmentAssignNew.UseVisualStyleBackColor = true;
-            this.buttonEquipmentAssignNew.Click += new System.EventHandler(this.buttonNewStaffing_Click);
+            this.buttonEquipmentAssignNew.Click += new System.EventHandler(this.buttonEquipmentAssignNew_Click);
             // 
             // tableLayoutPanel5
             // 
@@ -799,7 +799,7 @@
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(435, 49);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(435, 54);
             this.tableLayoutPanel5.TabIndex = 3;
             // 
             // dateTimePicker1
@@ -809,7 +809,7 @@
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicker1.Location = new System.Drawing.Point(165, 3);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(0, 21);
+            this.dateTimePicker1.Size = new System.Drawing.Size(0, 20);
             this.dateTimePicker1.TabIndex = 2;
             this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
@@ -872,7 +872,7 @@
             this.buttonCalendarHire.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonCalendarHire.Name = "buttonCalendarHire";
             this.buttonCalendarHire.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonCalendarHire.Size = new System.Drawing.Size(42, 37);
+            this.buttonCalendarHire.Size = new System.Drawing.Size(42, 42);
             this.buttonCalendarHire.TabIndex = 4;
             this.buttonCalendarHire.Text = "🗓️";
             this.buttonCalendarHire.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -940,7 +940,7 @@
             this.buttonCalendarFire.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonCalendarFire.Name = "buttonCalendarFire";
             this.buttonCalendarFire.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonCalendarFire.Size = new System.Drawing.Size(43, 37);
+            this.buttonCalendarFire.Size = new System.Drawing.Size(43, 42);
             this.buttonCalendarFire.TabIndex = 7;
             this.buttonCalendarFire.Text = "🗓️";
             this.buttonCalendarFire.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -953,7 +953,7 @@
             // 
             this.dateTimePicker2.Location = new System.Drawing.Point(382, 3);
             this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.Size = new System.Drawing.Size(1, 21);
+            this.dateTimePicker2.Size = new System.Drawing.Size(1, 20);
             this.dateTimePicker2.TabIndex = 8;
             this.dateTimePicker2.ValueChanged += new System.EventHandler(this.dateTimePicker2_ValueChanged);
             // 
@@ -973,7 +973,7 @@
             this.materialComboBox2.Hint = "Список сотрудников на производстве";
             this.materialComboBox2.IntegralHeight = false;
             this.materialComboBox2.ItemHeight = 43;
-            this.materialComboBox2.Location = new System.Drawing.Point(13, 12);
+            this.materialComboBox2.Location = new System.Drawing.Point(13, 13);
             this.materialComboBox2.MaxDropDownItems = 4;
             this.materialComboBox2.MouseState = MaterialSkin.MouseState.OUT;
             this.materialComboBox2.Name = "materialComboBox2";
@@ -990,11 +990,11 @@
             this.tableLayoutPanel3.Controls.Add(this.materialButton1, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.materialButton2, 2, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 613);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 663);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(904, 49);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(904, 54);
             this.tableLayoutPanel3.TabIndex = 2;
             // 
             // materialButton1
@@ -1010,7 +1010,7 @@
             this.materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton1.Name = "materialButton1";
             this.materialButton1.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton1.Size = new System.Drawing.Size(257, 37);
+            this.materialButton1.Size = new System.Drawing.Size(257, 42);
             this.materialButton1.TabIndex = 0;
             this.materialButton1.Text = "Добавить";
             this.materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1031,7 +1031,7 @@
             this.materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton2.Name = "materialButton2";
             this.materialButton2.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton2.Size = new System.Drawing.Size(172, 37);
+            this.materialButton2.Size = new System.Drawing.Size(172, 42);
             this.materialButton2.TabIndex = 1;
             this.materialButton2.Text = "Отмена";
             this.materialButton2.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1049,27 +1049,27 @@
             this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel3, 1, 3);
             this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel1, 1, 2);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 81);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 88);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 4;
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(930, 665);
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(930, 720);
             this.tableLayoutPanel6.TabIndex = 1;
             // 
             // FormAddUser
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(936, 749);
+            this.ClientSize = new System.Drawing.Size(936, 811);
             this.Controls.Add(this.tableLayoutPanel6);
             this.FormStyle = MaterialSkin.Controls.MaterialForm.FormStyles.ActionBar_64;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormAddUser";
-            this.Padding = new System.Windows.Forms.Padding(3, 81, 3, 3);
+            this.Padding = new System.Windows.Forms.Padding(3, 88, 3, 3);
             this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Сотрудник";

@@ -21,10 +21,12 @@ namespace Production_planning
         private List<EquipmentLookupDto> _equipments;
         private List<ScheduleTemplateModel> _schedules;
 
+        PeriodUpdateBuffer _periodBuffer;
         PositionUpdateBuffer _positionBuffer;
         EquipmentUpdateBuffer _equipmentBuffer;
         ScheduleUpdateBuffer _scheduleBuffer;
 
+        DateTime? _originalPeriodFireDate;
         DateTime _originalPositionDate;
         DateTime _originalEquipmentDate;
         DateTime _originalScheduleDate;
@@ -171,6 +173,7 @@ namespace Production_planning
                 {
                     _employee = await employeeService.GetEmployeeFullCardAsync((ulong)_userID);
 
+                    _originalPeriodFireDate = _employee.FireDate ?? null;
                     _originalPositionDate = _employee.PositionValidFrom ?? _employee.HireDate;
                     _originalScheduleDate = _employee.ScheduleValidFrom ?? _employee.HireDate;
                     _originalEquipmentDate = _employee.EquipmentValidFrom ?? _employee.HireDate;
@@ -197,6 +200,10 @@ namespace Production_planning
                     comboBoxEquipments.SelectedIndex = equipmentId;
                     comboBoxTemplates.SelectedIndex = templateID;
 
+                    comboBoxPositions.Refresh();
+                    comboBoxEquipments.Refresh();
+                    comboBoxTemplates.Refresh();
+
                     if (_employee.FireDate != null)
                     {
                         _isActive = false;
@@ -216,6 +223,12 @@ namespace Production_planning
                         buttonFire.Visible = true;
                         buttonFire.Text = "Уволить";
                     }
+
+                    _periodBuffer = new PeriodUpdateBuffer
+                    {
+                        AssignmentId = _employee.CurrentPeriodId, // Передали ID строки!
+                        EmployeeId = _employee.Id
+                    };
 
                     _positionBuffer = new PositionUpdateBuffer
                     {
@@ -244,7 +257,7 @@ namespace Production_planning
             }
         }
 
-        private async Task<bool> SaveEquipment()
+        private async Task<bool> SaveEmployee()
         {
             bool result = true;
 
@@ -274,11 +287,13 @@ namespace Production_planning
                 _employee.EquipmentId = _equipments[comboBoxEquipments.SelectedIndex].Id;
                 _employee.EquipmentValidFrom = Convert.ToDateTime(maskedTextBoxEquipmentDate.Text);
 
-                _employee.ScheduleTemplateId = (ulong?)_schedules[comboBoxTemplates.SelectedIndex].CycleId;
+                _employee.ScheduleTemplateId = (ulong?)_schedules[comboBoxTemplates.SelectedIndex].Id;
                 _employee.ScheduleValidFrom = Convert.ToDateTime(maskedTextBoxTemplateDate.Text);
 
-                EmployeeManagementService employeeService = new EmployeeManagementService(parameter.GetMySQLConnectionString());
+                
 
+                EmployeeManagementService employeeService = new EmployeeManagementService(parameter.GetMySQLConnectionString());
+                
                 if (!_edit)
                 {
                     //_equipment.WorkAreaId = _areaID;
@@ -289,7 +304,30 @@ namespace Production_planning
                 {
                     var (PositionAge, EquipmentAge, ScheduleAge) = await employeeService.GetCurrentAssignmentsAgeAsync(_userID);
 
-                    if (_oldPositionId != (int)_employee.PositionId)
+                    if (_originalPeriodFireDate != null && _periodBuffer.IsNewAssignment)
+                    {
+                        _periodBuffer.NewValidFrom = Convert.ToDateTime(textBoxDateHire.Text);
+
+                        if (_originalPeriodFireDate > _periodBuffer.NewValidFrom)
+                        {
+                            DateTime newDate = DateTime.Now < _originalPeriodFireDate ? _originalPeriodFireDate.Value.AddDays(1) : DateTime.Now;
+
+                            DialogResult dialogResult = MessageBox.Show($"Дата повторного найма не может быть раньше даты увольнения.\nНанять с {newDate.ToString("dd.MM.yyyy")}?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                            if (dialogResult == DialogResult.Yes)
+                            {
+                                _periodBuffer.NewValidFrom = newDate;
+                            }
+
+                            if (dialogResult == DialogResult.No)
+                            {
+                                result = false;
+                                return false;
+                            }
+                        }
+                    }
+
+                    if (_oldPositionId != (int)_employee.PositionId && !_positionBuffer.NewPositionId.HasValue)
                     {
                         if (PositionAge > 3)
                         {
@@ -309,7 +347,7 @@ namespace Production_planning
                         }
                     }
 
-                    if (_oldEquipmentId != (int)_employee.EquipmentId)
+                    if (_oldEquipmentId != (int)_employee.EquipmentId && !_equipmentBuffer.NewEquipmentId.HasValue)
                     {
                         if (EquipmentAge > 3)
                         {
@@ -328,8 +366,8 @@ namespace Production_planning
                             }
                         }
                     }
-
-                    if (_oldScheduleId != (int)_employee.ScheduleTemplateId)
+                    
+                    if (_oldScheduleId != (int)_employee.ScheduleTemplateId && !_scheduleBuffer.NewTemplateId.HasValue)
                     {
                         if (ScheduleAge > 3)
                         {
@@ -349,7 +387,7 @@ namespace Production_planning
                         }
                     }
 
-                    await employeeService.SaveEmployeeFullCardChangesAsync(_employee, _positionBuffer, _scheduleBuffer, _equipmentBuffer);
+                    await employeeService.SaveEmployeeFullCardChangesAsync(_employee, _periodBuffer, _positionBuffer, _scheduleBuffer, _equipmentBuffer);
                 }
             }
             catch (Exception ex)
@@ -365,7 +403,7 @@ namespace Production_planning
 
         private async void materialButton1_Click(object sender, EventArgs e)
         {
-            if (await SaveEquipment())
+            if (await SaveEmployee())
             {
                 this.DialogResult = DialogResult.OK;
                 this.Close();
@@ -514,8 +552,13 @@ namespace Production_planning
             {
                 _isActive = false;
 
+                textBoxDateHire.Enabled = false;
+                buttonCalendarHire.Enabled = false;
+
                 textBoxDateFire.Visible = true;
                 buttonCalendarFire.Visible = true;
+
+                _periodBuffer.NewValidFrom = null;
 
                 buttonFire.Text = "Отмена";
 
@@ -525,10 +568,25 @@ namespace Production_planning
             {
                 _isActive = true;
 
+                textBoxDateHire.Enabled = true;
+                buttonCalendarHire.Enabled = true;
+
                 textBoxDateFire.Visible = false;
                 buttonCalendarFire.Visible = false;
 
-                buttonFire.Text = "Уволить";
+                if (_originalPeriodFireDate != null)
+                {
+                    dateTimePicker1.Value = DateTime.Now;
+
+                    _periodBuffer.NewValidFrom = Convert.ToDateTime(textBoxDateHire.Text);
+
+                    buttonFire.Enabled = false;
+                    buttonFire.Text = "Повторный найм сотрудника";
+                }
+                else
+                {
+                    buttonFire.Text = "Уволить";
+                }
             }
         }
 
@@ -548,76 +606,79 @@ namespace Production_planning
             }
         }
 
-        private async void ButtonNewSchedules_ClickAsync(object sender, EventArgs e)
+        private async void buttonPositionAssignNew_Click(object sender, EventArgs e)
         {
-            /*FormSelectSchedule selectSchedule = new FormSelectSchedule(_equipmentID);
-            selectSchedule.Owner = this;
+            FormSelectUserPosition selectForm = new FormSelectUserPosition(_userID);
+            selectForm.Owner = this;
 
-            DialogResult result = selectSchedule.ShowDialog();
+            DialogResult result = selectForm.ShowDialog();
 
             await Task.Delay(100);
 
             if (result == DialogResult.OK)
             {
-                var newAssignment = new PendingScheduleAssignment
-                {
-                    TemplateId = selectSchedule.SelectedTemplateId,
-                    TemplateName = selectSchedule.SelectedTemplateName,
-                    ValidFrom = selectSchedule.SelectedDate
-                };
+                _positionBuffer.NewPositionId = (ulong?)selectForm.SelectedPositionId;
+                _positionBuffer.NewValidFrom = selectForm.SelectedDate;
 
-                _scheduleBuffer = new List<PendingScheduleAssignment>
-                {
-                    newAssignment
-                };
+                comboBoxPositions.SelectedIndex = _positions.FindIndex(s => s.Id == (ulong?)selectForm.SelectedPositionId);
+                maskedTextBoxPositionDate.Text = selectForm.SelectedDate.ToString("dd.MM.yyyy");
 
-                comboBoxTemplates.SelectedIndex = _scheduleTemplates.FindIndex(s => s.Id == selectSchedule.SelectedTemplateId);
-                maskedTextBoxTemplateDate.Text = selectSchedule.SelectedDate.ToString("dd.MM.yyyy");
+                comboBoxPositions.Refresh();
 
-                comboBoxTemplates.Refresh();
-
-                comboBoxTemplates.Enabled = false;
-                maskedTextBoxTemplateDate.Enabled = false;
-                buttonCalendarTemplate.Enabled = false;
-            }*/
+                comboBoxPositions.Enabled = false;
+                maskedTextBoxPositionDate.Enabled = false;
+                buttonCalendarPosition.Enabled = false;
+            }
         }
 
-        private async void buttonNewStaffing_Click(object sender, EventArgs e)
+        private async void buttonEquipmentAssignNew_Click(object sender, EventArgs e)
         {
-            /*FormSelectStaffingMode selectSchedule = new FormSelectStaffingMode(_equipmentID);
-            selectSchedule.Owner = this;
+            FormSelectUserAssignmentEquip selectForm = new FormSelectUserAssignmentEquip(_userID);
+            selectForm.Owner = this;
 
-            DialogResult result = selectSchedule.ShowDialog();
+            DialogResult result = selectForm.ShowDialog();
 
             await Task.Delay(100);
 
             if (result == DialogResult.OK)
             {
-                var newAssignment = new PendingStaffingAssignment
-                {
-                    StaffingMode = selectSchedule.SelectedStaffingMode,
-                    ValidFrom = selectSchedule.SelectedDate
-                };
+                _equipmentBuffer.NewEquipmentId = (ulong?)selectForm.SelectedEquipId;
+                _equipmentBuffer.NewValidFrom = selectForm.SelectedDate;
 
-                _staffingBuffer = new List<PendingStaffingAssignment>
-                {
-                    newAssignment
-                };
-
-                comboBoxEquipments.SelectedIndex = Array.IndexOf(_staffingMode, selectSchedule.SelectedStaffingMode);
-                maskedTextBoxEquipmentDate.Text = selectSchedule.SelectedDate.ToString("dd.MM.yyyy");
+                comboBoxEquipments.SelectedIndex = _equipments.FindIndex(s => s.Id == (ulong?)selectForm.SelectedEquipId);
+                maskedTextBoxEquipmentDate.Text = selectForm.SelectedDate.ToString("dd.MM.yyyy");
 
                 comboBoxEquipments.Refresh();
 
                 comboBoxEquipments.Enabled = false;
                 maskedTextBoxEquipmentDate.Enabled = false;
                 buttonCalendarEquipmentAssign.Enabled = false;
-            }*/
+            }
         }
 
-        private void buttonPositionAssignNew_Click(object sender, EventArgs e)
+        private async void ButtonTemplateAssignNew_Click(object sender, EventArgs e)
         {
+            FormSelectUserAssignmentSchedule selectForm = new FormSelectUserAssignmentSchedule(_userID);
+            selectForm.Owner = this;
 
+            DialogResult result = selectForm.ShowDialog();
+
+            await Task.Delay(100);
+
+            if (result == DialogResult.OK)
+            {
+                _scheduleBuffer.NewTemplateId = (ulong?)selectForm.SelectedTemplateId;
+                _scheduleBuffer.NewValidFrom = selectForm.SelectedDate;
+
+                comboBoxTemplates.SelectedIndex = _schedules.FindIndex(s => s.Id == selectForm.SelectedTemplateId);
+                maskedTextBoxTemplateDate.Text = selectForm.SelectedDate.ToString("dd.MM.yyyy");
+
+                comboBoxTemplates.Refresh();
+
+                comboBoxTemplates.Enabled = false;
+                maskedTextBoxTemplateDate.Enabled = false;
+                buttonCalendarTemplate.Enabled = false;
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ namespace data
         public string Patronymic { get; set; }
         public int IsActive { get; set; }
         public string CurrentStatus => IsActive == 1 ? "Работает" : "Уволен";     // "Работает" или "Уволен"
+        public ulong CurrentPositionID { get; set; }
         public string CurrentPosition { get; set; }   // На текущую дату
         public string CurrentSchedule { get; set; }   // На текущую дату
         public string CurrentEquipment { get; set; }  // Закрепленный станок
@@ -86,7 +87,14 @@ namespace data
         // Понятное отображение в интерфейсе, если нужно вывести роль рядом
         public string DisplayText => $"{Name} ({SystemRole})";
     }
+    public class PeriodUpdateBuffer
+    {
+        public ulong? AssignmentId { get; set; } // Ключевое поле! ID строки из базы данных
+        public ulong EmployeeId { get; set; }
+        public DateTime? NewValidFrom { get; set; }
 
+        public bool IsNewAssignment => NewValidFrom.HasValue;
+    }
     public class PositionUpdateBuffer
     {
         public ulong? AssignmentId { get; set; } // Ключевое поле! ID строки из базы данных
@@ -94,7 +102,7 @@ namespace data
         public ulong? NewPositionId { get; set; }
         public DateTime? NewValidFrom { get; set; }
 
-        public bool IsNewAssignment => !NewPositionId.HasValue || NewValidFrom.HasValue;
+        public bool IsNewAssignment => NewPositionId.HasValue || NewValidFrom.HasValue;
     }
 
     public class ScheduleUpdateBuffer
@@ -114,7 +122,7 @@ namespace data
         public ulong? NewEquipmentId { get; set; }
         public DateTime? NewValidFrom { get; set; }
 
-        public bool IsNewAssignment => !NewEquipmentId.HasValue || NewValidFrom.HasValue;
+        public bool IsNewAssignment => NewEquipmentId.HasValue || NewValidFrom.HasValue;
     }
 
     /// <summary>

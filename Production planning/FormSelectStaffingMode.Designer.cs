@@ -60,16 +60,16 @@
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.materialLabel1, 1, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 81);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 88);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 6;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(696, 400);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(696, 433);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel4
@@ -85,11 +85,11 @@
             this.tableLayoutPanel4.Controls.Add(this.comboBoxStaffingMode, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.dateTimePicker1, 2, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(13, 12);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(13, 13);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(670, 49);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(670, 54);
             this.tableLayoutPanel4.TabIndex = 2;
             // 
             // buttonCalendarTemplate
@@ -106,7 +106,7 @@
             this.buttonCalendarTemplate.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonCalendarTemplate.Name = "buttonCalendarTemplate";
             this.buttonCalendarTemplate.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonCalendarTemplate.Size = new System.Drawing.Size(45, 37);
+            this.buttonCalendarTemplate.Size = new System.Drawing.Size(45, 42);
             this.buttonCalendarTemplate.TabIndex = 5;
             this.buttonCalendarTemplate.Text = "🗓️";
             this.buttonCalendarTemplate.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -187,7 +187,7 @@
             // 
             this.dateTimePicker1.Location = new System.Drawing.Point(615, 3);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(1, 21);
+            this.dateTimePicker1.Size = new System.Drawing.Size(1, 20);
             this.dateTimePicker1.TabIndex = 6;
             this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged_1);
             // 
@@ -197,17 +197,17 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.listViewScheduleHistory, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(13, 104);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(13, 113);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 228F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 228F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 228F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 228F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 228F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 228F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 228F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(670, 228);
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 247F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 247F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 247F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 247F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 247F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 247F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 247F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(670, 247);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // listViewScheduleHistory
@@ -225,13 +225,13 @@
             this.listViewScheduleHistory.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewScheduleHistory.HideSelection = false;
             this.listViewScheduleHistory.Location = new System.Drawing.Point(3, 3);
-            this.listViewScheduleHistory.MinimumSize = new System.Drawing.Size(200, 92);
+            this.listViewScheduleHistory.MinimumSize = new System.Drawing.Size(200, 100);
             this.listViewScheduleHistory.MouseLocation = new System.Drawing.Point(-1, -1);
             this.listViewScheduleHistory.MouseState = MaterialSkin.MouseState.OUT;
             this.listViewScheduleHistory.MultiSelect = false;
             this.listViewScheduleHistory.Name = "listViewScheduleHistory";
             this.listViewScheduleHistory.OwnerDraw = true;
-            this.listViewScheduleHistory.Size = new System.Drawing.Size(664, 222);
+            this.listViewScheduleHistory.Size = new System.Drawing.Size(664, 241);
             this.listViewScheduleHistory.TabIndex = 9;
             this.listViewScheduleHistory.UseCompatibleStateImageBehavior = false;
             this.listViewScheduleHistory.View = System.Windows.Forms.View.Details;
@@ -260,11 +260,11 @@
             this.tableLayoutPanel3.Controls.Add(this.materialButton1, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.materialButton2, 2, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 338);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 366);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(670, 59);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(670, 64);
             this.tableLayoutPanel3.TabIndex = 2;
             // 
             // materialButton1
@@ -280,7 +280,7 @@
             this.materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton1.Name = "materialButton1";
             this.materialButton1.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton1.Size = new System.Drawing.Size(232, 47);
+            this.materialButton1.Size = new System.Drawing.Size(232, 52);
             this.materialButton1.TabIndex = 0;
             this.materialButton1.Text = "Применить новый режим";
             this.materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -301,7 +301,7 @@
             this.materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton2.Name = "materialButton2";
             this.materialButton2.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton2.Size = new System.Drawing.Size(112, 47);
+            this.materialButton2.Size = new System.Drawing.Size(112, 52);
             this.materialButton2.TabIndex = 1;
             this.materialButton2.Text = "Отмена";
             this.materialButton2.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -315,25 +315,25 @@
             this.materialLabel1.Depth = 0;
             this.materialLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.materialLabel1.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel1.Location = new System.Drawing.Point(13, 73);
+            this.materialLabel1.Location = new System.Drawing.Point(13, 80);
             this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel1.Name = "materialLabel1";
-            this.materialLabel1.Size = new System.Drawing.Size(670, 28);
+            this.materialLabel1.Size = new System.Drawing.Size(670, 30);
             this.materialLabel1.TabIndex = 10;
             this.materialLabel1.Text = "История изменений режима работы";
             this.materialLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FormSelectStaffingMode
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(702, 484);
+            this.ClientSize = new System.Drawing.Size(702, 524);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormStyle = MaterialSkin.Controls.MaterialForm.FormStyles.ActionBar_64;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormSelectStaffingMode";
-            this.Padding = new System.Windows.Forms.Padding(3, 81, 3, 3);
+            this.Padding = new System.Windows.Forms.Padding(3, 88, 3, 3);
             this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Назначение нового режима работы";

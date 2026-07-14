@@ -45,8 +45,8 @@ namespace Production_planning
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -83,6 +83,7 @@ namespace Production_planning
             this.tableLayoutPanel23 = new System.Windows.Forms.TableLayoutPanel();
             this.materialButtonUserViewFullCard = new MaterialSkin.Controls.MaterialButton();
             this.materialButtonUserAdd = new MaterialSkin.Controls.MaterialButton();
+            this.comboBoxUserPosition = new MaterialSkin.Controls.MaterialComboBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
@@ -205,12 +206,12 @@ namespace Production_planning
             this.materialTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.materialTabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.materialTabControl1.ImageList = this.imageList;
-            this.materialTabControl1.Location = new System.Drawing.Point(3, 81);
+            this.materialTabControl1.Location = new System.Drawing.Point(3, 88);
             this.materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialTabControl1.Multiline = true;
             this.materialTabControl1.Name = "materialTabControl1";
             this.materialTabControl1.SelectedIndex = 0;
-            this.materialTabControl1.Size = new System.Drawing.Size(1248, 591);
+            this.materialTabControl1.Size = new System.Drawing.Size(1248, 640);
             this.materialTabControl1.TabIndex = 0;
             this.materialTabControl1.SelectedIndexChanged += new System.EventHandler(this.materialTabControl1_SelectedIndexChangedAsync);
             // 
@@ -221,7 +222,7 @@ namespace Production_planning
             this.tabPage1.Location = new System.Drawing.Point(4, 39);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1240, 548);
+            this.tabPage1.Size = new System.Drawing.Size(1240, 597);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Расстановка персонала";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -236,40 +237,40 @@ namespace Production_planning
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1234, 542);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1234, 591);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // dataGridPlanning
             // 
             this.dataGridPlanning.AllowUserToAddRows = false;
             this.dataGridPlanning.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dataGridPlanning.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dataGridPlanning.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridPlanning.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridPlanning.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridPlanning.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridPlanning.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridPlanning.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridPlanning.ColumnHeadersVisible = false;
             this.dataGridPlanning.Cursor = System.Windows.Forms.Cursors.Hand;
             this.dataGridPlanning.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridPlanning.Location = new System.Drawing.Point(3, 58);
+            this.dataGridPlanning.Location = new System.Drawing.Point(3, 63);
             this.dataGridPlanning.MultiSelect = false;
             this.dataGridPlanning.Name = "dataGridPlanning";
             this.dataGridPlanning.ReadOnly = true;
             this.dataGridPlanning.RowHeadersVisible = false;
             this.dataGridPlanning.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dataGridPlanning.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataGridPlanning.Size = new System.Drawing.Size(1228, 481);
+            this.dataGridPlanning.Size = new System.Drawing.Size(1228, 525);
             this.dataGridPlanning.TabIndex = 2;
             this.dataGridPlanning.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridPlanning_CellDoubleClick);
             this.dataGridPlanning.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dataGridPlanning_CellPainting);
@@ -292,7 +293,7 @@ namespace Production_planning
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1228, 49);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1228, 54);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
             // planComboBoxYear
@@ -408,7 +409,7 @@ namespace Production_planning
             this.tabPage2.ImageKey = "free-icon-form-3914182.png";
             this.tabPage2.Location = new System.Drawing.Point(4, 39);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(1240, 548);
+            this.tabPage2.Size = new System.Drawing.Size(1240, 597);
             this.tabPage2.TabIndex = 5;
             this.tabPage2.Text = "План работы";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -423,9 +424,9 @@ namespace Production_planning
             this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 2;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(1240, 548);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(1240, 597);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // tableLayoutPanel4
@@ -443,7 +444,7 @@ namespace Production_planning
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(1234, 49);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(1234, 54);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // materialButton1
@@ -459,7 +460,7 @@ namespace Production_planning
             this.materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton1.Name = "materialButton1";
             this.materialButton1.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton1.Size = new System.Drawing.Size(172, 37);
+            this.materialButton1.Size = new System.Drawing.Size(172, 42);
             this.materialButton1.TabIndex = 0;
             this.materialButton1.Text = "Обновить";
             this.materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -525,13 +526,13 @@ namespace Production_planning
             this.dataGridViewPlan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPlan.ColumnHeadersVisible = false;
             this.dataGridViewPlan.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewPlan.Location = new System.Drawing.Point(3, 58);
+            this.dataGridViewPlan.Location = new System.Drawing.Point(3, 63);
             this.dataGridViewPlan.MultiSelect = false;
             this.dataGridViewPlan.Name = "dataGridViewPlan";
             this.dataGridViewPlan.ReadOnly = true;
             this.dataGridViewPlan.RowHeadersVisible = false;
             this.dataGridViewPlan.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewPlan.Size = new System.Drawing.Size(1234, 487);
+            this.dataGridViewPlan.Size = new System.Drawing.Size(1234, 531);
             this.dataGridViewPlan.TabIndex = 1;
             // 
             // tabPage3
@@ -539,7 +540,7 @@ namespace Production_planning
             this.tabPage3.ImageKey = "free-icon-user-delete-3914336.png";
             this.tabPage3.Location = new System.Drawing.Point(4, 39);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1240, 548);
+            this.tabPage3.Size = new System.Drawing.Size(1240, 597);
             this.tabPage3.TabIndex = 10;
             this.tabPage3.Text = "Отсутствия";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -551,7 +552,7 @@ namespace Production_planning
             this.tabPage4.Location = new System.Drawing.Point(4, 39);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1240, 548);
+            this.tabPage4.Size = new System.Drawing.Size(1240, 597);
             this.tabPage4.TabIndex = 6;
             this.tabPage4.Text = "Сотрудники";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -565,14 +566,15 @@ namespace Production_planning
             this.tableLayoutPanel19.Controls.Add(this.listBoxUsers, 0, 1);
             this.tableLayoutPanel19.Controls.Add(this.tableLayoutPanel20, 2, 1);
             this.tableLayoutPanel19.Controls.Add(this.tableLayoutPanel23, 1, 1);
+            this.tableLayoutPanel19.Controls.Add(this.comboBoxUserPosition, 0, 0);
             this.tableLayoutPanel19.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel19.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel19.Name = "tableLayoutPanel19";
             this.tableLayoutPanel19.RowCount = 3;
-            this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
+            this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel19.Size = new System.Drawing.Size(1234, 542);
+            this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel19.Size = new System.Drawing.Size(1234, 591);
             this.tableLayoutPanel19.TabIndex = 0;
             // 
             // listBoxUsers
@@ -582,14 +584,15 @@ namespace Production_planning
             this.listBoxUsers.Depth = 0;
             this.listBoxUsers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxUsers.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.listBoxUsers.Location = new System.Drawing.Point(3, 54);
+            this.listBoxUsers.Location = new System.Drawing.Point(3, 58);
             this.listBoxUsers.MouseState = MaterialSkin.MouseState.HOVER;
             this.listBoxUsers.Name = "listBoxUsers";
             this.listBoxUsers.SelectedIndex = -1;
             this.listBoxUsers.SelectedItem = null;
-            this.listBoxUsers.Size = new System.Drawing.Size(463, 434);
+            this.listBoxUsers.Size = new System.Drawing.Size(463, 475);
             this.listBoxUsers.TabIndex = 0;
             this.listBoxUsers.SelectedIndexChanged += new MaterialSkin.Controls.MaterialListBox.SelectedIndexChangedEventHandler(this.listBoxUsers_SelectedIndexChanged);
+            this.listBoxUsers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxUsers_MouseDoubleClick);
             // 
             // tableLayoutPanel20
             // 
@@ -609,19 +612,19 @@ namespace Production_planning
             this.tableLayoutPanel20.Controls.Add(this.textBoxUserContactPhone, 0, 5);
             this.tableLayoutPanel20.Controls.Add(this.textBoxUserSchedule, 2, 5);
             this.tableLayoutPanel20.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel20.Location = new System.Drawing.Point(532, 54);
+            this.tableLayoutPanel20.Location = new System.Drawing.Point(532, 58);
             this.tableLayoutPanel20.Name = "tableLayoutPanel20";
             this.tableLayoutPanel20.RowCount = 9;
-            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
+            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel20.Size = new System.Drawing.Size(699, 434);
+            this.tableLayoutPanel20.Size = new System.Drawing.Size(699, 475);
             this.tableLayoutPanel20.TabIndex = 1;
             // 
             // textBoxUserPatronymic
@@ -633,7 +636,7 @@ namespace Production_planning
             this.textBoxUserPatronymic.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textBoxUserPatronymic.Hint = "Отчество";
             this.textBoxUserPatronymic.LeadingIcon = null;
-            this.textBoxUserPatronymic.Location = new System.Drawing.Point(3, 156);
+            this.textBoxUserPatronymic.Location = new System.Drawing.Point(3, 168);
             this.textBoxUserPatronymic.MaxLength = 50;
             this.textBoxUserPatronymic.MouseState = MaterialSkin.MouseState.OUT;
             this.textBoxUserPatronymic.Multiline = false;
@@ -653,7 +656,7 @@ namespace Production_planning
             this.textBoxUserFirstName.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textBoxUserFirstName.Hint = "Имя";
             this.textBoxUserFirstName.LeadingIcon = null;
-            this.textBoxUserFirstName.Location = new System.Drawing.Point(3, 105);
+            this.textBoxUserFirstName.Location = new System.Drawing.Point(3, 113);
             this.textBoxUserFirstName.MaxLength = 50;
             this.textBoxUserFirstName.MouseState = MaterialSkin.MouseState.OUT;
             this.textBoxUserFirstName.Multiline = false;
@@ -673,7 +676,7 @@ namespace Production_planning
             this.textBoxUserLastName.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textBoxUserLastName.Hint = "Фамилия";
             this.textBoxUserLastName.LeadingIcon = null;
-            this.textBoxUserLastName.Location = new System.Drawing.Point(3, 54);
+            this.textBoxUserLastName.Location = new System.Drawing.Point(3, 58);
             this.textBoxUserLastName.MaxLength = 50;
             this.textBoxUserLastName.MouseState = MaterialSkin.MouseState.OUT;
             this.textBoxUserLastName.Multiline = false;
@@ -695,7 +698,7 @@ namespace Production_planning
             this.materialLabel4.Location = new System.Drawing.Point(3, 0);
             this.materialLabel4.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel4.Name = "materialLabel4";
-            this.materialLabel4.Size = new System.Drawing.Size(308, 51);
+            this.materialLabel4.Size = new System.Drawing.Size(308, 55);
             this.materialLabel4.TabIndex = 4;
             this.materialLabel4.Text = "Личная информация";
             this.materialLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -711,7 +714,7 @@ namespace Production_planning
             this.materialLabel5.Location = new System.Drawing.Point(386, 0);
             this.materialLabel5.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel5.Name = "materialLabel5";
-            this.materialLabel5.Size = new System.Drawing.Size(310, 51);
+            this.materialLabel5.Size = new System.Drawing.Size(310, 55);
             this.materialLabel5.TabIndex = 5;
             this.materialLabel5.Text = "Рабочая информация";
             this.materialLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -725,7 +728,7 @@ namespace Production_planning
             this.textBoxUserStatus.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textBoxUserStatus.Hint = "Статус";
             this.textBoxUserStatus.LeadingIcon = null;
-            this.textBoxUserStatus.Location = new System.Drawing.Point(386, 54);
+            this.textBoxUserStatus.Location = new System.Drawing.Point(386, 58);
             this.textBoxUserStatus.MaxLength = 50;
             this.textBoxUserStatus.MouseState = MaterialSkin.MouseState.OUT;
             this.textBoxUserStatus.Multiline = false;
@@ -745,7 +748,7 @@ namespace Production_planning
             this.textBoxUserPosition.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textBoxUserPosition.Hint = "Занимаемая должность";
             this.textBoxUserPosition.LeadingIcon = null;
-            this.textBoxUserPosition.Location = new System.Drawing.Point(386, 105);
+            this.textBoxUserPosition.Location = new System.Drawing.Point(386, 113);
             this.textBoxUserPosition.MaxLength = 50;
             this.textBoxUserPosition.MouseState = MaterialSkin.MouseState.OUT;
             this.textBoxUserPosition.Multiline = false;
@@ -765,7 +768,7 @@ namespace Production_planning
             this.textBoxUserAssigmentArea.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textBoxUserAssigmentArea.Hint = "Производственный участок";
             this.textBoxUserAssigmentArea.LeadingIcon = null;
-            this.textBoxUserAssigmentArea.Location = new System.Drawing.Point(386, 156);
+            this.textBoxUserAssigmentArea.Location = new System.Drawing.Point(386, 168);
             this.textBoxUserAssigmentArea.MaxLength = 50;
             this.textBoxUserAssigmentArea.MouseState = MaterialSkin.MouseState.OUT;
             this.textBoxUserAssigmentArea.Multiline = false;
@@ -785,7 +788,7 @@ namespace Production_planning
             this.textBoxUserAssigmentEquip.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textBoxUserAssigmentEquip.Hint = "Закрепленное оборудование";
             this.textBoxUserAssigmentEquip.LeadingIcon = null;
-            this.textBoxUserAssigmentEquip.Location = new System.Drawing.Point(386, 207);
+            this.textBoxUserAssigmentEquip.Location = new System.Drawing.Point(386, 223);
             this.textBoxUserAssigmentEquip.MaxLength = 50;
             this.textBoxUserAssigmentEquip.MouseState = MaterialSkin.MouseState.OUT;
             this.textBoxUserAssigmentEquip.Multiline = false;
@@ -805,7 +808,7 @@ namespace Production_planning
             this.textBoxUserContactPhone.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textBoxUserContactPhone.Hint = "Контактный телефон";
             this.textBoxUserContactPhone.LeadingIcon = null;
-            this.textBoxUserContactPhone.Location = new System.Drawing.Point(3, 258);
+            this.textBoxUserContactPhone.Location = new System.Drawing.Point(3, 278);
             this.textBoxUserContactPhone.MaxLength = 50;
             this.textBoxUserContactPhone.MouseState = MaterialSkin.MouseState.OUT;
             this.textBoxUserContactPhone.Multiline = false;
@@ -825,7 +828,7 @@ namespace Production_planning
             this.textBoxUserSchedule.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.textBoxUserSchedule.Hint = "Рабочий график";
             this.textBoxUserSchedule.LeadingIcon = null;
-            this.textBoxUserSchedule.Location = new System.Drawing.Point(386, 258);
+            this.textBoxUserSchedule.Location = new System.Drawing.Point(386, 278);
             this.textBoxUserSchedule.MaxLength = 50;
             this.textBoxUserSchedule.MouseState = MaterialSkin.MouseState.OUT;
             this.textBoxUserSchedule.Multiline = false;
@@ -843,16 +846,16 @@ namespace Production_planning
             this.tableLayoutPanel23.Controls.Add(this.materialButtonUserViewFullCard, 0, 1);
             this.tableLayoutPanel23.Controls.Add(this.materialButtonUserAdd, 0, 0);
             this.tableLayoutPanel23.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel23.Location = new System.Drawing.Point(472, 54);
+            this.tableLayoutPanel23.Location = new System.Drawing.Point(472, 58);
             this.tableLayoutPanel23.Name = "tableLayoutPanel23";
             this.tableLayoutPanel23.RowCount = 6;
-            this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
+            this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel23.Size = new System.Drawing.Size(54, 434);
+            this.tableLayoutPanel23.Size = new System.Drawing.Size(54, 475);
             this.tableLayoutPanel23.TabIndex = 2;
             // 
             // materialButtonUserViewFullCard
@@ -863,12 +866,12 @@ namespace Production_planning
             this.materialButtonUserViewFullCard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.materialButtonUserViewFullCard.HighEmphasis = true;
             this.materialButtonUserViewFullCard.Icon = null;
-            this.materialButtonUserViewFullCard.Location = new System.Drawing.Point(4, 57);
+            this.materialButtonUserViewFullCard.Location = new System.Drawing.Point(4, 61);
             this.materialButtonUserViewFullCard.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButtonUserViewFullCard.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButtonUserViewFullCard.Name = "materialButtonUserViewFullCard";
             this.materialButtonUserViewFullCard.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButtonUserViewFullCard.Size = new System.Drawing.Size(46, 39);
+            this.materialButtonUserViewFullCard.Size = new System.Drawing.Size(46, 43);
             this.materialButtonUserViewFullCard.TabIndex = 12;
             this.materialButtonUserViewFullCard.Text = "📝";
             this.materialButtonUserViewFullCard.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -889,7 +892,7 @@ namespace Production_planning
             this.materialButtonUserAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButtonUserAdd.Name = "materialButtonUserAdd";
             this.materialButtonUserAdd.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButtonUserAdd.Size = new System.Drawing.Size(46, 39);
+            this.materialButtonUserAdd.Size = new System.Drawing.Size(46, 43);
             this.materialButtonUserAdd.TabIndex = 13;
             this.materialButtonUserAdd.Text = "➕";
             this.materialButtonUserAdd.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -897,13 +900,38 @@ namespace Production_planning
             this.materialButtonUserAdd.UseVisualStyleBackColor = true;
             this.materialButtonUserAdd.Click += new System.EventHandler(this.materialButtonUserAdd_Click);
             // 
+            // comboBoxUserPosition
+            // 
+            this.comboBoxUserPosition.AutoResize = false;
+            this.comboBoxUserPosition.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.comboBoxUserPosition.Depth = 0;
+            this.comboBoxUserPosition.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxUserPosition.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.comboBoxUserPosition.DropDownHeight = 174;
+            this.comboBoxUserPosition.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxUserPosition.DropDownWidth = 121;
+            this.comboBoxUserPosition.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.comboBoxUserPosition.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.comboBoxUserPosition.FormattingEnabled = true;
+            this.comboBoxUserPosition.Hint = "Должности";
+            this.comboBoxUserPosition.IntegralHeight = false;
+            this.comboBoxUserPosition.ItemHeight = 43;
+            this.comboBoxUserPosition.Location = new System.Drawing.Point(3, 3);
+            this.comboBoxUserPosition.MaxDropDownItems = 4;
+            this.comboBoxUserPosition.MouseState = MaterialSkin.MouseState.OUT;
+            this.comboBoxUserPosition.Name = "comboBoxUserPosition";
+            this.comboBoxUserPosition.Size = new System.Drawing.Size(463, 49);
+            this.comboBoxUserPosition.StartIndex = 0;
+            this.comboBoxUserPosition.TabIndex = 3;
+            this.comboBoxUserPosition.SelectedIndexChanged += new System.EventHandler(this.comboBoxUserPosition_SelectedIndexChanged);
+            // 
             // tabPage5
             // 
             this.tabPage5.Controls.Add(this.tableLayoutPanel5);
             this.tabPage5.ImageKey = "free-icon-database-3914565.png";
             this.tabPage5.Location = new System.Drawing.Point(4, 39);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(1240, 548);
+            this.tabPage5.Size = new System.Drawing.Size(1240, 597);
             this.tabPage5.TabIndex = 7;
             this.tabPage5.Text = "Рабочие места";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -927,10 +955,10 @@ namespace Production_planning
             this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 3;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(1240, 548);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(1240, 597);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // tableLayoutPanel6
@@ -941,11 +969,11 @@ namespace Production_planning
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 499);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 543);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(393, 46);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(393, 51);
             this.tableLayoutPanel6.TabIndex = 0;
             // 
             // tableLayoutPanel7
@@ -956,11 +984,11 @@ namespace Production_planning
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel7.Location = new System.Drawing.Point(452, 499);
+            this.tableLayoutPanel7.Location = new System.Drawing.Point(452, 543);
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(735, 46);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(735, 51);
             this.tableLayoutPanel7.TabIndex = 1;
             // 
             // materialLabel1
@@ -972,9 +1000,9 @@ namespace Production_planning
             this.materialLabel1.Location = new System.Drawing.Point(3, 0);
             this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel1.Name = "materialLabel1";
-            this.materialLabel1.Size = new System.Drawing.Size(393, 28);
+            this.materialLabel1.Size = new System.Drawing.Size(393, 30);
             this.materialLabel1.TabIndex = 2;
-            this.materialLabel1.Text = "Производственные участки";
+            this.materialLabel1.Text = "Участки";
             this.materialLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // materialLabel2
@@ -986,9 +1014,9 @@ namespace Production_planning
             this.materialLabel2.Location = new System.Drawing.Point(452, 0);
             this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel2.Name = "materialLabel2";
-            this.materialLabel2.Size = new System.Drawing.Size(735, 28);
+            this.materialLabel2.Size = new System.Drawing.Size(735, 30);
             this.materialLabel2.TabIndex = 3;
-            this.materialLabel2.Text = "Оборудование";
+            this.materialLabel2.Text = "Рабочее место";
             this.materialLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // listBoxAreas
@@ -998,12 +1026,12 @@ namespace Production_planning
             this.listBoxAreas.Depth = 0;
             this.listBoxAreas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxAreas.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.listBoxAreas.Location = new System.Drawing.Point(3, 31);
+            this.listBoxAreas.Location = new System.Drawing.Point(3, 33);
             this.listBoxAreas.MouseState = MaterialSkin.MouseState.HOVER;
             this.listBoxAreas.Name = "listBoxAreas";
             this.listBoxAreas.SelectedIndex = -1;
             this.listBoxAreas.SelectedItem = null;
-            this.listBoxAreas.Size = new System.Drawing.Size(393, 462);
+            this.listBoxAreas.Size = new System.Drawing.Size(393, 504);
             this.listBoxAreas.TabIndex = 4;
             this.listBoxAreas.SelectedIndexChanged += new MaterialSkin.Controls.MaterialListBox.SelectedIndexChangedEventHandler(this.listBoxAreas_SelectedIndexChanged);
             // 
@@ -1017,16 +1045,16 @@ namespace Production_planning
             this.tableLayoutPanel15.Controls.Add(this.buttonAreaEdit, 0, 1);
             this.tableLayoutPanel15.Controls.Add(this.buttonAreaAdd, 0, 0);
             this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel15.Location = new System.Drawing.Point(402, 31);
+            this.tableLayoutPanel15.Location = new System.Drawing.Point(402, 33);
             this.tableLayoutPanel15.Name = "tableLayoutPanel15";
             this.tableLayoutPanel15.RowCount = 6;
-            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel15.Size = new System.Drawing.Size(44, 462);
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel15.Size = new System.Drawing.Size(44, 504);
             this.tableLayoutPanel15.TabIndex = 6;
             // 
             // buttonAreaMoveDown
@@ -1038,12 +1066,12 @@ namespace Production_planning
             this.buttonAreaMoveDown.Enabled = false;
             this.buttonAreaMoveDown.HighEmphasis = true;
             this.buttonAreaMoveDown.Icon = null;
-            this.buttonAreaMoveDown.Location = new System.Drawing.Point(4, 174);
+            this.buttonAreaMoveDown.Location = new System.Drawing.Point(4, 190);
             this.buttonAreaMoveDown.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonAreaMoveDown.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonAreaMoveDown.Name = "buttonAreaMoveDown";
             this.buttonAreaMoveDown.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonAreaMoveDown.Size = new System.Drawing.Size(36, 30);
+            this.buttonAreaMoveDown.Size = new System.Drawing.Size(36, 34);
             this.buttonAreaMoveDown.TabIndex = 5;
             this.buttonAreaMoveDown.Text = "↓";
             this.buttonAreaMoveDown.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1060,12 +1088,12 @@ namespace Production_planning
             this.buttonAreaMoveUp.Enabled = false;
             this.buttonAreaMoveUp.HighEmphasis = true;
             this.buttonAreaMoveUp.Icon = null;
-            this.buttonAreaMoveUp.Location = new System.Drawing.Point(4, 132);
+            this.buttonAreaMoveUp.Location = new System.Drawing.Point(4, 144);
             this.buttonAreaMoveUp.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonAreaMoveUp.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonAreaMoveUp.Name = "buttonAreaMoveUp";
             this.buttonAreaMoveUp.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonAreaMoveUp.Size = new System.Drawing.Size(36, 30);
+            this.buttonAreaMoveUp.Size = new System.Drawing.Size(36, 34);
             this.buttonAreaMoveUp.TabIndex = 4;
             this.buttonAreaMoveUp.Text = "↑";
             this.buttonAreaMoveUp.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1082,12 +1110,12 @@ namespace Production_planning
             this.buttonAreaDelete.Enabled = false;
             this.buttonAreaDelete.HighEmphasis = true;
             this.buttonAreaDelete.Icon = null;
-            this.buttonAreaDelete.Location = new System.Drawing.Point(4, 90);
+            this.buttonAreaDelete.Location = new System.Drawing.Point(4, 98);
             this.buttonAreaDelete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonAreaDelete.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonAreaDelete.Name = "buttonAreaDelete";
             this.buttonAreaDelete.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonAreaDelete.Size = new System.Drawing.Size(36, 30);
+            this.buttonAreaDelete.Size = new System.Drawing.Size(36, 34);
             this.buttonAreaDelete.TabIndex = 3;
             this.buttonAreaDelete.Text = "❌";
             this.buttonAreaDelete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1105,12 +1133,12 @@ namespace Production_planning
             this.buttonAreaEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonAreaEdit.HighEmphasis = true;
             this.buttonAreaEdit.Icon = null;
-            this.buttonAreaEdit.Location = new System.Drawing.Point(4, 48);
+            this.buttonAreaEdit.Location = new System.Drawing.Point(4, 52);
             this.buttonAreaEdit.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonAreaEdit.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonAreaEdit.Name = "buttonAreaEdit";
             this.buttonAreaEdit.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonAreaEdit.Size = new System.Drawing.Size(36, 30);
+            this.buttonAreaEdit.Size = new System.Drawing.Size(36, 34);
             this.buttonAreaEdit.TabIndex = 2;
             this.buttonAreaEdit.Text = "📝";
             this.buttonAreaEdit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1131,7 +1159,7 @@ namespace Production_planning
             this.buttonAreaAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonAreaAdd.Name = "buttonAreaAdd";
             this.buttonAreaAdd.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonAreaAdd.Size = new System.Drawing.Size(36, 30);
+            this.buttonAreaAdd.Size = new System.Drawing.Size(36, 34);
             this.buttonAreaAdd.TabIndex = 1;
             this.buttonAreaAdd.Text = "➕";
             this.buttonAreaAdd.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1149,16 +1177,16 @@ namespace Production_planning
             this.tableLayoutPanel16.Controls.Add(this.buttonEquipEdit, 0, 1);
             this.tableLayoutPanel16.Controls.Add(this.buttonEquipAdd, 0, 0);
             this.tableLayoutPanel16.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel16.Location = new System.Drawing.Point(1193, 31);
+            this.tableLayoutPanel16.Location = new System.Drawing.Point(1193, 33);
             this.tableLayoutPanel16.Name = "tableLayoutPanel16";
             this.tableLayoutPanel16.RowCount = 6;
-            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel16.Size = new System.Drawing.Size(44, 462);
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel16.Size = new System.Drawing.Size(44, 504);
             this.tableLayoutPanel16.TabIndex = 7;
             // 
             // buttonEquipMoveDown
@@ -1170,12 +1198,12 @@ namespace Production_planning
             this.buttonEquipMoveDown.Enabled = false;
             this.buttonEquipMoveDown.HighEmphasis = true;
             this.buttonEquipMoveDown.Icon = null;
-            this.buttonEquipMoveDown.Location = new System.Drawing.Point(4, 174);
+            this.buttonEquipMoveDown.Location = new System.Drawing.Point(4, 190);
             this.buttonEquipMoveDown.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonEquipMoveDown.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonEquipMoveDown.Name = "buttonEquipMoveDown";
             this.buttonEquipMoveDown.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonEquipMoveDown.Size = new System.Drawing.Size(36, 30);
+            this.buttonEquipMoveDown.Size = new System.Drawing.Size(36, 34);
             this.buttonEquipMoveDown.TabIndex = 5;
             this.buttonEquipMoveDown.Text = "↓";
             this.buttonEquipMoveDown.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1192,12 +1220,12 @@ namespace Production_planning
             this.buttonEquipMoveUp.Enabled = false;
             this.buttonEquipMoveUp.HighEmphasis = true;
             this.buttonEquipMoveUp.Icon = null;
-            this.buttonEquipMoveUp.Location = new System.Drawing.Point(4, 132);
+            this.buttonEquipMoveUp.Location = new System.Drawing.Point(4, 144);
             this.buttonEquipMoveUp.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonEquipMoveUp.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonEquipMoveUp.Name = "buttonEquipMoveUp";
             this.buttonEquipMoveUp.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonEquipMoveUp.Size = new System.Drawing.Size(36, 30);
+            this.buttonEquipMoveUp.Size = new System.Drawing.Size(36, 34);
             this.buttonEquipMoveUp.TabIndex = 4;
             this.buttonEquipMoveUp.Text = "↑";
             this.buttonEquipMoveUp.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1214,12 +1242,12 @@ namespace Production_planning
             this.buttonEquipDelete.Enabled = false;
             this.buttonEquipDelete.HighEmphasis = true;
             this.buttonEquipDelete.Icon = null;
-            this.buttonEquipDelete.Location = new System.Drawing.Point(4, 90);
+            this.buttonEquipDelete.Location = new System.Drawing.Point(4, 98);
             this.buttonEquipDelete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonEquipDelete.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonEquipDelete.Name = "buttonEquipDelete";
             this.buttonEquipDelete.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonEquipDelete.Size = new System.Drawing.Size(36, 30);
+            this.buttonEquipDelete.Size = new System.Drawing.Size(36, 34);
             this.buttonEquipDelete.TabIndex = 3;
             this.buttonEquipDelete.Text = "❌";
             this.buttonEquipDelete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1237,12 +1265,12 @@ namespace Production_planning
             this.buttonEquipEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonEquipEdit.HighEmphasis = true;
             this.buttonEquipEdit.Icon = null;
-            this.buttonEquipEdit.Location = new System.Drawing.Point(4, 48);
+            this.buttonEquipEdit.Location = new System.Drawing.Point(4, 52);
             this.buttonEquipEdit.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonEquipEdit.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonEquipEdit.Name = "buttonEquipEdit";
             this.buttonEquipEdit.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonEquipEdit.Size = new System.Drawing.Size(36, 30);
+            this.buttonEquipEdit.Size = new System.Drawing.Size(36, 34);
             this.buttonEquipEdit.TabIndex = 2;
             this.buttonEquipEdit.Text = "📝";
             this.buttonEquipEdit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1264,7 +1292,7 @@ namespace Production_planning
             this.buttonEquipAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonEquipAdd.Name = "buttonEquipAdd";
             this.buttonEquipAdd.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonEquipAdd.Size = new System.Drawing.Size(36, 30);
+            this.buttonEquipAdd.Size = new System.Drawing.Size(36, 34);
             this.buttonEquipAdd.TabIndex = 1;
             this.buttonEquipAdd.Text = "➕";
             this.buttonEquipAdd.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1289,14 +1317,14 @@ namespace Production_planning
             this.listViewEquips.FullRowSelect = true;
             this.listViewEquips.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewEquips.HideSelection = false;
-            this.listViewEquips.Location = new System.Drawing.Point(452, 31);
-            this.listViewEquips.MinimumSize = new System.Drawing.Size(200, 92);
+            this.listViewEquips.Location = new System.Drawing.Point(452, 33);
+            this.listViewEquips.MinimumSize = new System.Drawing.Size(200, 100);
             this.listViewEquips.MouseLocation = new System.Drawing.Point(-1, -1);
             this.listViewEquips.MouseState = MaterialSkin.MouseState.OUT;
             this.listViewEquips.MultiSelect = false;
             this.listViewEquips.Name = "listViewEquips";
             this.listViewEquips.OwnerDraw = true;
-            this.listViewEquips.Size = new System.Drawing.Size(735, 462);
+            this.listViewEquips.Size = new System.Drawing.Size(735, 504);
             this.listViewEquips.TabIndex = 8;
             this.listViewEquips.UseCompatibleStateImageBehavior = false;
             this.listViewEquips.View = System.Windows.Forms.View.Details;
@@ -1334,7 +1362,7 @@ namespace Production_planning
             this.tabPage6.ImageKey = "free-icon-indent-3917045.png";
             this.tabPage6.Location = new System.Drawing.Point(4, 39);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(1240, 548);
+            this.tabPage6.Size = new System.Drawing.Size(1240, 597);
             this.tabPage6.TabIndex = 8;
             this.tabPage6.Text = "График смен";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -1354,7 +1382,7 @@ namespace Production_planning
             this.tableLayoutPanel8.RowCount = 2;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(1240, 548);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(1240, 597);
             this.tableLayoutPanel8.TabIndex = 0;
             // 
             // tableLayoutPanel9
@@ -1369,10 +1397,10 @@ namespace Production_planning
             this.tableLayoutPanel9.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
             this.tableLayoutPanel9.RowCount = 3;
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(604, 268);
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(604, 292);
             this.tableLayoutPanel9.TabIndex = 0;
             // 
             // tableLayoutPanel10
@@ -1383,15 +1411,15 @@ namespace Production_planning
             this.tableLayoutPanel10.Controls.Add(this.buttonShiftAdd, 0, 0);
             this.tableLayoutPanel10.Controls.Add(this.buttonShiftDelete, 0, 2);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel10.Location = new System.Drawing.Point(557, 21);
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(557, 23);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
             this.tableLayoutPanel10.RowCount = 5;
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(44, 226);
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(44, 246);
             this.tableLayoutPanel10.TabIndex = 0;
             // 
             // buttonShiftEdit
@@ -1404,12 +1432,12 @@ namespace Production_planning
             this.buttonShiftEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonShiftEdit.HighEmphasis = true;
             this.buttonShiftEdit.Icon = null;
-            this.buttonShiftEdit.Location = new System.Drawing.Point(4, 43);
+            this.buttonShiftEdit.Location = new System.Drawing.Point(4, 46);
             this.buttonShiftEdit.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonShiftEdit.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonShiftEdit.Name = "buttonShiftEdit";
             this.buttonShiftEdit.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonShiftEdit.Size = new System.Drawing.Size(36, 25);
+            this.buttonShiftEdit.Size = new System.Drawing.Size(36, 28);
             this.buttonShiftEdit.TabIndex = 1;
             this.buttonShiftEdit.Text = "📝";
             this.buttonShiftEdit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1430,7 +1458,7 @@ namespace Production_planning
             this.buttonShiftAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonShiftAdd.Name = "buttonShiftAdd";
             this.buttonShiftAdd.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonShiftAdd.Size = new System.Drawing.Size(36, 25);
+            this.buttonShiftAdd.Size = new System.Drawing.Size(36, 28);
             this.buttonShiftAdd.TabIndex = 0;
             this.buttonShiftAdd.Text = "➕";
             this.buttonShiftAdd.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1447,12 +1475,12 @@ namespace Production_planning
             this.buttonShiftDelete.Enabled = false;
             this.buttonShiftDelete.HighEmphasis = true;
             this.buttonShiftDelete.Icon = null;
-            this.buttonShiftDelete.Location = new System.Drawing.Point(4, 80);
+            this.buttonShiftDelete.Location = new System.Drawing.Point(4, 86);
             this.buttonShiftDelete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonShiftDelete.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonShiftDelete.Name = "buttonShiftDelete";
             this.buttonShiftDelete.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonShiftDelete.Size = new System.Drawing.Size(36, 25);
+            this.buttonShiftDelete.Size = new System.Drawing.Size(36, 28);
             this.buttonShiftDelete.TabIndex = 2;
             this.buttonShiftDelete.Text = "❌";
             this.buttonShiftDelete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1476,14 +1504,14 @@ namespace Production_planning
             this.listViewShiftsDef.FullRowSelect = true;
             this.listViewShiftsDef.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewShiftsDef.HideSelection = false;
-            this.listViewShiftsDef.Location = new System.Drawing.Point(3, 21);
-            this.listViewShiftsDef.MinimumSize = new System.Drawing.Size(200, 92);
+            this.listViewShiftsDef.Location = new System.Drawing.Point(3, 23);
+            this.listViewShiftsDef.MinimumSize = new System.Drawing.Size(200, 100);
             this.listViewShiftsDef.MouseLocation = new System.Drawing.Point(-1, -1);
             this.listViewShiftsDef.MouseState = MaterialSkin.MouseState.OUT;
             this.listViewShiftsDef.MultiSelect = false;
             this.listViewShiftsDef.Name = "listViewShiftsDef";
             this.listViewShiftsDef.OwnerDraw = true;
-            this.listViewShiftsDef.Size = new System.Drawing.Size(548, 226);
+            this.listViewShiftsDef.Size = new System.Drawing.Size(548, 246);
             this.listViewShiftsDef.TabIndex = 1;
             this.listViewShiftsDef.UseCompatibleStateImageBehavior = false;
             this.listViewShiftsDef.View = System.Windows.Forms.View.Details;
@@ -1523,7 +1551,7 @@ namespace Production_planning
             this.materialLabel3.Location = new System.Drawing.Point(3, 0);
             this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel3.Name = "materialLabel3";
-            this.materialLabel3.Size = new System.Drawing.Size(548, 18);
+            this.materialLabel3.Size = new System.Drawing.Size(548, 20);
             this.materialLabel3.TabIndex = 2;
             this.materialLabel3.Text = "Список смен";
             // 
@@ -1535,13 +1563,13 @@ namespace Production_planning
             this.tableLayoutPanel11.Controls.Add(this.tableLayoutPanel12, 1, 1);
             this.tableLayoutPanel11.Controls.Add(this.listViewShiftCycle, 0, 1);
             this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel11.Location = new System.Drawing.Point(3, 277);
+            this.tableLayoutPanel11.Location = new System.Drawing.Point(3, 301);
             this.tableLayoutPanel11.Name = "tableLayoutPanel11";
             this.tableLayoutPanel11.RowCount = 3;
-            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
+            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
-            this.tableLayoutPanel11.Size = new System.Drawing.Size(604, 268);
+            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(604, 293);
             this.tableLayoutPanel11.TabIndex = 1;
             // 
             // tableLayoutPanel12
@@ -1552,15 +1580,15 @@ namespace Production_planning
             this.tableLayoutPanel12.Controls.Add(this.buttonTemplateEdit, 0, 1);
             this.tableLayoutPanel12.Controls.Add(this.buttonTemplateAdd, 0, 0);
             this.tableLayoutPanel12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel12.Location = new System.Drawing.Point(557, 21);
+            this.tableLayoutPanel12.Location = new System.Drawing.Point(557, 23);
             this.tableLayoutPanel12.Name = "tableLayoutPanel12";
             this.tableLayoutPanel12.RowCount = 5;
-            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel12.Size = new System.Drawing.Size(44, 226);
+            this.tableLayoutPanel12.Size = new System.Drawing.Size(44, 247);
             this.tableLayoutPanel12.TabIndex = 0;
             // 
             // buttonTemplateDelete
@@ -1572,12 +1600,12 @@ namespace Production_planning
             this.buttonTemplateDelete.Enabled = false;
             this.buttonTemplateDelete.HighEmphasis = true;
             this.buttonTemplateDelete.Icon = null;
-            this.buttonTemplateDelete.Location = new System.Drawing.Point(4, 80);
+            this.buttonTemplateDelete.Location = new System.Drawing.Point(4, 86);
             this.buttonTemplateDelete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonTemplateDelete.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonTemplateDelete.Name = "buttonTemplateDelete";
             this.buttonTemplateDelete.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonTemplateDelete.Size = new System.Drawing.Size(36, 25);
+            this.buttonTemplateDelete.Size = new System.Drawing.Size(36, 28);
             this.buttonTemplateDelete.TabIndex = 3;
             this.buttonTemplateDelete.Text = "❌";
             this.buttonTemplateDelete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1595,12 +1623,12 @@ namespace Production_planning
             this.buttonTemplateEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonTemplateEdit.HighEmphasis = true;
             this.buttonTemplateEdit.Icon = null;
-            this.buttonTemplateEdit.Location = new System.Drawing.Point(4, 43);
+            this.buttonTemplateEdit.Location = new System.Drawing.Point(4, 46);
             this.buttonTemplateEdit.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonTemplateEdit.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonTemplateEdit.Name = "buttonTemplateEdit";
             this.buttonTemplateEdit.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonTemplateEdit.Size = new System.Drawing.Size(36, 25);
+            this.buttonTemplateEdit.Size = new System.Drawing.Size(36, 28);
             this.buttonTemplateEdit.TabIndex = 2;
             this.buttonTemplateEdit.Text = "📝";
             this.buttonTemplateEdit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1621,7 +1649,7 @@ namespace Production_planning
             this.buttonTemplateAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonTemplateAdd.Name = "buttonTemplateAdd";
             this.buttonTemplateAdd.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonTemplateAdd.Size = new System.Drawing.Size(36, 25);
+            this.buttonTemplateAdd.Size = new System.Drawing.Size(36, 28);
             this.buttonTemplateAdd.TabIndex = 0;
             this.buttonTemplateAdd.Text = "➕";
             this.buttonTemplateAdd.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1644,14 +1672,14 @@ namespace Production_planning
             this.listViewShiftCycle.FullRowSelect = true;
             this.listViewShiftCycle.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewShiftCycle.HideSelection = false;
-            this.listViewShiftCycle.Location = new System.Drawing.Point(3, 21);
-            this.listViewShiftCycle.MinimumSize = new System.Drawing.Size(200, 92);
+            this.listViewShiftCycle.Location = new System.Drawing.Point(3, 23);
+            this.listViewShiftCycle.MinimumSize = new System.Drawing.Size(200, 100);
             this.listViewShiftCycle.MouseLocation = new System.Drawing.Point(-1, -1);
             this.listViewShiftCycle.MouseState = MaterialSkin.MouseState.OUT;
             this.listViewShiftCycle.MultiSelect = false;
             this.listViewShiftCycle.Name = "listViewShiftCycle";
             this.listViewShiftCycle.OwnerDraw = true;
-            this.listViewShiftCycle.Size = new System.Drawing.Size(548, 226);
+            this.listViewShiftCycle.Size = new System.Drawing.Size(548, 247);
             this.listViewShiftCycle.TabIndex = 1;
             this.listViewShiftCycle.UseCompatibleStateImageBehavior = false;
             this.listViewShiftCycle.View = System.Windows.Forms.View.Details;
@@ -1689,10 +1717,10 @@ namespace Production_planning
             this.tableLayoutPanel13.Location = new System.Drawing.Point(633, 3);
             this.tableLayoutPanel13.Name = "tableLayoutPanel13";
             this.tableLayoutPanel13.RowCount = 3;
-            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
+            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
-            this.tableLayoutPanel13.Size = new System.Drawing.Size(604, 268);
+            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel13.Size = new System.Drawing.Size(604, 292);
             this.tableLayoutPanel13.TabIndex = 2;
             // 
             // tableLayoutPanel14
@@ -1703,15 +1731,15 @@ namespace Production_planning
             this.tableLayoutPanel14.Controls.Add(this.buttonBrigadeEdit, 0, 1);
             this.tableLayoutPanel14.Controls.Add(this.buttonBrigadeAdd, 0, 0);
             this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel14.Location = new System.Drawing.Point(557, 21);
+            this.tableLayoutPanel14.Location = new System.Drawing.Point(557, 23);
             this.tableLayoutPanel14.Name = "tableLayoutPanel14";
             this.tableLayoutPanel14.RowCount = 5;
-            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel14.Size = new System.Drawing.Size(44, 226);
+            this.tableLayoutPanel14.Size = new System.Drawing.Size(44, 246);
             this.tableLayoutPanel14.TabIndex = 0;
             // 
             // buttonBrigadeDelete
@@ -1723,12 +1751,12 @@ namespace Production_planning
             this.buttonBrigadeDelete.Enabled = false;
             this.buttonBrigadeDelete.HighEmphasis = true;
             this.buttonBrigadeDelete.Icon = null;
-            this.buttonBrigadeDelete.Location = new System.Drawing.Point(4, 80);
+            this.buttonBrigadeDelete.Location = new System.Drawing.Point(4, 86);
             this.buttonBrigadeDelete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonBrigadeDelete.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonBrigadeDelete.Name = "buttonBrigadeDelete";
             this.buttonBrigadeDelete.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonBrigadeDelete.Size = new System.Drawing.Size(36, 25);
+            this.buttonBrigadeDelete.Size = new System.Drawing.Size(36, 28);
             this.buttonBrigadeDelete.TabIndex = 3;
             this.buttonBrigadeDelete.Text = "❌";
             this.buttonBrigadeDelete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1746,12 +1774,12 @@ namespace Production_planning
             this.buttonBrigadeEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonBrigadeEdit.HighEmphasis = true;
             this.buttonBrigadeEdit.Icon = null;
-            this.buttonBrigadeEdit.Location = new System.Drawing.Point(4, 43);
+            this.buttonBrigadeEdit.Location = new System.Drawing.Point(4, 46);
             this.buttonBrigadeEdit.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonBrigadeEdit.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonBrigadeEdit.Name = "buttonBrigadeEdit";
             this.buttonBrigadeEdit.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonBrigadeEdit.Size = new System.Drawing.Size(36, 25);
+            this.buttonBrigadeEdit.Size = new System.Drawing.Size(36, 28);
             this.buttonBrigadeEdit.TabIndex = 2;
             this.buttonBrigadeEdit.Text = "📝";
             this.buttonBrigadeEdit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1772,7 +1800,7 @@ namespace Production_planning
             this.buttonBrigadeAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonBrigadeAdd.Name = "buttonBrigadeAdd";
             this.buttonBrigadeAdd.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonBrigadeAdd.Size = new System.Drawing.Size(36, 25);
+            this.buttonBrigadeAdd.Size = new System.Drawing.Size(36, 28);
             this.buttonBrigadeAdd.TabIndex = 0;
             this.buttonBrigadeAdd.Text = "➕";
             this.buttonBrigadeAdd.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1795,14 +1823,14 @@ namespace Production_planning
             this.listViewShiftTemplate.FullRowSelect = true;
             this.listViewShiftTemplate.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewShiftTemplate.HideSelection = false;
-            this.listViewShiftTemplate.Location = new System.Drawing.Point(3, 21);
-            this.listViewShiftTemplate.MinimumSize = new System.Drawing.Size(200, 92);
+            this.listViewShiftTemplate.Location = new System.Drawing.Point(3, 23);
+            this.listViewShiftTemplate.MinimumSize = new System.Drawing.Size(200, 100);
             this.listViewShiftTemplate.MouseLocation = new System.Drawing.Point(-1, -1);
             this.listViewShiftTemplate.MouseState = MaterialSkin.MouseState.OUT;
             this.listViewShiftTemplate.MultiSelect = false;
             this.listViewShiftTemplate.Name = "listViewShiftTemplate";
             this.listViewShiftTemplate.OwnerDraw = true;
-            this.listViewShiftTemplate.Size = new System.Drawing.Size(548, 226);
+            this.listViewShiftTemplate.Size = new System.Drawing.Size(548, 246);
             this.listViewShiftTemplate.TabIndex = 1;
             this.listViewShiftTemplate.UseCompatibleStateImageBehavior = false;
             this.listViewShiftTemplate.View = System.Windows.Forms.View.Details;
@@ -1835,7 +1863,7 @@ namespace Production_planning
             this.tabPage7.ImageKey = "++++.png";
             this.tabPage7.Location = new System.Drawing.Point(4, 39);
             this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(1240, 548);
+            this.tabPage7.Size = new System.Drawing.Size(1240, 597);
             this.tabPage7.TabIndex = 9;
             this.tabPage7.Text = "Параметры";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -1856,7 +1884,7 @@ namespace Production_planning
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel17.Size = new System.Drawing.Size(1240, 548);
+            this.tableLayoutPanel17.Size = new System.Drawing.Size(1240, 597);
             this.tableLayoutPanel17.TabIndex = 3;
             // 
             // materialExpansionPanel2
@@ -1875,7 +1903,7 @@ namespace Production_planning
             this.materialExpansionPanel2.Margin = new System.Windows.Forms.Padding(16, 1, 16, 0);
             this.materialExpansionPanel2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialExpansionPanel2.Name = "materialExpansionPanel2";
-            this.materialExpansionPanel2.Padding = new System.Windows.Forms.Padding(24, 59, 24, 15);
+            this.materialExpansionPanel2.Padding = new System.Windows.Forms.Padding(24, 64, 24, 16);
             this.materialExpansionPanel2.ShowValidationButtons = false;
             this.materialExpansionPanel2.Size = new System.Drawing.Size(1208, 48);
             this.materialExpansionPanel2.TabIndex = 4;
@@ -1887,7 +1915,7 @@ namespace Production_planning
             this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel21.Location = new System.Drawing.Point(24, 59);
+            this.tableLayoutPanel21.Location = new System.Drawing.Point(24, 64);
             this.tableLayoutPanel21.Name = "tableLayoutPanel21";
             this.tableLayoutPanel21.RowCount = 2;
             this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -1911,7 +1939,7 @@ namespace Production_planning
             this.materialExpansionPanel1.Margin = new System.Windows.Forms.Padding(16, 1, 16, 0);
             this.materialExpansionPanel1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialExpansionPanel1.Name = "materialExpansionPanel1";
-            this.materialExpansionPanel1.Padding = new System.Windows.Forms.Padding(24, 59, 24, 15);
+            this.materialExpansionPanel1.Padding = new System.Windows.Forms.Padding(24, 64, 24, 16);
             this.materialExpansionPanel1.ShowValidationButtons = false;
             this.materialExpansionPanel1.Size = new System.Drawing.Size(1208, 48);
             this.materialExpansionPanel1.TabIndex = 3;
@@ -1924,7 +1952,7 @@ namespace Production_planning
             this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel18.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel18.Location = new System.Drawing.Point(24, 59);
+            this.tableLayoutPanel18.Location = new System.Drawing.Point(24, 64);
             this.tableLayoutPanel18.Name = "tableLayoutPanel18";
             this.tableLayoutPanel18.RowCount = 2;
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -1948,7 +1976,7 @@ namespace Production_planning
             this.materialExpansionPanel5.Margin = new System.Windows.Forms.Padding(16, 1, 16, 0);
             this.materialExpansionPanel5.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialExpansionPanel5.Name = "materialExpansionPanel5";
-            this.materialExpansionPanel5.Padding = new System.Windows.Forms.Padding(24, 59, 24, 15);
+            this.materialExpansionPanel5.Padding = new System.Windows.Forms.Padding(24, 64, 24, 16);
             this.materialExpansionPanel5.ShowValidationButtons = false;
             this.materialExpansionPanel5.Size = new System.Drawing.Size(1208, 48);
             this.materialExpansionPanel5.TabIndex = 5;
@@ -1960,7 +1988,7 @@ namespace Production_planning
             this.tableLayoutPanel22.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel22.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel22.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel22.Location = new System.Drawing.Point(24, 59);
+            this.tableLayoutPanel22.Location = new System.Drawing.Point(24, 64);
             this.tableLayoutPanel22.Name = "tableLayoutPanel22";
             this.tableLayoutPanel22.RowCount = 2;
             this.tableLayoutPanel22.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -2128,9 +2156,9 @@ namespace Production_planning
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1254, 675);
+            this.ClientSize = new System.Drawing.Size(1254, 731);
             this.Controls.Add(this.materialTabControl1);
             this.DrawerShowIconsWhenHidden = true;
             this.DrawerTabControl = this.materialTabControl1;
@@ -2138,7 +2166,7 @@ namespace Production_planning
             this.DrawerWidth = 320;
             this.FormStyle = MaterialSkin.Controls.MaterialForm.FormStyles.ActionBar_64;
             this.Name = "Form1";
-            this.Padding = new System.Windows.Forms.Padding(3, 81, 3, 3);
+            this.Padding = new System.Windows.Forms.Padding(3, 88, 3, 3);
             this.Text = "Производственный план";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -2304,6 +2332,7 @@ namespace Production_planning
         private MaterialSkin.Controls.MaterialButton materialButtonUserViewFullCard;
         private TableLayoutPanel tableLayoutPanel23;
         private MaterialSkin.Controls.MaterialButton materialButtonUserAdd;
+        private MaterialSkin.Controls.MaterialComboBox comboBoxUserPosition;
     }
 }
 

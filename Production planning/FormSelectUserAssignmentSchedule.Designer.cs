@@ -1,6 +1,6 @@
 ﻿namespace Production_planning
 {
-    partial class FormSelectSchedule
+    partial class FormSelectUserAssignmentSchedule
     {
         /// <summary>
         /// Required designer variable.
@@ -323,7 +323,7 @@
             this.materialLabel1.Text = "История изменений графика";
             this.materialLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // FormSelectSchedule
+            // FormSelectUserAssignmentSchedule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -332,7 +332,7 @@
             this.FormStyle = MaterialSkin.Controls.MaterialForm.FormStyles.ActionBar_64;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FormSelectSchedule";
+            this.Name = "FormSelectUserAssignmentSchedule";
             this.Padding = new System.Windows.Forms.Padding(3, 88, 3, 3);
             this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
