@@ -625,5 +625,180 @@ namespace Production_planning
             return $"{ln} {firstInitial}";
         }
 
+        // =========================================================================
+        // РАЗДЕЛ 15: МОДУЛЬ УЧЕТА ОТСУТСТВИЙ (ABSENCES) С ПРОВЕРКОЙ ПЕРЕСЕЧЕНИЙ
+        // =========================================================================
+
+        /// <summary>
+        /// Возвращает справочник типов отсутствий для комбобокса
+        /// </summary>
+        /*public async Task<List<KeyValuePair<ulong, string>>> GetAbsenceTypesLookupAsync()
+        {
+            string sql = "SELECT id, name FROM absence_types ORDER BY id ASC;";
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                var res = await conn.QueryAsync(sql);
+                return res.Select(x => new KeyValuePair<ulong, (string)x.name>((ulong)x.id, (string)x.name)).ToList();
+            }
+        }*/
+
+        /// <summary>
+        /// Возвращает список всех зарегистрированных отсутствий сотрудника
+        /// </summary>
+        public async Task<List<EmployeeAbsenceRow>> GetEmployeeAbsencesAsync(ulong employeeId)
+        {
+            string sql = "SELECT a.id AS Id, a.employee_id AS EmployeeId, a.type_id AS TypeId, abt.name AS AbsenceTypeName, a.start_date AS StartDate, a.end_date AS EndDate " +
+                         "FROM absences a JOIN absence_types abt ON a.type_id = abt.id " +
+                         "WHERE a.employee_id = @EmployeeId ORDER BY a.start_date DESC;";
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                var res = await conn.QueryAsync<EmployeeAbsenceRow>(sql, new { EmployeeId = employeeId });
+                return res.ToList();
+            }
+        }
+
+        /// <summary>
+        /// Регистрирует новое отсутствие с предварительной проверкой пересечения периодов
+        /// </summary>
+        public async Task<bool> TryRegisterAbsenceAsync(RegisterAbsenceCommand cmd)
+        {
+            // 1. Вытаскиваем из базы ВСЕ существующие отсутствия этого сотрудника
+            List<EmployeeAbsenceRow> existingAbsences = await GetEmployeeAbsencesAsync(cmd.EmployeeId);
+
+            DateTime newStart = cmd.StartDate.Date;
+            DateTime newEnd = cmd.EndDate?.Date ?? DateTime.MaxValue;
+
+            // Валидация логики дат
+            if (newEnd < newStart)
+                throw new Exception("Дата окончания не может быть раньше даты начала.");
+
+            // 2. Алгоритмическая проверка пересечения интервалов в памяти C#
+            foreach (var old in existingAbsences)
+            {
+                DateTime oldStart = old.StartDate.Date;
+                DateTime oldEnd = old.EndDate?.Date ?? DateTime.MaxValue;
+
+                // Математическое условие пересечения двух отрезков времени:
+                // (Старт1 <= Конец2) И (Конец1 >= Старт2)
+                if (oldStart <= newEnd && oldEnd >= newStart)
+                {
+                    string oldPeriodStr = old.EndDate.HasValue ? old.EndDate.Value.ToString("dd.MM.yyyy") : "открытая дата";
+                    throw new Exception($"Невозможно сохранить. Данный период пересекается с уже существующей записью: '{old.AbsenceTypeName}' с {old.StartDate:dd.MM.yyyy} по {oldPeriodStr}.");
+                }
+            }
+
+            // 3. Если пересечений не найдено — выполняем чистый INSERT в MySQL
+            string sqlInsert = "INSERT INTO absences (employee_id, type_id, start_date, end_date) VALUES (@EmployeeId, @TypeId, @StartDate, @EndDate);";
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                int rows = await conn.ExecuteAsync(sqlInsert, new
+                {
+                    EmployeeId = cmd.EmployeeId,
+                    TypeId = cmd.TypeId,
+                    StartDate = newStart,
+                    EndDate = cmd.EndDate // Запишет null в базу, если дата открыта
+                });
+                return rows > 0;
+            }
+        }
+
+        // =========================================================================
+        // РАЗДЕЛ 16: АНАЛИТИКА, РЕДАКТИРОВАНИЕ И ФИЛЬТРАЦИЯ ОТСУТСТВИЙ (ABSENCES)
+        // =========================================================================
+
+        /// <summary>
+        /// 1. МАССОВЫЙ СРЕЗ: Возвращает все отсутствия, активные в указанном диапазоне дат (например, в течение месяца)
+        /// </summary>
+        public async Task<List<EmployeeAbsenceExtendedRow>> GetActiveAbsencesInPeriodAsync(DateTime startDate, DateTime endDate)
+        {
+            // Математическое условие пересечения отрезка отсутствия с выбранным периодом месяца
+            string sql = "SELECT a.id AS Id, a.employee_id AS EmployeeId, e.full_name AS EmployeeFullName, a.type_id AS TypeId, abt.name AS AbsenceTypeName, a.start_date AS StartDate, a.end_date AS EndDate " +
+                         "FROM absences a " +
+                         "JOIN employees e ON a.employee_id = e.id " +
+                         "JOIN absence_types abt ON a.type_id = abt.id " +
+                         "WHERE a.start_date <= @EndDate AND (a.end_date IS NULL OR a.end_date >= @StartDate) " +
+                         "ORDER BY a.start_date DESC, e.full_name ASC;";
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                var res = await conn.QueryAsync<EmployeeAbsenceExtendedRow>(sql, new { StartDate = startDate.Date, EndDate = endDate.Date });
+                return res.ToList();
+            }
+        }
+
+        /// <summary>
+        /// 2. ПОЛУЧЕНИЕ ПО ИНДЕКСУ: Находит конкретное отсутствие для открытия в окне редактирования
+        /// </summary>
+        public async Task<EmployeeAbsenceRow> GetAbsenceByIdAsync(ulong absenceId)
+        {
+            string sql = "SELECT id AS Id, employee_id AS EmployeeId, type_id AS TypeId, start_date AS StartDate, end_date AS EndDate " +
+                         "FROM absences WHERE id = @Id;";
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                return await conn.QueryFirstOrDefaultAsync<EmployeeAbsenceRow>(sql, new { Id = absenceId });
+            }
+        }
+
+        /// <summary>
+        /// 3. ИЗМЕНЕНИЕ ИСХОДНОГО ОТСУТСТВИЯ С ПРОВЕРКОЙ НАЛОЖЕНИЙ (Защита от дублей при редактировании)
+        /// </summary>
+        public async Task<bool> UpdateAbsenceAsync(ulong absenceId, RegisterAbsenceCommand cmd)
+        {
+            // Получаем все отсутствия этого сотрудника ИЗВНЕ редактируемой записи
+            string sqlCheck = "SELECT a.id AS Id, a.start_date AS StartDate, a.end_date AS EndDate, abt.name AS AbsenceTypeName " +
+                              "FROM absences a JOIN absence_types abt ON a.type_id = abt.id " +
+                              "WHERE a.employee_id = @EmployeeId AND a.id != @CurrentAbsenceId;";
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                var existing = await conn.QueryAsync(sqlCheck, new { EmployeeId = cmd.EmployeeId, CurrentAbsenceId = absenceId });
+
+                DateTime newStart = cmd.StartDate.Date;
+                DateTime newEnd = cmd.EndDate?.Date ?? DateTime.MaxValue;
+
+                if (newEnd < newStart)
+                    throw new Exception("Дата окончания не может быть раньше даты начала.");
+
+                // Проверяем в памяти C#, чтобы измененные даты не налезли на другие документы сотрудника
+                foreach (var old in existing)
+                {
+                    DateTime oldStart = ((DateTime)old.StartDate).Date;
+                    DateTime oldEnd = old.EndDate != null ? ((DateTime)old.EndDate).Date : DateTime.MaxValue;
+
+                    if (oldStart <= newEnd && oldEnd >= newStart)
+                    {
+                        string oldPeriodStr = old.EndDate != null ? ((DateTime)old.EndDate).ToString("dd.MM.yyyy") : "открытая дата";
+                        throw new Exception($"Изменение отклонено. Корректируемый период пересекается с записью: '{old.AbsenceTypeName}' с {oldStart:dd.MM.yyyy} по {oldPeriodStr}.");
+                    }
+                }
+
+                // Выполняем точечный UPDATE по первичному ключу id
+                string sqlUpdate = "UPDATE absences SET type_id = @TypeId, start_date = @StartDate, end_date = @EndDate WHERE id = @Id;";
+                int rows = await conn.ExecuteAsync(sqlUpdate, new
+                {
+                    Id = absenceId,
+                    TypeId = cmd.TypeId,
+                    StartDate = newStart,
+                    EndDate = cmd.EndDate
+                });
+                return rows > 0;
+            }
+        }
+
+        /// <summary>
+        /// 4. УДАЛЕНИЕ: Позволяет мастеру стереть ошибочный документ
+        /// </summary>
+        public async Task<bool> DeleteAbsenceAsync(ulong absenceId)
+        {
+            string sql = "DELETE FROM absences WHERE id = @Id;";
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                int rows = await conn.ExecuteAsync(sql, new { Id = absenceId });
+                return rows > 0;
+            }
+        }
+
     }
 }

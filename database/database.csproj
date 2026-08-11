@@ -82,6 +82,7 @@
     <Compile Include="ReportStaffing.cs" />
     <Compile Include="ScheduleTemplateService.cs" />
     <Compile Include="ShiftService.cs" />
+    <Compile Include="TEST.cs" />
     <Compile Include="ValueOrders.cs" />
     <Compile Include="WorkAreaService.cs" />
   </ItemGroup>
