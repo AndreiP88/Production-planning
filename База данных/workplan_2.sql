@@ -1,17 +1,17 @@
 /*
  Navicat Premium Dump SQL
 
- Source Server         : local
+ Source Server         : localhost_3309
  Source Server Type    : MySQL
- Source Server Version : 80400 (8.4.0)
+ Source Server Version : 80046 (8.0.46)
  Source Host           : localhost:3309
  Source Schema         : workplan
 
  Target Server Type    : MySQL
- Target Server Version : 80400 (8.4.0)
+ Target Server Version : 80046 (8.0.46)
  File Encoding         : 65001
 
- Date: 11/09/2026 10:37:18
+ Date: 10/09/2026 10:07:42
 */
 
 SET NAMES utf8mb4;
@@ -322,16 +322,13 @@ CREATE TABLE `equipment_daily_plan`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `equipment_id`(`equipment_id` ASC, `plan_date` ASC, `shift_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 47 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of equipment_daily_plan
 -- ----------------------------
 INSERT INTO `equipment_daily_plan` VALUES (1, 3, '2026-05-01', 1, 0);
 INSERT INTO `equipment_daily_plan` VALUES (2, 2, '2026-05-01', 2, 1);
-INSERT INTO `equipment_daily_plan` VALUES (11, 1, '2026-09-01', 1, 1);
-INSERT INTO `equipment_daily_plan` VALUES (32, 14, '2026-09-04', 1, 0);
-INSERT INTO `equipment_daily_plan` VALUES (42, 12, '2026-09-05', 14, 0);
 
 -- ----------------------------
 -- Table structure for equipment_schedule_history
@@ -509,7 +506,7 @@ CREATE TABLE `schedule_overrides`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `employee_id`(`employee_id` ASC, `override_date` ASC, `shift_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 54 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 42 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of schedule_overrides
@@ -532,9 +529,6 @@ INSERT INTO `schedule_overrides` VALUES (35, 8, '2026-09-03', 1, 2, 2, '🔄 П�
 INSERT INTO `schedule_overrides` VALUES (37, 6, '2026-09-03', 2, 1, 2, NULL, 0);
 INSERT INTO `schedule_overrides` VALUES (39, 6, '2026-09-01', 1, 1, 2, '🔄 Перевод с Diana', 0);
 INSERT INTO `schedule_overrides` VALUES (41, 3, '2026-09-01', 1, 2, 2, NULL, 0);
-INSERT INTO `schedule_overrides` VALUES (48, 12, '2026-09-04', 1, 14, 2, NULL, 0);
-INSERT INTO `schedule_overrides` VALUES (51, 7, '2026-09-11', 1, 2, 2, '🔄 Перевод с Diana Eye', 0);
-INSERT INTO `schedule_overrides` VALUES (53, 11, '2026-09-05', 14, 12, 2, NULL, 0);
 
 -- ----------------------------
 -- Table structure for schedule_templates
@@ -624,10 +618,8 @@ BEGIN
                CAST(CONCAT(p_target_date, ' ', start_time) AS DATETIME) as target_start_dt,
                CAST(CONCAT(IF(end_time < start_time, p_target_date + INTERVAL 1 DAY, p_target_date), ' ', end_time) AS DATETIME) as target_end_dt
         FROM shift_definitions WHERE shift_number = p_target_shift_number
-        LIMIT 1
     ),
     AllEmployeeActivities AS (
-        -- 1. ПЛАНОВАЯ РАБОТА
         SELECT 
             e.id as emp_id, sd.id as shift_id, sd.shift_number, sd.name as shift_name, 
             eq.name as eq_name, NULL as ovr_id, 'План' as source_type,
@@ -647,10 +639,7 @@ BEGIN
         WHERE sd.shift_number > 0
           AND NOT EXISTS (SELECT 1 FROM absences abs WHERE abs.employee_id = e.id AND c.day_date BETWEEN abs.start_date AND COALESCE(abs.end_date, '2099-12-31'))
           AND NOT EXISTS (SELECT 1 FROM schedule_overrides ovr WHERE ovr.employee_id = e.id AND ovr.override_date = c.day_date AND ovr.shift_id = sd.id AND ovr.status = 2)
-
         UNION ALL
-
-        -- 2. РУЧНЫЕ НАЗНАЧЕНИЯ
         SELECT 
             ovr.employee_id, ovr.shift_id, sd_o.shift_number, sd_o.name, 
             eq_o.name, ovr.id, 'Назначение',
@@ -667,57 +656,28 @@ BEGIN
     SELECT 
         e.id AS "EmployeeId",
         e.full_name AS "EmployeeName",
+        (SELECT a.ovr_id FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.shift_id = ts.id AND a.start_dt = ts.target_start_dt AND a.ovr_id IS NOT NULL LIMIT 1) AS "OverrideId",
+        (SELECT CONCAT(IF(a.source_type = 'План', 'План: ', 'Назначение: '), a.shift_name, ' (', a.eq_name, ')') FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.shift_id = ts.id AND a.start_dt = ts.target_start_dt LIMIT 1) AS "CurrentActivity",
+        (SELECT CONCAT(DATE_FORMAT(a.cal_date, '%d.%m.%Y'), ' ', a.source_type, ': ', a.shift_name, ' (', a.eq_name, ')') FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.end_dt <= ts.target_start_dt AND TIMESTAMPDIFF(HOUR, a.end_dt, ts.target_start_dt) < 8 ORDER BY a.end_dt DESC LIMIT 1) AS "AdjacentBefore",
+        (SELECT CONCAT(DATE_FORMAT(a.cal_date, '%d.%m.%Y'), ' ', a.source_type, ': ', a.shift_name, ' (', a.eq_name, ')') FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.start_dt >= ts.target_end_dt AND TIMESTAMPDIFF(HOUR, ts.target_end_dt, a.start_dt) < 8 ORDER BY a.start_dt ASC LIMIT 1) AS "AdjacentAfter",
         
-        -- Вытаскиваем OverrideId, если сотрудник ПЕРЕСЕКАЕТСЯ по времени с целевой сменой
-        (SELECT a.ovr_id FROM AllEmployeeActivities a, TargetShift ts 
-         WHERE a.emp_id = e.id AND a.start_dt < ts.target_end_dt AND a.end_dt > ts.target_start_dt AND a.ovr_id IS NOT NULL LIMIT 1) AS "OverrideId",
-
-        -- ТЕКУЩАЯ АКТИВНОСТЬ: Проверяем ЛЮБОЕ пересечение временных интервалов смен
-        (SELECT CONCAT(IF(a.source_type = 'План', 'План: ', 'Назначение: '), a.shift_name, ' (', a.eq_name, ')') 
-         FROM AllEmployeeActivities a, TargetShift ts 
-         WHERE a.emp_id = e.id AND a.start_dt < ts.target_end_dt AND a.end_dt > ts.target_start_dt LIMIT 1) AS "CurrentActivity",
-
-        (SELECT CONCAT(DATE_FORMAT(a.cal_date, '%d.%m.%Y'), ' ', a.source_type, ': ', a.shift_name, ' (', a.eq_name, ')') 
-         FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.end_dt <= ts.target_start_dt AND TIMESTAMPDIFF(HOUR, a.end_dt, ts.target_start_dt) < 8 ORDER BY a.end_dt DESC LIMIT 1) AS "AdjacentBefore",
-
-        (SELECT CONCAT(DATE_FORMAT(a.cal_date, '%d.%m.%Y'), ' ', a.source_type, ': ', a.shift_name, ' (', a.eq_name, ')') 
-         FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.start_dt >= ts.target_end_dt AND TIMESTAMPDIFF(HOUR, ts.target_end_dt, a.start_dt) < 8 ORDER BY a.start_dt ASC LIMIT 1) AS "AdjacentAfter",
-        CASE 
-            WHEN EXISTS (SELECT 1 FROM absences abs WHERE abs.employee_id = e.id AND p_target_date BETWEEN abs.start_date AND COALESCE(abs.end_date, '2099-12-31')) THEN 0
-            
-            -- ИСПРАВЛЕНО: Человек помечается как ЗАНЯТ, если интервалы его смен пересекаются по времени с целевой сменой
-            WHEN EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.start_dt < ts.target_end_dt AND a.end_dt > ts.target_start_dt) THEN 1
-            
-            WHEN EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND ((a.end_dt <= ts.target_start_dt AND TIMESTAMPDIFF(HOUR, a.end_dt, ts.target_start_dt) < 8) OR (a.start_dt >= ts.target_end_dt AND TIMESTAMPDIFF(HOUR, ts.target_end_dt, a.start_dt) < 8))) THEN 2
-            ELSE 3
-        END AS "StatusCode",
         CASE 
             WHEN EXISTS (SELECT 1 FROM absences abs WHERE abs.employee_id = e.id AND p_target_date BETWEEN abs.start_date AND COALESCE(abs.end_date, '2099-12-31'))
-                THEN (SELECT CASE WHEN EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.start_dt < ts.target_end_dt AND a.end_dt > ts.target_start_dt AND a.source_type = 'Назначение') THEN CONCAT('⚠️ РАБОТАЕТ ПРИ: ', abt.name) ELSE CONCAT('❌ ', abt.name) END FROM absences abs2 JOIN absence_types abt ON abs2.type_id = abt.id WHERE abs2.employee_id = e.id AND p_target_date BETWEEN abs2.start_date AND COALESCE(abs2.end_date, '2099-12-31') LIMIT 1)
-            
-            -- ИСПРАВЛЕНО: Человек помечается как ЗАНЯТ, если интервалы его смен пересекаются по времени с целевой сменой
-            WHEN EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.start_dt < ts.target_end_dt AND a.end_dt > ts.target_start_dt) THEN '⛔ ЗАНЯТ'
-            
+                THEN (SELECT CASE WHEN EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.shift_id = ts.id AND a.start_dt = ts.target_start_dt AND a.source_type = 'Назн') THEN CONCAT('⚠️ РАБОТАЕТ ПРИ: ', abt.name) ELSE CONCAT('❌ ', abt.name) END FROM absences abs2 JOIN absence_types abt ON abs2.type_id = abt.id WHERE abs2.employee_id = e.id AND p_target_date BETWEEN abs2.start_date AND COALESCE(abs2.end_date, '2099-12-31') LIMIT 1)
+            WHEN EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.shift_id = ts.id AND a.start_dt = ts.target_start_dt) THEN '⛔ ЗАНЯТ'
             WHEN EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND ((a.end_dt <= ts.target_start_dt AND TIMESTAMPDIFF(HOUR, a.end_dt, ts.target_start_dt) < 8) OR (a.start_dt >= ts.target_end_dt AND TIMESTAMPDIFF(HOUR, ts.target_end_dt, a.start_dt) < 8))) THEN '🟡 ДОСТУПЕН (смежные)'
             ELSE '🟢 ДОСТУПЕН'
         END AS "CurrentStatus"
-
     FROM employees e
     WHERE EXISTS (SELECT 1 FROM employment_periods ep WHERE ep.employee_id = e.id AND p_target_date BETWEEN ep.hire_date AND COALESCE(ep.fire_date, '2099-12-31'))
-
     ORDER BY 
         (CASE 
-            WHEN NOT EXISTS (SELECT 1 FROM absences abs WHERE abs.employee_id = e.id AND p_target_date BETWEEN abs.start_date AND COALESCE(abs.end_date, '2099-12-31')) 
-                 -- ИСПРАВЛЕНО: Условие сортировки свободных тоже переведено на пересечение временных интервалов
-                 AND NOT EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.start_dt < ts.target_end_dt AND a.end_dt > ts.target_start_dt) 
-                 AND NOT EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND ((a.end_dt <= ts.target_start_dt AND TIMESTAMPDIFF(HOUR, a.end_dt, ts.target_start_dt) < 8) OR (a.start_dt >= ts.target_end_dt AND TIMESTAMPDIFF(HOUR, ts.target_end_dt, a.start_dt) < 8))) THEN 1
-            WHEN NOT EXISTS (SELECT 1 FROM absences abs WHERE abs.employee_id = e.id AND p_target_date BETWEEN abs.start_date AND COALESCE(abs.end_date, '2099-12-31')) 
-                 AND NOT EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.start_dt < ts.target_end_dt AND a.end_dt > ts.target_start_dt) THEN 2
+            WHEN NOT EXISTS (SELECT 1 FROM absences abs WHERE abs.employee_id = e.id AND p_target_date BETWEEN abs.start_date AND COALESCE(abs.end_date, '2099-12-31')) AND NOT EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.shift_id = ts.id AND a.start_dt = ts.target_start_dt) AND NOT EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND ((a.end_dt <= ts.target_start_dt AND TIMESTAMPDIFF(HOUR, a.end_dt, ts.target_start_dt) < 8) OR (a.start_dt >= ts.target_end_dt AND TIMESTAMPDIFF(HOUR, ts.target_end_dt, a.start_dt) < 8))) THEN 1
+            WHEN NOT EXISTS (SELECT 1 FROM absences abs WHERE abs.employee_id = e.id AND p_target_date BETWEEN abs.start_date AND COALESCE(abs.end_date, '2099-12-31')) AND NOT EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.shift_id = ts.id AND a.start_dt = ts.target_start_dt) THEN 2
             WHEN NOT EXISTS (SELECT 1 FROM absences abs WHERE abs.employee_id = e.id AND p_target_date BETWEEN abs.start_date AND COALESCE(abs.end_date, '2099-12-31')) THEN 3
-            WHEN EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.start_dt < ts.target_end_dt AND a.end_dt > ts.target_start_dt AND a.source_type = 'Назначение') THEN 4
+            WHEN EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.shift_id = ts.id AND a.start_dt = ts.target_start_dt AND a.source_type = 'Назн') THEN 4
             ELSE 5
-        END) ASC, 
-        e.full_name ASC;
+        END) ASC, e.full_name ASC;
 END
 ;;
 delimiter ;
@@ -844,37 +804,12 @@ BEGIN
         DATE_FORMAT(tsd.target_end_time, '%H:%i') AS time_end,
         edp.id AS edp_id, 
         COALESCE(edp.is_cancelled, 0) AS is_equipment_cancelled,
-        -- ФЛАГ 1: Должен ли станок работать по базовому графику шаблона (1 или 0)
-        tsd.is_equipment_working_by_plan AS "IsWorkingByPlan", 
         
-        -- ФЛАГ 2: Режим планирования станка (например, 'manual_only')
-        tsd.active_staffing_mode AS "ActiveStaffingMode",
         CASE 
-            WHEN edp.is_cancelled = 1 THEN 0                       -- Остановка станка
-            WHEN (SELECT active_count FROM ActiveWorkforce) > 0 THEN 1 -- Укомплектовано
-            WHEN edp.id IS NOT NULL AND edp.is_cancelled = 0 THEN 2   -- Требуется персонал (Вынужденный ручной запуск)
-            WHEN tsd.is_equipment_working_by_plan = 0 THEN 3          -- Вне графика (Простой)
-            WHEN tsd.active_staffing_mode = 'manual_only' THEN 4      -- Ожидание назначения
-            ELSE 2                                                    -- Требуется персонал (По плану)
-        END AS staffing_requirement_code,
-        CASE 
-            -- 1. Если станок принудительно за стопорен в оверрайдах
             WHEN edp.is_cancelled = 1 THEN 'Не требуется (Остановка станка)'
-            
-            -- 2. Если на станке уже физически есть работающие люди (план или замены)
             WHEN (SELECT active_count FROM ActiveWorkforce) > 0 THEN '✅ Укомплектовано'
-            
-            -- 3. НОВОЕ: Если станок запущен вне плана мастером рукми (есть запись и is_cancelled = 0),
-            -- но людей еще нет — он ЖЕСТКО требует персонал, игнорируя режим manual_only!
-            WHEN edp.id IS NOT NULL AND edp.is_cancelled = 0 THEN '🚨 ТРЕБУЕТСЯ ПЕРСОНАЛ'
-            
-            -- 4. Если станок простаивает по графику шаблона
             WHEN tsd.is_equipment_working_by_plan = 0 THEN 'Не требуется (Вне графика)'
-            
-            -- 5. Если по графику станок должен работать, но его режим требует ручного распределения
             WHEN tsd.active_staffing_mode = 'manual_only' THEN '⚪ Ожидание назначения'
-            
-            -- 6. Дефолтный алерт для работающего по плану оборудования
             ELSE '🚨 ТРЕБУЕТСЯ ПЕРСОНАЛ'
         END AS staffing_requirement,
 

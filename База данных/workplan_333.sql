@@ -11,7 +11,7 @@
  Target Server Version : 80400 (8.4.0)
  File Encoding         : 65001
 
- Date: 11/09/2026 10:37:18
+ Date: 10/09/2026 21:43:39
 */
 
 SET NAMES utf8mb4;
@@ -58,7 +58,7 @@ INSERT INTO `absences` VALUES (1, 4, 1, '2026-05-08', '2026-05-20');
 INSERT INTO `absences` VALUES (2, 2, 2, '2026-05-07', '2026-05-21');
 INSERT INTO `absences` VALUES (4, 1, 2, '2026-07-19', '2026-08-01');
 INSERT INTO `absences` VALUES (5, 3, 2, '2026-09-03', '2026-09-16');
-INSERT INTO `absences` VALUES (6, 2, 1, '2026-09-01', '2026-09-05');
+INSERT INTO `absences` VALUES (6, 2, 1, '2026-09-01', '2026-09-04');
 
 -- ----------------------------
 -- Table structure for contact_types
@@ -108,7 +108,7 @@ CREATE TABLE `employee_equipment_assignments`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `employee_id`(`employee_id` ASC, `valid_from` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employee_equipment_assignments
@@ -131,6 +131,8 @@ INSERT INTO `employee_equipment_assignments` VALUES (15, 14, 15, '2010-07-13');
 INSERT INTO `employee_equipment_assignments` VALUES (16, 15, 16, '2018-07-14');
 INSERT INTO `employee_equipment_assignments` VALUES (17, 7, 13, '2026-08-01');
 INSERT INTO `employee_equipment_assignments` VALUES (18, 16, 7, '2026-08-01');
+INSERT INTO `employee_equipment_assignments` VALUES (19, 17, 7, '2026-02-01');
+INSERT INTO `employee_equipment_assignments` VALUES (20, 18, 7, '2026-02-08');
 
 -- ----------------------------
 -- Table structure for employee_position_assignments
@@ -144,7 +146,7 @@ CREATE TABLE `employee_position_assignments`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `employee_id`(`employee_id` ASC, `valid_from` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employee_position_assignments
@@ -165,6 +167,8 @@ INSERT INTO `employee_position_assignments` VALUES (13, 13, 5, '2018-07-13');
 INSERT INTO `employee_position_assignments` VALUES (14, 14, 6, '2010-07-13');
 INSERT INTO `employee_position_assignments` VALUES (15, 15, 6, '2018-07-14');
 INSERT INTO `employee_position_assignments` VALUES (16, 16, 1, '2026-08-01');
+INSERT INTO `employee_position_assignments` VALUES (17, 17, 1, '2026-02-01');
+INSERT INTO `employee_position_assignments` VALUES (18, 18, 1, '2026-02-08');
 
 -- ----------------------------
 -- Table structure for employee_schedule_assignments
@@ -178,7 +182,7 @@ CREATE TABLE `employee_schedule_assignments`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `employee_id`(`employee_id` ASC, `valid_from` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employee_schedule_assignments
@@ -200,7 +204,9 @@ INSERT INTO `employee_schedule_assignments` VALUES (14, 13, 11, '2018-07-13');
 INSERT INTO `employee_schedule_assignments` VALUES (15, 14, 11, '2010-07-13');
 INSERT INTO `employee_schedule_assignments` VALUES (16, 15, 11, '2018-07-14');
 INSERT INTO `employee_schedule_assignments` VALUES (17, 7, 5, '2026-08-01');
-INSERT INTO `employee_schedule_assignments` VALUES (18, 16, 10, '2026-08-01');
+INSERT INTO `employee_schedule_assignments` VALUES (18, 16, 12, '2026-08-01');
+INSERT INTO `employee_schedule_assignments` VALUES (19, 17, 13, '2026-02-01');
+INSERT INTO `employee_schedule_assignments` VALUES (20, 18, 14, '2026-02-08');
 
 -- ----------------------------
 -- Table structure for employees
@@ -215,7 +221,7 @@ CREATE TABLE `employees`  (
   `system_role` enum('worker','master','chief') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'worker',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employees
@@ -236,6 +242,8 @@ INSERT INTO `employees` VALUES (13, 'Золотая', 'Галина', '', 'Зо�
 INSERT INTO `employees` VALUES (14, 'Журко', 'Андрей', 'Михайлович', 'Журко А. М.', 'worker');
 INSERT INTO `employees` VALUES (15, 'Лойко', 'Александр', 'Петрович', 'Лойко А. П.', 'worker');
 INSERT INTO `employees` VALUES (16, 'Сидоров', 'Семен', 'Семенович', 'Сидоров С. С.', 'worker');
+INSERT INTO `employees` VALUES (17, 'Сидорчук', 'Сидор', 'Сидорович', 'Сидорчук С. С.', 'worker');
+INSERT INTO `employees` VALUES (18, 'Сидоренко', 'Семион', 'Феликсович', 'Сидоренко С. Ф.', 'worker');
 
 -- ----------------------------
 -- Table structure for employment_periods
@@ -248,7 +256,7 @@ CREATE TABLE `employment_periods`  (
   `fire_date` date NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employment_periods
@@ -269,6 +277,8 @@ INSERT INTO `employment_periods` VALUES (13, 13, '2018-07-13', NULL);
 INSERT INTO `employment_periods` VALUES (14, 14, '2010-07-13', NULL);
 INSERT INTO `employment_periods` VALUES (15, 15, '2018-07-14', NULL);
 INSERT INTO `employment_periods` VALUES (16, 16, '2026-08-01', NULL);
+INSERT INTO `employment_periods` VALUES (17, 17, '2026-02-01', NULL);
+INSERT INTO `employment_periods` VALUES (18, 18, '2026-02-08', NULL);
 
 -- ----------------------------
 -- Table structure for equipment
@@ -322,16 +332,13 @@ CREATE TABLE `equipment_daily_plan`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `equipment_id`(`equipment_id` ASC, `plan_date` ASC, `shift_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 47 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of equipment_daily_plan
 -- ----------------------------
 INSERT INTO `equipment_daily_plan` VALUES (1, 3, '2026-05-01', 1, 0);
 INSERT INTO `equipment_daily_plan` VALUES (2, 2, '2026-05-01', 2, 1);
-INSERT INTO `equipment_daily_plan` VALUES (11, 1, '2026-09-01', 1, 1);
-INSERT INTO `equipment_daily_plan` VALUES (32, 14, '2026-09-04', 1, 0);
-INSERT INTO `equipment_daily_plan` VALUES (42, 12, '2026-09-05', 14, 0);
 
 -- ----------------------------
 -- Table structure for equipment_schedule_history
@@ -470,6 +477,27 @@ INSERT INTO `schedule_cycle_items` VALUES (5, 1, 1);
 INSERT INTO `schedule_cycle_items` VALUES (10, 1, 11);
 INSERT INTO `schedule_cycle_items` VALUES (10, 1, 12);
 INSERT INTO `schedule_cycle_items` VALUES (10, 1, 13);
+INSERT INTO `schedule_cycle_items` VALUES (11, 1, 13);
+INSERT INTO `schedule_cycle_items` VALUES (11, 2, 13);
+INSERT INTO `schedule_cycle_items` VALUES (11, 3, 13);
+INSERT INTO `schedule_cycle_items` VALUES (11, 4, 13);
+INSERT INTO `schedule_cycle_items` VALUES (11, 5, 13);
+INSERT INTO `schedule_cycle_items` VALUES (11, 6, 3);
+INSERT INTO `schedule_cycle_items` VALUES (11, 7, 3);
+INSERT INTO `schedule_cycle_items` VALUES (11, 8, 12);
+INSERT INTO `schedule_cycle_items` VALUES (11, 9, 12);
+INSERT INTO `schedule_cycle_items` VALUES (11, 10, 12);
+INSERT INTO `schedule_cycle_items` VALUES (11, 11, 12);
+INSERT INTO `schedule_cycle_items` VALUES (11, 12, 12);
+INSERT INTO `schedule_cycle_items` VALUES (11, 13, 3);
+INSERT INTO `schedule_cycle_items` VALUES (11, 14, 3);
+INSERT INTO `schedule_cycle_items` VALUES (11, 15, 11);
+INSERT INTO `schedule_cycle_items` VALUES (11, 16, 11);
+INSERT INTO `schedule_cycle_items` VALUES (11, 17, 11);
+INSERT INTO `schedule_cycle_items` VALUES (11, 18, 11);
+INSERT INTO `schedule_cycle_items` VALUES (11, 19, 11);
+INSERT INTO `schedule_cycle_items` VALUES (11, 20, 3);
+INSERT INTO `schedule_cycle_items` VALUES (11, 21, 3);
 
 -- ----------------------------
 -- Table structure for schedule_cycles
@@ -481,7 +509,7 @@ CREATE TABLE `schedule_cycles`  (
   `cycle_length` int NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of schedule_cycles
@@ -491,7 +519,8 @@ INSERT INTO `schedule_cycles` VALUES (2, '2/2 (день)', 4);
 INSERT INTO `schedule_cycles` VALUES (3, '5/2', 7);
 INSERT INTO `schedule_cycles` VALUES (4, 'Круглосуточно (2 смены)', 1);
 INSERT INTO `schedule_cycles` VALUES (5, 'Ежедневно', 1);
-INSERT INTO `schedule_cycles` VALUES (10, 'Станок 3 смены', 1);
+INSERT INTO `schedule_cycles` VALUES (10, 'Оборудование, 3 смены', 1);
+INSERT INTO `schedule_cycles` VALUES (11, 'Три смены', 21);
 
 -- ----------------------------
 -- Table structure for schedule_overrides
@@ -509,7 +538,7 @@ CREATE TABLE `schedule_overrides`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `employee_id`(`employee_id` ASC, `override_date` ASC, `shift_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 54 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 40 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of schedule_overrides
@@ -524,17 +553,12 @@ INSERT INTO `schedule_overrides` VALUES (11, 4, '2026-05-07', 1, 2, 2, 'Нет �
 INSERT INTO `schedule_overrides` VALUES (12, 2, '2026-05-07', 1, 1, 0, NULL, 0);
 INSERT INTO `schedule_overrides` VALUES (15, 4, '2026-05-07', 2, 1, 2, NULL, 0);
 INSERT INTO `schedule_overrides` VALUES (22, 3, '2026-05-02', 1, NULL, 2, 'Отмена мастером в карточке смены', 1);
-INSERT INTO `schedule_overrides` VALUES (25, 16, '2026-09-04', 1, 5, 2, 'Так надо', 0);
 INSERT INTO `schedule_overrides` VALUES (26, 16, '2026-09-04', 3, 6, 2, 'ввва', 0);
-INSERT INTO `schedule_overrides` VALUES (27, 14, '2026-09-04', 1, 8, 2, 'аа', 0);
-INSERT INTO `schedule_overrides` VALUES (34, 14, '2026-09-02', 14, 8, 2, NULL, 0);
-INSERT INTO `schedule_overrides` VALUES (35, 8, '2026-09-03', 1, 2, 2, '🔄 Перевод с Versor Pasio', 0);
-INSERT INTO `schedule_overrides` VALUES (37, 6, '2026-09-03', 2, 1, 2, NULL, 0);
-INSERT INTO `schedule_overrides` VALUES (39, 6, '2026-09-01', 1, 1, 2, '🔄 Перевод с Diana', 0);
-INSERT INTO `schedule_overrides` VALUES (41, 3, '2026-09-01', 1, 2, 2, NULL, 0);
-INSERT INTO `schedule_overrides` VALUES (48, 12, '2026-09-04', 1, 14, 2, NULL, 0);
-INSERT INTO `schedule_overrides` VALUES (51, 7, '2026-09-11', 1, 2, 2, '🔄 Перевод с Diana Eye', 0);
-INSERT INTO `schedule_overrides` VALUES (53, 11, '2026-09-05', 14, 12, 2, NULL, 0);
+INSERT INTO `schedule_overrides` VALUES (30, 4, '2026-09-01', 2, 1, 2, NULL, 0);
+INSERT INTO `schedule_overrides` VALUES (31, 6, '2026-09-01', 1, 1, 2, '🔄 Перевод с Diana', 0);
+INSERT INTO `schedule_overrides` VALUES (33, 3, '2026-09-01', 1, 2, 2, NULL, 0);
+INSERT INTO `schedule_overrides` VALUES (37, 1, '2026-09-07', 2, 2, 2, NULL, 0);
+INSERT INTO `schedule_overrides` VALUES (38, 5, '2026-09-07', 2, NULL, 2, 'Отмена мастером в карточке смены', 1);
 
 -- ----------------------------
 -- Table structure for schedule_templates
@@ -547,7 +571,7 @@ CREATE TABLE `schedule_templates`  (
   `base_date` date NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of schedule_templates
@@ -559,9 +583,12 @@ INSERT INTO `schedule_templates` VALUES (4, 'Сменный 4', 1, '2010-01-06')
 INSERT INTO `schedule_templates` VALUES (5, 'Сменный 5', 2, '2010-01-02');
 INSERT INTO `schedule_templates` VALUES (6, 'Сменный 6', 2, '2010-01-04');
 INSERT INTO `schedule_templates` VALUES (7, 'Рабочее место (2 смены, круглосуточно)', 4, '2010-01-01');
-INSERT INTO `schedule_templates` VALUES (8, 'Дневные, 12 часов', 5, '2010-01-01');
+INSERT INTO `schedule_templates` VALUES (8, 'День, 1 смена, 12 часов', 5, '2010-01-01');
 INSERT INTO `schedule_templates` VALUES (10, '3 смены круглосуточно', 10, '2026-05-31');
 INSERT INTO `schedule_templates` VALUES (11, 'Пятидневка', 3, '2009-12-28');
+INSERT INTO `schedule_templates` VALUES (12, 'Три смены 1', 11, '2026-01-05');
+INSERT INTO `schedule_templates` VALUES (13, 'Три смены 2', 11, '2026-01-12');
+INSERT INTO `schedule_templates` VALUES (14, 'Три смены 3', 11, '2026-01-19');
 
 -- ----------------------------
 -- Table structure for shift_definitions
@@ -682,15 +709,7 @@ BEGIN
 
         (SELECT CONCAT(DATE_FORMAT(a.cal_date, '%d.%m.%Y'), ' ', a.source_type, ': ', a.shift_name, ' (', a.eq_name, ')') 
          FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.start_dt >= ts.target_end_dt AND TIMESTAMPDIFF(HOUR, ts.target_end_dt, a.start_dt) < 8 ORDER BY a.start_dt ASC LIMIT 1) AS "AdjacentAfter",
-        CASE 
-            WHEN EXISTS (SELECT 1 FROM absences abs WHERE abs.employee_id = e.id AND p_target_date BETWEEN abs.start_date AND COALESCE(abs.end_date, '2099-12-31')) THEN 0
-            
-            -- ИСПРАВЛЕНО: Человек помечается как ЗАНЯТ, если интервалы его смен пересекаются по времени с целевой сменой
-            WHEN EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.start_dt < ts.target_end_dt AND a.end_dt > ts.target_start_dt) THEN 1
-            
-            WHEN EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND ((a.end_dt <= ts.target_start_dt AND TIMESTAMPDIFF(HOUR, a.end_dt, ts.target_start_dt) < 8) OR (a.start_dt >= ts.target_end_dt AND TIMESTAMPDIFF(HOUR, ts.target_end_dt, a.start_dt) < 8))) THEN 2
-            ELSE 3
-        END AS "StatusCode",
+
         CASE 
             WHEN EXISTS (SELECT 1 FROM absences abs WHERE abs.employee_id = e.id AND p_target_date BETWEEN abs.start_date AND COALESCE(abs.end_date, '2099-12-31'))
                 THEN (SELECT CASE WHEN EXISTS (SELECT 1 FROM AllEmployeeActivities a, TargetShift ts WHERE a.emp_id = e.id AND a.start_dt < ts.target_end_dt AND a.end_dt > ts.target_start_dt AND a.source_type = 'Назначение') THEN CONCAT('⚠️ РАБОТАЕТ ПРИ: ', abt.name) ELSE CONCAT('❌ ', abt.name) END FROM absences abs2 JOIN absence_types abt ON abs2.type_id = abt.id WHERE abs2.employee_id = e.id AND p_target_date BETWEEN abs2.start_date AND COALESCE(abs2.end_date, '2099-12-31') LIMIT 1)
@@ -844,37 +863,12 @@ BEGIN
         DATE_FORMAT(tsd.target_end_time, '%H:%i') AS time_end,
         edp.id AS edp_id, 
         COALESCE(edp.is_cancelled, 0) AS is_equipment_cancelled,
-        -- ФЛАГ 1: Должен ли станок работать по базовому графику шаблона (1 или 0)
-        tsd.is_equipment_working_by_plan AS "IsWorkingByPlan", 
         
-        -- ФЛАГ 2: Режим планирования станка (например, 'manual_only')
-        tsd.active_staffing_mode AS "ActiveStaffingMode",
         CASE 
-            WHEN edp.is_cancelled = 1 THEN 0                       -- Остановка станка
-            WHEN (SELECT active_count FROM ActiveWorkforce) > 0 THEN 1 -- Укомплектовано
-            WHEN edp.id IS NOT NULL AND edp.is_cancelled = 0 THEN 2   -- Требуется персонал (Вынужденный ручной запуск)
-            WHEN tsd.is_equipment_working_by_plan = 0 THEN 3          -- Вне графика (Простой)
-            WHEN tsd.active_staffing_mode = 'manual_only' THEN 4      -- Ожидание назначения
-            ELSE 2                                                    -- Требуется персонал (По плану)
-        END AS staffing_requirement_code,
-        CASE 
-            -- 1. Если станок принудительно за стопорен в оверрайдах
             WHEN edp.is_cancelled = 1 THEN 'Не требуется (Остановка станка)'
-            
-            -- 2. Если на станке уже физически есть работающие люди (план или замены)
             WHEN (SELECT active_count FROM ActiveWorkforce) > 0 THEN '✅ Укомплектовано'
-            
-            -- 3. НОВОЕ: Если станок запущен вне плана мастером рукми (есть запись и is_cancelled = 0),
-            -- но людей еще нет — он ЖЕСТКО требует персонал, игнорируя режим manual_only!
-            WHEN edp.id IS NOT NULL AND edp.is_cancelled = 0 THEN '🚨 ТРЕБУЕТСЯ ПЕРСОНАЛ'
-            
-            -- 4. Если станок простаивает по графику шаблона
             WHEN tsd.is_equipment_working_by_plan = 0 THEN 'Не требуется (Вне графика)'
-            
-            -- 5. Если по графику станок должен работать, но его режим требует ручного распределения
             WHEN tsd.active_staffing_mode = 'manual_only' THEN '⚪ Ожидание назначения'
-            
-            -- 6. Дефолтный алерт для работающего по плану оборудования
             ELSE '🚨 ТРЕБУЕТСЯ ПЕРСОНАЛ'
         END AS staffing_requirement,
 

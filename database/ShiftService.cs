@@ -1,6 +1,7 @@
-﻿using data;
-using Dapper;
+﻿using Dapper;
+using data;
 using MySqlConnector;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -61,6 +62,40 @@ namespace database
                 return await connection.QueryFirstOrDefaultAsync<ShiftDefinitionModel>(sql, new { Id = id });
             }
         }
+
+        /// <summary>
+        /// Возвращает список определений смен, которые доступны для данного станка на указанную дату
+        /// </summary>
+        public async Task<List<ShiftDefinitionModel>> GetEquipmentShiftsAsync(ulong equipmentId, DateTime date)
+        {
+            const string sql = @"
+                SELECT DISTINCT
+                    sd.id AS Id,
+                    sd.shift_number AS ShiftNumber,
+                    sd.name AS Name,
+                    DATE_FORMAT(sd.start_time, '%H:%i') AS StartTimeText,
+                    DATE_FORMAT(sd.end_time, '%H:%i') AS EndTimeText
+                FROM equipment e
+                -- Находим активный шаблон графика станка на дату
+                JOIN schedule_templates st ON st.id = COALESCE(
+                    (SELECT template_id FROM equipment_schedule_history 
+                     WHERE equipment_id = e.id AND valid_from <= @Date 
+                     ORDER BY valid_from DESC LIMIT 1),
+                    e.template_id
+                )
+                JOIN schedule_cycles sc ON st.cycle_id = sc.id
+                JOIN schedule_cycle_items sci ON sci.cycle_id = sc.id
+                JOIN shift_definitions sd ON sci.shift_id = sd.id
+                WHERE e.id = @EquipmentId
+                ORDER BY sd.shift_number ASC;";
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                var res = await conn.QueryAsync<ShiftDefinitionModel>(sql, new { EquipmentId = equipmentId, Date = date.Date });
+                return res.ToList();
+            }
+        }
+
 
         /// <summary>
         /// ДОБАВЛЕНИЕ: Создает новую смену и возвращает ее сгенерированный ID

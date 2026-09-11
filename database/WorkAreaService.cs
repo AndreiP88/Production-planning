@@ -247,6 +247,27 @@ namespace database
             }
         }
 
+        public async Task<EquipmentLookupDto> GetEquipmentLookupByIdAsync(ulong equipmentId)
+        {
+            const string sql = @"
+                SELECT 
+                    e.id AS Id,
+                    e.name AS Name,
+                    e.code AS Code,
+                    wa.id AS WorkAreaId,
+                    wa.name AS WorkAreaName
+                FROM equipment e
+                INNER JOIN work_areas wa ON e.work_area_id = wa.id
+                WHERE e.id = @EquipmentId 
+                LIMIT 1;";
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                // Возвращаем объект, мапя его прямо в вашу модель EquipmentLookupDto
+                return await conn.QueryFirstOrDefaultAsync<EquipmentLookupDto>(sql, new { EquipmentId = equipmentId });
+            }
+        }
+
         /// <summary>
         /// ПОЛУЧЕНИЕ СТАНКА ПО ID: Возвращает полную информацию о станке, включая актуальный график, режим и даты их начала действия
         /// </summary>

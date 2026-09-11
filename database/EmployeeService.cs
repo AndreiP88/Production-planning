@@ -22,68 +22,107 @@ namespace Production_planning
         // РАЗДЕЛ 1: ПОЛУЧЕНИЕ СПИСКОВ И КАРТОЧЕК С ОТСЕЧКОЙ НА ТЕКУЩУЮ ДАТУ
         // =========================================================================
 
+        public async Task<List<ActiveEmployeeRow>> GetCurrentActiveEmployeesAsync()
+        {
+            const string sql = @"
+                SELECT 
+                    e.id AS Id,
+                    CONCAT_WS(' ', e.last_name, e.first_name, e.patronymic) AS FullName,
+                    e.full_name AS ShortName
+                FROM employees e
+                INNER JOIN employment_periods ep ON ep.employee_id = e.id
+                WHERE ep.hire_date <= CURDATE() 
+                  AND (ep.fire_date IS NULL OR ep.fire_date >= CURDATE())
+                ORDER BY e.last_name ASC, e.first_name ASC;";
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                var res = await conn.QueryAsync<ActiveEmployeeRow>(sql);
+                return res.ToList();
+            }
+        }
+
+        public async Task<List<AvailableEmployeeRow>> GetAvailableEmployeesForShiftAsync(DateTime targetDate, int shiftNumber)
+        {
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("p_target_date", targetDate.Date);
+                parameters.Add("p_target_shift_number", shiftNumber);
+
+                var res = await conn.QueryAsync<AvailableEmployeeRow>(
+                    "GetAvailableEmployeesForShift",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+                return res.ToList();
+            }
+        }
+
+
+
         /// <summary>
         /// Возвращает краткий список сотрудников со срезом данных на текущую дату
         /// </summary>
         /// 
-        
+
         public async Task<List<EmployeeShortRow>> GetEmployeeShortListAsync()
         {
             string sql = @"
-        SELECT 
-            e.id AS Id,
-            e.full_name AS FullName,
-            e.last_name AS LastName, 
-            e.first_name AS FirstName, 
-            e.patronymic AS Patronymic,
+                SELECT 
+                    e.id AS Id,
+                    e.full_name AS FullName,
+                    e.last_name AS LastName, 
+                    e.first_name AS FirstName, 
+                    e.patronymic AS Patronymic,
             
-            -- Возвращаем 1 (работает) или 0 (уволен) без использования кириллицы
-            CASE WHEN active_periods.employee_id IS NOT NULL THEN 1 ELSE 0 END AS IsActive,
+                    -- Возвращаем 1 (работает) или 0 (уволен) без использования кириллицы
+                    CASE WHEN active_periods.employee_id IS NOT NULL THEN 1 ELSE 0 END AS IsActive,
             
-            p.id AS CurrentPositionID,
-            p.name AS CurrentPosition,
-            st.name AS CurrentSchedule,
-            eq.name AS CurrentEquipment,
-            wa.name AS CurrentWorkArea,
-            ec.contact_value AS PrimaryPhone
-        FROM employees e
+                    p.id AS CurrentPositionID,
+                    p.name AS CurrentPosition,
+                    st.name AS CurrentSchedule,
+                    eq.name AS CurrentEquipment,
+                    wa.name AS CurrentWorkArea,
+                    ec.contact_value AS PrimaryPhone
+                FROM employees e
         
-        LEFT JOIN (
-            SELECT employee_id 
-            FROM employment_periods 
-            WHERE hire_date <= CURDATE() AND (fire_date IS NULL OR fire_date >= CURDATE())
-        ) active_periods ON active_periods.employee_id = e.id
+                LEFT JOIN (
+                    SELECT employee_id 
+                    FROM employment_periods 
+                    WHERE hire_date <= CURDATE() AND (fire_date IS NULL OR fire_date >= CURDATE())
+                ) active_periods ON active_periods.employee_id = e.id
         
-        LEFT JOIN employee_position_assignments epa ON epa.id = (
-            SELECT id FROM employee_position_assignments 
-            WHERE employee_id = e.id AND valid_from <= CURDATE() 
-            ORDER BY valid_from DESC, id DESC LIMIT 1
-        )
-        LEFT JOIN positions p ON epa.position_id = p.id
+                LEFT JOIN employee_position_assignments epa ON epa.id = (
+                    SELECT id FROM employee_position_assignments 
+                    WHERE employee_id = e.id AND valid_from <= CURDATE() 
+                    ORDER BY valid_from DESC, id DESC LIMIT 1
+                )
+                LEFT JOIN positions p ON epa.position_id = p.id
         
-        LEFT JOIN employee_schedule_assignments esa ON esa.id = (
-            SELECT id FROM employee_schedule_assignments 
-            WHERE employee_id = e.id AND valid_from <= CURDATE() 
-            ORDER BY valid_from DESC, id DESC LIMIT 1
-        )
-        LEFT JOIN schedule_templates st ON esa.template_id = st.id
+                LEFT JOIN employee_schedule_assignments esa ON esa.id = (
+                    SELECT id FROM employee_schedule_assignments 
+                    WHERE employee_id = e.id AND valid_from <= CURDATE() 
+                    ORDER BY valid_from DESC, id DESC LIMIT 1
+                )
+                LEFT JOIN schedule_templates st ON esa.template_id = st.id
         
-        LEFT JOIN employee_equipment_assignments eea ON eea.id = (
-            SELECT id FROM employee_equipment_assignments 
-            WHERE employee_id = e.id AND valid_from <= CURDATE() 
-            ORDER BY valid_from DESC, id DESC LIMIT 1
-        )
-        LEFT JOIN equipment eq ON eea.equipment_id = eq.id
-        LEFT JOIN work_areas wa ON eq.work_area_id = wa.id
+                LEFT JOIN employee_equipment_assignments eea ON eea.id = (
+                    SELECT id FROM employee_equipment_assignments 
+                    WHERE employee_id = e.id AND valid_from <= CURDATE() 
+                    ORDER BY valid_from DESC, id DESC LIMIT 1
+                )
+                LEFT JOIN equipment eq ON eea.equipment_id = eq.id
+                LEFT JOIN work_areas wa ON eq.work_area_id = wa.id
         
-        LEFT JOIN employee_contacts ec ON ec.id = (
-            SELECT ec_inner.id FROM employee_contacts ec_inner
-            JOIN contact_types ct ON ec_inner.contact_type_id = ct.id
-            WHERE ec_inner.employee_id = e.id AND ct.code = 'phone'
-            LIMIT 1
-        )
+                LEFT JOIN employee_contacts ec ON ec.id = (
+                    SELECT ec_inner.id FROM employee_contacts ec_inner
+                    JOIN contact_types ct ON ec_inner.contact_type_id = ct.id
+                    WHERE ec_inner.employee_id = e.id AND ct.code = 'phone'
+                    LIMIT 1
+                )
         
-        ORDER BY IsActive DESC, e.full_name ASC;";
+                ORDER BY IsActive DESC, e.full_name ASC;";
 
             using (var conn = new MySqlConnection(_connectionString))
             {
@@ -138,6 +177,99 @@ namespace Production_planning
                     card.Contacts = contacts.ToList();
                 }
                 return card;
+            }
+        }
+
+        public async Task CancelEmployeeShiftAsync(DateTime date, ulong shiftId, ulong employeeId, string comment)
+        {
+            // Запрос использует ON DUPLICATE KEY UPDATE, чтобы если оверрайд на этот день 
+            // для этого сотрудника уже существовал (например, черновик), он перезаписался как утвержденная отмена
+            const string sql = @"
+                INSERT INTO schedule_overrides (override_date, shift_id, employee_id, is_cancellation, status, comment)
+                VALUES (@Date, @ShiftId, @EmployeeId, 1, 2, @Comment)
+                ON DUPLICATE KEY UPDATE is_cancellation = 1, status = 2, comment = @Comment;";
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                await conn.ExecuteAsync(sql, new
+                {
+                    Date = date.Date,
+                    ShiftId = shiftId,
+                    EmployeeId = employeeId,
+                    Comment = comment
+                });
+            }
+        }
+
+        /// <summary>
+        /// Точечно удаляет ручное кадровое изменение (оверрайд) из базы данных по его первичному ключу ID
+        /// </summary>
+        /// <param name="overrideId">Уникальный числовой индекс записи из schedule_overrides</param>
+        /// <returns>True, если строка была успешно удалена; иначе False</returns>
+        public async Task<bool> DeleteOverrideByIdAsync(ulong overrideId)
+        {
+            // Защита: если пришел 0 (значит, оверрайда нет, человек в графике), в базу не идем
+            if (overrideId == 0) return false;
+
+            const string sql = "DELETE FROM schedule_overrides WHERE id = @Id;";
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                // ExecuteAsync возвращает количество строк, которые затронул запрос
+                int affectedRows = await conn.ExecuteAsync(sql, new { Id = overrideId });
+
+                // Если affectedRows > 0, значит, запись реально существовала и удалилась
+                return affectedRows > 0;
+            }
+        }
+        /// <summary>
+        /// Назначает сотрудника на смену/станок с указанием статуса утверждения и комментария
+        /// </summary>
+        /// <param name="date">Дата назначения</param>
+        /// <param name="shiftId">Внутренний ID смены (из базы данных)</param>
+        /// <param name="equipmentId">ID станка, на который назначается сотрудник</param>
+        /// <param name="employeeId">ID назначаемого сотрудника</param>
+        /// <param name="status">Статус оверрайда (например: 0 - черновик, 2 - утверждено)</param>
+        /// <param name="comment">Текстовый комментарий мастера (причина назначения/замены)</param>
+        public async Task AssignEmployeeToShiftAsync(DateTime date, ulong shiftId, ulong equipmentId, ulong employeeId, int status, string comment)
+        {
+            // Запрос учитывает, что это ручное НАЗНАЧЕНИЕ, поэтому флаг отмены (is_cancellation) жестко сбрасывается в 0
+            const string sql = @"
+                INSERT INTO schedule_overrides (
+                    override_date, 
+                    shift_id, 
+                    employee_id, 
+                    equipment_id, 
+                    status, 
+                    is_cancellation, 
+                    comment
+                )
+                VALUES (
+                    @Date, 
+                    @ShiftId, 
+                    @EmployeeId, 
+                    @EquipmentId, 
+                    @Status, 
+                    0, 
+                    @Comment
+                )
+                ON DUPLICATE KEY UPDATE 
+                    equipment_id = @EquipmentId, 
+                    status = @Status, 
+                    is_cancellation = 0, 
+                    comment = @Comment;";
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                await conn.ExecuteAsync(sql, new
+                {
+                    Date = date.Date,       // Обрезаем время, сохраняем только чистый день
+                    ShiftId = shiftId,
+                    EquipmentId = equipmentId,
+                    EmployeeId = employeeId,
+                    Status = status,
+                    Comment = string.IsNullOrEmpty(comment) ? null : comment // Пишем NULL в базу, если комментарий пустой
+                });
             }
         }
 
@@ -632,15 +764,15 @@ namespace Production_planning
         /// <summary>
         /// Возвращает справочник типов отсутствий для комбобокса
         /// </summary>
-        /*public async Task<List<KeyValuePair<ulong, string>>> GetAbsenceTypesLookupAsync()
+        public async Task<List<KeyValuePair<ulong, string>>> GetAbsenceTypesLookupAsync()
         {
             string sql = "SELECT id, name FROM absence_types ORDER BY id ASC;";
             using (var conn = new MySqlConnection(_connectionString))
             {
                 var res = await conn.QueryAsync(sql);
-                return res.Select(x => new KeyValuePair<ulong, (string)x.name>((ulong)x.id, (string)x.name)).ToList();
+                return res.Select(x => new KeyValuePair<ulong, string>((ulong)x.id, (string)x.name)).ToList();
             }
-        }*/
+        }
 
         /// <summary>
         /// Возвращает список всех зарегистрированных отсутствий сотрудника
@@ -668,6 +800,7 @@ namespace Production_planning
 
             DateTime newStart = cmd.StartDate.Date;
             DateTime newEnd = cmd.EndDate?.Date ?? DateTime.MaxValue;
+            ulong newAbsenceType = cmd.TypeId;
 
             // Валидация логики дат
             if (newEnd < newStart)
@@ -683,8 +816,11 @@ namespace Production_planning
                 // (Старт1 <= Конец2) И (Конец1 >= Старт2)
                 if (oldStart <= newEnd && oldEnd >= newStart)
                 {
-                    string oldPeriodStr = old.EndDate.HasValue ? old.EndDate.Value.ToString("dd.MM.yyyy") : "открытая дата";
-                    throw new Exception($"Невозможно сохранить. Данный период пересекается с уже существующей записью: '{old.AbsenceTypeName}' с {old.StartDate:dd.MM.yyyy} по {oldPeriodStr}.");
+                    if (newAbsenceType != old.TypeId)
+                    {
+                        string oldPeriodStr = old.EndDate.HasValue ? old.EndDate.Value.ToString("dd.MM.yyyy") : "открытая дата";
+                        throw new Exception($"Невозможно сохранить. Данный период пересекается с уже существующей записью: '{old.AbsenceTypeName}' с {old.StartDate:dd.MM.yyyy} по {oldPeriodStr}.");
+                    }
                 }
             }
 
@@ -707,19 +843,50 @@ namespace Production_planning
         // РАЗДЕЛ 16: АНАЛИТИКА, РЕДАКТИРОВАНИЕ И ФИЛЬТРАЦИЯ ОТСУТСТВИЙ (ABSENCES)
         // =========================================================================
 
+        public async Task<List<AbsenceType>> GetAllAbsenceTypesAsync()
+        {
+            // Пишем SQL-запрос. 
+            // Используем оператор AS, чтобы имена колонок из MySQL точно совпали с именами свойств в C#
+            const string sql = @"
+                SELECT 
+                    id AS Id,
+                    name AS Name,
+                    is_end_date_required AS IsEndDateRequired,
+                    status_color AS StatusColor
+                FROM absence_types
+                ORDER BY name ASC;"; // Сортируем по алфавиту
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                var res = await conn.QueryAsync<AbsenceType>(sql);
+                return res.ToList();
+            }
+        }
+
         /// <summary>
         /// 1. МАССОВЫЙ СРЕЗ: Возвращает все отсутствия, активные в указанном диапазоне дат (например, в течение месяца)
         /// </summary>
         public async Task<List<EmployeeAbsenceExtendedRow>> GetActiveAbsencesInPeriodAsync(DateTime startDate, DateTime endDate)
         {
             // Математическое условие пересечения отрезка отсутствия с выбранным периодом месяца
-            string sql = "SELECT a.id AS Id, a.employee_id AS EmployeeId, e.full_name AS EmployeeFullName, a.type_id AS TypeId, abt.name AS AbsenceTypeName, a.start_date AS StartDate, a.end_date AS EndDate " +
-                         "FROM absences a " +
-                         "JOIN employees e ON a.employee_id = e.id " +
-                         "JOIN absence_types abt ON a.type_id = abt.id " +
-                         "WHERE a.start_date <= @EndDate AND (a.end_date IS NULL OR a.end_date >= @StartDate) " +
-                         "ORDER BY a.start_date DESC, e.full_name ASC;";
+            string sql = @"
+                SELECT 
+                    a.id AS Id, 
+                    a.employee_id AS EmployeeId, 
+                    e.full_name AS EmployeeFullName, 
+                    a.type_id AS TypeId, 
+                    abt.name AS AbsenceTypeName, 
+                    abt.status_color AS StatusColor,
+                    a.start_date AS StartDate, 
+                    a.end_date AS EndDate 
+                FROM absences a 
+                JOIN employees e ON a.employee_id = e.id 
+                JOIN absence_types abt ON a.type_id = abt.id 
+                WHERE a.start_date <= @EndDate 
+                  AND (a.end_date IS NULL OR a.end_date >= @StartDate) 
+                ORDER BY a.start_date ASC, e.full_name ASC;";
 
+            //DESC
             using (var conn = new MySqlConnection(_connectionString))
             {
                 var res = await conn.QueryAsync<EmployeeAbsenceExtendedRow>(sql, new { StartDate = startDate.Date, EndDate = endDate.Date });

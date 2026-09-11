@@ -25,7 +25,10 @@ namespace Production_planning
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-            materialSkinManager.ColorScheme = new ColorScheme((Primary)0x00796b, (Primary)0x009688, (Primary)0x009685, (Accent)0x009686, TextShade.WHITE);
+            materialSkinManager.ColorScheme = new ColorScheme((Primary)0x00796b, (Primary)0x009688, (Primary)0x009685, Accent.DeepOrange200, TextShade.WHITE);
+
+            gridViewAbsence.DefaultCellStyle.SelectionBackColor = gridViewAbsence.DefaultCellStyle.BackColor;
+            gridViewAbsence.DefaultCellStyle.SelectionForeColor = gridViewAbsence.DefaultCellStyle.ForeColor;
         }
 
         CancellationTokenSource cancelTokenSource;
@@ -51,12 +54,16 @@ namespace Production_planning
             while (year <= date.Year)
             {
                 planComboBoxYear.Items.Add(year);
+                comboBoxAbsenceYear.Items.Add(year);
 
                 year++;
             }
 
             planComboBoxYear.SelectedIndex = planComboBoxYear.Items.Count - 1;
             planComboBoxMonth.SelectedIndex = DateTime.Now.Month - 1;
+
+            comboBoxAbsenceYear.SelectedIndex = comboBoxAbsenceYear.Items.Count - 1;
+            comboBoxAbsenceMonth.SelectedIndex = DateTime.Now.Month - 1;
 
             materialTabControl1.SelectedIndex = 0;
             materialTabControl1_SelectedIndexChangedAsync(sender, e);
@@ -342,7 +349,8 @@ namespace Production_planning
                         // Строка 1: Инфо о сотрудниках
                         int r1 = dataGridPlanning.Rows.Add(eq.Key.Id);
                         dataGridPlanning.Rows[r1].HeaderCell.Value = eq.Key.Id;
-
+                        //dataGridPlanning.Rows[r1].HeaderCell.Tag = eq.SelectMany(s => s.Shifts).Select(s => s.Number);
+                        //MessageBox.Show(eq.SelectMany(s => s.Shifts).Select(s => s.Number) + "");
                         // Строка 2: Пустая (для будущего)
                         int r2 = dataGridPlanning.Rows.Add(eq.Key.Id);
                         dataGridPlanning.Rows[r2].HeaderCell.Value = eq.Key.Id;
@@ -709,7 +717,7 @@ namespace Production_planning
                 // Обычно код станка находится в самом первом столбце (индекс 0). 
                 // Замените индекс 0 на ваш индекс столбца, если код станка лежит в другом месте.
                 object machineValue = dataGridPlanning.Rows[targetRow].HeaderCell.Value;
-                int machineID = machineValue != null ? Convert.ToInt32(machineValue) : 0;
+                ulong machineID = machineValue != null ? Convert.ToUInt32(machineValue) : 0;
 
                 // 6. Получаем текст самого объединенного блока (задачи/плана)
                 object blockValue = dataGridPlanning.Rows[targetRow].Cells[targetCol].Value;
@@ -1347,6 +1355,9 @@ namespace Production_planning
                 listBoxUsers.SelectedIndex = -1;
                 listBoxUsers.Refresh();
                 ClearUserShortInfo();
+
+                materialButtonUserViewFullCard.Enabled = false;
+                buttonUserAbsenceAdd.Enabled = false;
             }
         }
 
@@ -1368,18 +1379,37 @@ namespace Production_planning
         {
             try
             {
-                int index = _employeeShortsIndexes[listBoxUsers.SelectedIndex];
+                if (listBoxUsers.SelectedIndex >= 0)
+                {
+                    int index = _employeeShortsIndexes[listBoxUsers.SelectedIndex];
 
-                textBoxUserLastName.Text = employeeShorts[index].LastName;
-                textBoxUserFirstName.Text = employeeShorts[index].FirstName;
-                textBoxUserPatronymic.Text = employeeShorts[index].Patronymic;
-                textBoxUserContactPhone.Text = employeeShorts[index].PrimaryPhone;
+                    textBoxUserLastName.Text = employeeShorts[index].LastName;
+                    textBoxUserFirstName.Text = employeeShorts[index].FirstName;
+                    textBoxUserPatronymic.Text = employeeShorts[index].Patronymic;
+                    textBoxUserContactPhone.Text = employeeShorts[index].PrimaryPhone;
 
-                textBoxUserStatus.Text = employeeShorts[index].CurrentStatus;
-                textBoxUserPosition.Text = employeeShorts[index].CurrentPosition;
-                textBoxUserAssigmentArea.Text = employeeShorts[index].CurrentWorkArea;
-                textBoxUserAssigmentEquip.Text = employeeShorts[index].CurrentEquipment;
-                textBoxUserSchedule.Text = employeeShorts[index].CurrentSchedule;
+                    textBoxUserStatus.Text = employeeShorts[index].CurrentStatus;
+                    textBoxUserPosition.Text = employeeShorts[index].CurrentPosition;
+                    textBoxUserAssigmentArea.Text = employeeShorts[index].CurrentWorkArea;
+                    textBoxUserAssigmentEquip.Text = employeeShorts[index].CurrentEquipment;
+                    textBoxUserSchedule.Text = employeeShorts[index].CurrentSchedule;
+
+                    materialButtonUserViewFullCard.Enabled = true;
+
+                    if (employeeShorts[index].IsActive == 1)
+                    {
+                        buttonUserAbsenceAdd.Enabled = true;
+                    }
+                    else
+                    {
+                        buttonUserAbsenceAdd.Enabled = false;
+                    }
+                }
+                else
+                {
+                    materialButtonUserViewFullCard.Enabled = false;
+                    buttonUserAbsenceAdd.Enabled = false;
+                }
             }
             catch (Exception ex)
             {
@@ -1391,18 +1421,20 @@ namespace Production_planning
         {
             try
             {
-                int index = _employeeShortsIndexes[listBoxUsers.SelectedIndex];
+                int selecredIndex = listBoxUsers.SelectedIndex;
+                int index = _employeeShortsIndexes[selecredIndex];
 
                 FormAddUser form = new FormAddUser((int)employeeShorts[index].Id);
                 DialogResult = form.ShowDialog();
-
+                
                 if (DialogResult == DialogResult.OK)
                 {
                     await LoadUserListToListBox();
-
-                    listBoxUsers.SelectedIndex = index;
+                    
+                    listBoxUsers.SelectedIndex = -1;
                     listBoxUsers.Update();
                     listBoxUsers.Refresh();
+                    listBoxUsers.SelectedIndex = selecredIndex;
                 }
             }
             catch (Exception ex)
@@ -1440,7 +1472,8 @@ namespace Production_planning
         {
             try
             {
-                int index = _employeeShortsIndexes[listBoxUsers.SelectedIndex];
+                int selecredIndex = listBoxUsers.SelectedIndex;
+                int index = _employeeShortsIndexes[selecredIndex];
 
                 FormAddUser form = new FormAddUser((int)employeeShorts[index].Id);
                 DialogResult = form.ShowDialog();
@@ -1449,9 +1482,10 @@ namespace Production_planning
                 {
                     await LoadUserListToListBox();
 
-                    listBoxUsers.SelectedIndex = index;
+                    listBoxUsers.SelectedIndex = -1;
                     listBoxUsers.Update();
                     listBoxUsers.Refresh();
+                    listBoxUsers.SelectedIndex = selecredIndex;
                 }
             }
             catch (Exception ex)
@@ -1460,6 +1494,446 @@ namespace Production_planning
             }
         }
 
+        ///Блок отображения, заполнения и редактирования отсутствий
         ///
+        public List<AbsenceGridRow> PrepareDataForGrid(List<EmployeeAbsenceExtendedRow> dbRows, DateTime targetMonth)
+        {
+            // 1. Узнаем, сколько дней в выбранном месяце (28, 29, 30 или 31)
+            int daysInMonth = DateTime.DaysInMonth(targetMonth.Year, targetMonth.Month);
+            var gridRows = new List<AbsenceGridRow>();
+
+            foreach (var dbRow in dbRows)
+            {
+                var gridRow = new AbsenceGridRow(daysInMonth)
+                {
+                    Id = dbRow.Id,
+                    EmployeeFullName = dbRow.EmployeeFullName,
+                    AbsenceTypeName = dbRow.AbsenceTypeName,
+                    PeriodText = dbRow.PeriodText,
+                    StatusColor = dbRow.StatusColor
+                };
+
+                // 2. Проверяем каждый день месяца
+                for (int day = 1; day <= daysInMonth; day++)
+                {
+                    DateTime currentDate = new DateTime(targetMonth.Year, targetMonth.Month, day);
+
+                    // Используем ваш готовый метод проверки активности даты!
+                    if (dbRow.IsActiveOn(currentDate))
+                    {
+                        gridRow.Days[day - 1] = true; // Отмечаем, что в этот день человек отсутствовал
+                    }
+                }
+
+                gridRows.Add(gridRow);
+            }
+
+            return gridRows;
+        }
+
+        public void FillAndColorGrid(DataGridView grid, List<AbsenceGridRow> gridData, DateTime targetMonth)
+        {
+            // Очищаем старые данные и колонки
+            grid.Columns.Clear();
+            grid.Rows.Clear();
+
+            // 1. Создаем базовые колонки
+            grid.Columns.Add("Number", "Number");
+            grid.Columns.Add("FullName", "Сотрудник");
+            grid.Columns.Add("AbsenceType", "Причина");
+            grid.Columns.Add("Period", "Период");
+
+            // 2. Динамически создаем колонки для дней месяца
+            int daysInMonth = DateTime.DaysInMonth(targetMonth.Year, targetMonth.Month);
+
+            int rowFirst = grid.Rows.Add();
+
+            grid.Rows[rowFirst].Height = 40;
+
+            GridHelper.MergeCells(grid, "№", rowFirst, 0, 1, 1, Color.Gray);
+            GridHelper.MergeCells(grid, "Сотрудник", rowFirst, 1, 1, 1, Color.Gray);
+            GridHelper.MergeCells(grid, "Причина", rowFirst, 2, 1, 1, Color.Gray);
+            GridHelper.MergeCells(grid, "Период, продолжительность", rowFirst, 3, 1, 1, Color.Gray);
+
+            grid.Columns[0].Width = 20;
+            grid.Columns[1].Width = 220;
+            grid.Columns[2].Width = 200;
+            grid.Columns[3].Width = 280;
+
+            for (int day = 1; day <= daysInMonth; day++)
+            {
+                // Имя колонки будет "Day1", "Day2" и т.д., а заголовок просто "1", "2"..."31"
+                int colIndex = grid.Columns.Add($"Day{day}", day.ToString());
+                grid.Columns[colIndex].Width = 30; // Делаем колонки дней узкими и аккуратными
+
+                GridHelper.MergeCells(grid, day.ToString(), rowFirst, day + 3, 1, 1, Color.Gray);
+            }
+
+            int colLastIndex = grid.Columns.Add($"DayCount", "sum");
+            grid.Columns[colLastIndex].Width = 80;
+
+            GridHelper.MergeCells(grid, "Дней", rowFirst, colLastIndex, 1, 1, Color.Gray);
+
+            // 3. Заполняем строки данными и красим ячейки
+            foreach (var rowData in gridData)
+            {
+                // Создаем массив объектов для добавления строки (Сотрудник, Причина, Период)
+
+
+                /*var rowValues = new List<object> { rowData.EmployeeFullName, rowData.AbsenceTypeName, rowData.PeriodText };
+
+                // Добавляем пустые значения для ячеек-дней (чтобы текст там не писался)
+                for (int i = 0; i < daysInMonth; i++) rowValues.Add("");
+
+                // Добавляем строку в GridView и получаем её индекс
+                int rowIndex = grid.Rows.Add(rowValues.ToArray());
+                DataGridViewRow gridRow = grid.Rows[rowIndex];*/
+
+                int rowIndex = grid.Rows.Add();
+
+                grid.Rows[rowIndex].Tag = rowData.Id;
+                grid.Rows[rowIndex].Height = 30;
+
+                DataGridViewRow gridRow = grid.Rows[rowIndex];
+
+                GridHelper.MergeCells(grid, rowIndex.ToString(), rowIndex, 0, 1, 1, Color.Gray);
+
+                gridRow.DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
+
+                gridRow.Cells[1].Value = rowData.EmployeeFullName;
+                gridRow.Cells[2].Value = rowData.AbsenceTypeName;
+                gridRow.Cells[3].Value = rowData.PeriodText;
+
+                gridRow.Cells[1].Style.Alignment = DataGridViewContentAlignment.MiddleRight;
+                gridRow.Cells[2].Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+                // 4. КРАСИМ ЯЧЕЙКИ: Идем по колонкам дней (они начинаются с индекса 3)
+                Color customColor = ColorTranslator.FromHtml(rowData.StatusColor);
+
+                int days = 0;
+
+                for (int i = 0; i < daysInMonth; i++)
+                {
+                    int cellIndex = 4 + i; // Смещение, так как первые 3 колонки — это текст
+
+                    gridRow.Cells[cellIndex].Value = "";
+
+                    if (rowData.Days[i] == true)
+                    {
+                        days++;
+
+                        /*
+                         // Превращаем "#4CAF50" в Color объект для C#
+                        Color customColor = ColorTranslator.FromHtml(rowData.StatusColor);
+                        e.CellStyle.BackColor = customColor;
+                        e.CellStyle.SelectionBackColor = customColor;
+
+                         */
+                        // Закрашиваем ячейку, если в этот день человек отсутствует
+                        gridRow.Cells[cellIndex].Style.BackColor = customColor;//Color.Tomato; // Красный цвет (можно Color.Orange)
+                        gridRow.Cells[cellIndex].ToolTipText = rowData.AbsenceTypeName; // Подсказка при наведении
+                    }
+                }
+
+                gridRow.Cells[colLastIndex].Value = days.ToString("N0");
+            }
+        }
+
+        private async void OnMonthSelected(DateTime selectedMonth)
+        {
+            ConnectionParameter parameter = new ConnectionParameter();
+            EmployeeManagementService employeeService = new EmployeeManagementService(parameter.GetMySQLConnectionString());
+
+            // 1. Вычисляем начало и конец выбранного месяца для SQL-запроса
+            DateTime startOfMonth = new DateTime(selectedMonth.Year, selectedMonth.Month, 1);
+            DateTime endOfMonth = new DateTime(selectedMonth.Year, selectedMonth.Month, DateTime.DaysInMonth(selectedMonth.Year, selectedMonth.Month));
+
+            // 2. Получаем данные из вашей БД через созданный ранее метод
+            List<EmployeeAbsenceExtendedRow> dbData = await employeeService.GetActiveAbsencesInPeriodAsync(startOfMonth, endOfMonth);
+
+            // 3. Пересобираем данные в удобную для сетки структуру
+            List<AbsenceGridRow> gridData = PrepareDataForGrid(dbData, selectedMonth);
+
+            // 4. Отображаем и красим в DataGridView
+            FillAndColorGrid(gridViewAbsence, gridData, selectedMonth);
+            SetupColumnsFlexibility(gridViewAbsence);
+        }
+
+        private void DateChange()
+        {
+            if (comboBoxAbsenceMonth.SelectedIndex != -1 && comboBoxAbsenceYear.SelectedIndex != -1)
+            {
+                DateTime date = new DateTime(Convert.ToInt32(comboBoxAbsenceYear.Text), comboBoxAbsenceMonth.SelectedIndex + 1, 1);
+
+                OnMonthSelected(date);
+            }
+        }
+
+        private void comboBoxAbsenceYear_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DateChange();
+        }
+
+        private void comboBoxAbsenceMonth_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DateChange();
+        }
+
+        public void SetupColumnsFlexibility(DataGridView grid)
+        {
+            // Обязательно отключаем этот режим для всей таблицы, 
+            // так как мы будем настраивать каждую колонку индивидуально
+            grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+
+            int totalColumns = grid.Columns.Count;
+
+            for (int i = 0; i < totalColumns; i++)
+            {
+                // 1. Первые 4 колонки (индексы 0, 1, 2, 3)
+                if (i < 4)
+                {
+                    grid.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                    //grid.Columns[i].Width = 120; // Задайте нужную вам фиксированную ширину
+                }
+                // 2. Самая последняя колонка
+                else if (i == totalColumns - 1)
+                {
+                    grid.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                    grid.Columns[i].Width = 60; // Фиксированная ширина для последней колонки
+                }
+                // 3. Все остальные колонки (дни месяца между ними)
+                else
+                {
+                    // Режим Fill заставляет колонки равномерно растягиваться, 
+                    // чтобы занять всё оставшееся свободное пространство
+                    grid.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+                    // Задаем минимальную ширину ячейки дня, чтобы сетка не сжималась слишком сильно
+                    grid.Columns[i].MinimumWidth = 25;
+                }
+            }
+        }
+
+
+        private void gridViewAbsence_SelectionChanged(object sender, EventArgs e)
+        {
+            // Отключаем обработку, если таблица пустая
+            if (gridViewAbsence.Rows.Count == 0) return;
+
+            // ЗАЩИТА: Если пользователь умудрился выделить самую первую строку (индекс 0)
+            if (gridViewAbsence.Rows[0].Selected)
+            {
+                // Просто снимаем с нее выделение, НЕ трогая остальные строки!
+                gridViewAbsence.Rows[0].Selected = false;
+            }
+
+            // 1. Проверяем, есть ли вообще выбранная строка
+            if (gridViewAbsence.CurrentRow == null)
+            {
+                gridViewAbsence.Enabled = false;
+                return;
+            }
+
+            int currentIndex = gridViewAbsence.CurrentRow.Index;
+
+            // 2. БИЗНЕС-ПРАВИЛО: Кнопка активна только если выбрана строка сотрудника.
+            // Если индекс равен 0 (наша первая строка с числами месяца), кнопку активировать НЕЛЬЗЯ.
+            if (currentIndex > 0)
+            {
+                buttonAbsenceDelete.Enabled = true; // Активируем кнопку удаления
+            }
+            else
+            {
+                buttonAbsenceDelete.Enabled = false; // Блокируем для первой строки
+            }
+        }
+
+        private void gridViewAbsence_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex <= 0) return;
+            // Игнорируем клики по шапке таблицы (индекс -1)
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            // 1. Если кликнули по первой строке (индекс 0) — запрещаем её выделять
+            if (e.RowIndex == 0)
+            {
+                gridViewAbsence.ClearSelection();
+                return;
+            }
+
+            // 2. Если кликнули по ячейкам дней (индекс столбца >= 4)
+            if (e.ColumnIndex >= 4)
+            {
+                // Очищаем старое выделение
+                gridViewAbsence.ClearSelection();
+
+                // Принудительно выделяем ТОЛЬКО текстовую часть КЛИКНУТОЙ строки (e.RowIndex)
+                for (int i = 0; i < 4; i++)
+                {
+                    gridViewAbsence.Rows[e.RowIndex].Cells[i].Selected = true;
+                }
+            }
+
+            gridViewAbsence.Invalidate();
+        }
+        private void gridViewAbsence_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            if (e.RowIndex == 0) return;
+
+            var grid = (DataGridView)sender;
+
+            // ПРОВЕРКА №2: Проверяем, является ли текущая рисуемая строка АКТИВНОЙ (выбранной пользователем)
+            if (grid.CurrentRow != null && grid.CurrentRow.Index == e.RowIndex)
+            {
+                // Берем границы строки с небольшим отступом внутрь, чтобы линия не обрезалась
+                Rectangle bounds = new Rectangle(
+                    e.RowBounds.Left + 0,
+                    e.RowBounds.Top + 0,
+                    e.RowBounds.Width - 1,
+                    e.RowBounds.Height - 1
+                );
+
+                // Рисуем рамку ярким цветом для теста
+                using (Pen pen = new Pen(Color.Orange, 2))
+                {
+                    e.Graphics.DrawRectangle(pen, bounds);
+                }
+            }
+        }
+
+        private void gridViewAbsence_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // 1. Проверяем, что клик был в рабочей области:
+            // Игнорируем шапку (e.RowIndex < 0 или e.ColumnIndex < 0)
+            // Игнорируем первые 2 верхние строки (0 и 1)
+            // Игнорируем первые 2 левых столбца (0 и 1)
+            if (e.RowIndex >= 1 && e.ColumnIndex < 5)
+            {
+                // 2. Определяем целевую строку и колонку для сбора данных.
+                // Если кликнули по объединенному блоку, данные привязаны к его "мастер-ячейке" (началу блока).
+                int targetRow = e.RowIndex;
+                int targetCol = e.ColumnIndex;
+
+                if (gridViewAbsence.Rows[e.RowIndex].Cells[e.ColumnIndex] is BiMergedCell clickedCell)
+                {
+                    targetRow = clickedCell.TopRow;
+                    targetCol = clickedCell.LeftColumn;
+                }
+
+                // Получаем содержимое столбца с индексом 1 для этой строки (Номер смены)
+                object rowName = gridViewAbsence.Rows[targetRow].Tag;
+                int id = rowName != null ? Convert.ToInt32(rowName) : -1;
+
+                FormAddAbsence form = new FormAddAbsence(1, id);
+                DialogResult = form.ShowDialog();
+
+                if (DialogResult == DialogResult.OK)
+                {
+                    DateChange();
+                }
+            }
+        }
+
+        private void buttonAbsenceNew_Click(object sender, EventArgs e)
+        {
+            FormAddAbsence form = new FormAddAbsence();
+            DialogResult = form.ShowDialog();
+
+            if (DialogResult == DialogResult.OK)
+            {
+                DateChange();
+            }
+        }
+
+        private void buttonAbsenceCurrentMonth_Click(object sender, EventArgs e)
+        {
+            comboBoxAbsenceYear.SelectedIndex = comboBoxAbsenceYear.Items.Count - 1;
+            comboBoxAbsenceMonth.SelectedIndex = DateTime.Now.Month - 1;
+
+            comboBoxAbsenceYear.Refresh();
+            comboBoxAbsenceMonth.Refresh();
+
+            DateChange();
+        }
+
+        private async void buttonAbsenceDelete_Click(object sender, EventArgs e)
+        {
+            // 1. Защитная проверка: есть ли выделенная строка и лежит ли в её Tag наш ulong ID
+            if (gridViewAbsence.CurrentRow == null || !(gridViewAbsence.CurrentRow.Tag is ulong absenceId))
+            {
+                MessageBox.Show("Не удалось определить ID выбранного отсутствия.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // 2. Запрашиваем подтверждение удаления, чтобы пользователь не нажал кнопку случайно
+            var confirmResult = MessageBox.Show(
+                "Вы уверены, что хотите безвозвратно удалить этот период отсутствия сотрудника?",
+                "Подтверждение удаления",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
+
+            if (confirmResult == DialogResult.Yes)
+            {
+                try
+                {
+                    // Блокируем элементы на время запроса к БД
+                    buttonAbsenceDelete.Enabled = false;
+
+                    // 3. Вызываем метод репозитория
+                    ConnectionParameter parameter = new ConnectionParameter();
+                    EmployeeManagementService employeeService = new EmployeeManagementService(parameter.GetMySQLConnectionString());
+                    bool isDeleted = await employeeService.DeleteAbsenceAsync(absenceId);
+
+                    if (isDeleted)
+                    {
+                        MessageBox.Show("Период отсутствия успешно удален.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // 4. ОБНОВЛЕНИЕ ЭКРАНА: вызываем ваш метод загрузки данных, 
+                        // чтобы таблица мгновенно перерисовалась уже без удаленного сотрудника
+                        DateChange();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Запись не найдена в базе данных. Возможно, она уже была удалена.", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при удалении из базы данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private async void buttonUserAbsenceAdd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int selecredIndex = listBoxUsers.SelectedIndex;
+                int index = _employeeShortsIndexes[selecredIndex];
+
+                FormAddAbsence form = new FormAddAbsence(2, (int)employeeShorts[index].Id);
+                DialogResult = form.ShowDialog();
+
+                if (DialogResult == DialogResult.OK)
+                {
+                    await LoadUserListToListBox();
+
+                    listBoxUsers.SelectedIndex = -1;
+                    listBoxUsers.Update();
+                    listBoxUsers.Refresh();
+                    listBoxUsers.SelectedIndex = selecredIndex;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка добавления периода:\n {ex}");
+            }
+        }
+
+        private void dataGridPlanning_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

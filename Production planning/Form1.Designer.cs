@@ -47,6 +47,10 @@ namespace Production_planning
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -65,6 +69,15 @@ namespace Production_planning
             this.workPlanEquipComboBox = new MaterialSkin.Controls.MaterialComboBox();
             this.dataGridViewPlan = new Production_planning.Form1.DoubleBufferedDataGridView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel24 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel25 = new System.Windows.Forms.TableLayoutPanel();
+            this.comboBoxAbsenceYear = new MaterialSkin.Controls.MaterialComboBox();
+            this.comboBoxAbsenceMonth = new MaterialSkin.Controls.MaterialComboBox();
+            this.buttonAbsenceCurrentMonth = new MaterialSkin.Controls.MaterialButton();
+            this.buttonAbsenceNew = new MaterialSkin.Controls.MaterialButton();
+            this.buttonAbsenceDelete = new MaterialSkin.Controls.MaterialButton();
+            this.tableLayoutPanel26 = new System.Windows.Forms.TableLayoutPanel();
+            this.gridViewAbsence = new Production_planning.Form1.DoubleBufferedDataGridView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel19 = new System.Windows.Forms.TableLayoutPanel();
             this.listBoxUsers = new MaterialSkin.Controls.MaterialListBox();
@@ -80,6 +93,7 @@ namespace Production_planning
             this.textBoxUserAssigmentEquip = new MaterialSkin.Controls.MaterialTextBox();
             this.textBoxUserContactPhone = new MaterialSkin.Controls.MaterialTextBox();
             this.textBoxUserSchedule = new MaterialSkin.Controls.MaterialTextBox();
+            this.buttonUserAbsenceAdd = new MaterialSkin.Controls.MaterialButton();
             this.tableLayoutPanel23 = new System.Windows.Forms.TableLayoutPanel();
             this.materialButtonUserViewFullCard = new MaterialSkin.Controls.MaterialButton();
             this.materialButtonUserAdd = new MaterialSkin.Controls.MaterialButton();
@@ -170,6 +184,11 @@ namespace Production_planning
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPlan)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            this.tableLayoutPanel24.SuspendLayout();
+            this.tableLayoutPanel25.SuspendLayout();
+            this.tableLayoutPanel26.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridViewAbsence)).BeginInit();
             this.tabPage4.SuspendLayout();
             this.tableLayoutPanel19.SuspendLayout();
             this.tableLayoutPanel20.SuspendLayout();
@@ -272,6 +291,7 @@ namespace Production_planning
             this.dataGridPlanning.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dataGridPlanning.Size = new System.Drawing.Size(1228, 525);
             this.dataGridPlanning.TabIndex = 2;
+            this.dataGridPlanning.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridPlanning_CellContentClick);
             this.dataGridPlanning.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridPlanning_CellDoubleClick);
             this.dataGridPlanning.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dataGridPlanning_CellPainting);
             this.dataGridPlanning.SelectionChanged += new System.EventHandler(this.dataGridPlanning_SelectionChanged);
@@ -281,7 +301,7 @@ namespace Production_planning
             this.tableLayoutPanel2.ColumnCount = 5;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 280F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 340F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.planComboBoxYear, 0, 0);
@@ -377,7 +397,7 @@ namespace Production_planning
             this.planComboBoxAreas.MaxDropDownItems = 4;
             this.planComboBoxAreas.MouseState = MaterialSkin.MouseState.OUT;
             this.planComboBoxAreas.Name = "planComboBoxAreas";
-            this.planComboBoxAreas.Size = new System.Drawing.Size(274, 49);
+            this.planComboBoxAreas.Size = new System.Drawing.Size(334, 49);
             this.planComboBoxAreas.StartIndex = 0;
             this.planComboBoxAreas.TabIndex = 2;
             this.planComboBoxAreas.SelectedIndexChanged += new System.EventHandler(this.planComboBoxAreas_SelectedIndexChanged);
@@ -390,7 +410,7 @@ namespace Production_planning
             this.materialButton2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.materialButton2.HighEmphasis = true;
             this.materialButton2.Icon = null;
-            this.materialButton2.Location = new System.Drawing.Point(644, 6);
+            this.materialButton2.Location = new System.Drawing.Point(704, 6);
             this.materialButton2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton2.Name = "materialButton2";
@@ -537,6 +557,7 @@ namespace Production_planning
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.tableLayoutPanel24);
             this.tabPage3.ImageKey = "free-icon-user-delete-3914336.png";
             this.tabPage3.Location = new System.Drawing.Point(4, 39);
             this.tabPage3.Name = "tabPage3";
@@ -544,6 +565,236 @@ namespace Production_planning
             this.tabPage3.TabIndex = 10;
             this.tabPage3.Text = "Отсутствия";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel24
+            // 
+            this.tableLayoutPanel24.ColumnCount = 1;
+            this.tableLayoutPanel24.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel24.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel24.Controls.Add(this.tableLayoutPanel25, 0, 0);
+            this.tableLayoutPanel24.Controls.Add(this.tableLayoutPanel26, 0, 1);
+            this.tableLayoutPanel24.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel24.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel24.Name = "tableLayoutPanel24";
+            this.tableLayoutPanel24.RowCount = 3;
+            this.tableLayoutPanel24.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel24.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel24.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel24.Size = new System.Drawing.Size(1240, 597);
+            this.tableLayoutPanel24.TabIndex = 0;
+            // 
+            // tableLayoutPanel25
+            // 
+            this.tableLayoutPanel25.ColumnCount = 6;
+            this.tableLayoutPanel25.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tableLayoutPanel25.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tableLayoutPanel25.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tableLayoutPanel25.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tableLayoutPanel25.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tableLayoutPanel25.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel25.Controls.Add(this.comboBoxAbsenceYear, 0, 0);
+            this.tableLayoutPanel25.Controls.Add(this.comboBoxAbsenceMonth, 1, 0);
+            this.tableLayoutPanel25.Controls.Add(this.buttonAbsenceCurrentMonth, 2, 0);
+            this.tableLayoutPanel25.Controls.Add(this.buttonAbsenceNew, 3, 0);
+            this.tableLayoutPanel25.Controls.Add(this.buttonAbsenceDelete, 4, 0);
+            this.tableLayoutPanel25.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel25.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel25.Name = "tableLayoutPanel25";
+            this.tableLayoutPanel25.RowCount = 1;
+            this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel25.Size = new System.Drawing.Size(1234, 54);
+            this.tableLayoutPanel25.TabIndex = 0;
+            // 
+            // comboBoxAbsenceYear
+            // 
+            this.comboBoxAbsenceYear.AutoResize = false;
+            this.comboBoxAbsenceYear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.comboBoxAbsenceYear.Depth = 0;
+            this.comboBoxAbsenceYear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxAbsenceYear.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.comboBoxAbsenceYear.DropDownHeight = 174;
+            this.comboBoxAbsenceYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAbsenceYear.DropDownWidth = 121;
+            this.comboBoxAbsenceYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.comboBoxAbsenceYear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.comboBoxAbsenceYear.FormattingEnabled = true;
+            this.comboBoxAbsenceYear.IntegralHeight = false;
+            this.comboBoxAbsenceYear.ItemHeight = 43;
+            this.comboBoxAbsenceYear.Location = new System.Drawing.Point(3, 3);
+            this.comboBoxAbsenceYear.MaxDropDownItems = 4;
+            this.comboBoxAbsenceYear.MouseState = MaterialSkin.MouseState.OUT;
+            this.comboBoxAbsenceYear.Name = "comboBoxAbsenceYear";
+            this.comboBoxAbsenceYear.Size = new System.Drawing.Size(174, 49);
+            this.comboBoxAbsenceYear.StartIndex = 0;
+            this.comboBoxAbsenceYear.TabIndex = 0;
+            this.comboBoxAbsenceYear.SelectedIndexChanged += new System.EventHandler(this.comboBoxAbsenceYear_SelectedIndexChanged);
+            // 
+            // comboBoxAbsenceMonth
+            // 
+            this.comboBoxAbsenceMonth.AutoResize = false;
+            this.comboBoxAbsenceMonth.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.comboBoxAbsenceMonth.Depth = 0;
+            this.comboBoxAbsenceMonth.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxAbsenceMonth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.comboBoxAbsenceMonth.DropDownHeight = 174;
+            this.comboBoxAbsenceMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAbsenceMonth.DropDownWidth = 121;
+            this.comboBoxAbsenceMonth.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.comboBoxAbsenceMonth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.comboBoxAbsenceMonth.FormattingEnabled = true;
+            this.comboBoxAbsenceMonth.IntegralHeight = false;
+            this.comboBoxAbsenceMonth.ItemHeight = 43;
+            this.comboBoxAbsenceMonth.Items.AddRange(new object[] {
+            "Январь",
+            "Февраль",
+            "Март",
+            "Апрель",
+            "Май",
+            "Июнь",
+            "Июль",
+            "Август",
+            "Сентябрь",
+            "Октябрь",
+            "Ноябрь",
+            "Декабрь"});
+            this.comboBoxAbsenceMonth.Location = new System.Drawing.Point(183, 3);
+            this.comboBoxAbsenceMonth.MaxDropDownItems = 4;
+            this.comboBoxAbsenceMonth.MouseState = MaterialSkin.MouseState.OUT;
+            this.comboBoxAbsenceMonth.Name = "comboBoxAbsenceMonth";
+            this.comboBoxAbsenceMonth.Size = new System.Drawing.Size(174, 49);
+            this.comboBoxAbsenceMonth.StartIndex = 0;
+            this.comboBoxAbsenceMonth.TabIndex = 1;
+            this.comboBoxAbsenceMonth.SelectedIndexChanged += new System.EventHandler(this.comboBoxAbsenceMonth_SelectedIndexChanged);
+            // 
+            // buttonAbsenceCurrentMonth
+            // 
+            this.buttonAbsenceCurrentMonth.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.buttonAbsenceCurrentMonth.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.buttonAbsenceCurrentMonth.Depth = 0;
+            this.buttonAbsenceCurrentMonth.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonAbsenceCurrentMonth.HighEmphasis = true;
+            this.buttonAbsenceCurrentMonth.Icon = null;
+            this.buttonAbsenceCurrentMonth.Location = new System.Drawing.Point(364, 6);
+            this.buttonAbsenceCurrentMonth.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.buttonAbsenceCurrentMonth.MouseState = MaterialSkin.MouseState.HOVER;
+            this.buttonAbsenceCurrentMonth.Name = "buttonAbsenceCurrentMonth";
+            this.buttonAbsenceCurrentMonth.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.buttonAbsenceCurrentMonth.Size = new System.Drawing.Size(172, 42);
+            this.buttonAbsenceCurrentMonth.TabIndex = 2;
+            this.buttonAbsenceCurrentMonth.Text = "Текущий месяц";
+            this.buttonAbsenceCurrentMonth.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.buttonAbsenceCurrentMonth.UseAccentColor = false;
+            this.buttonAbsenceCurrentMonth.UseVisualStyleBackColor = true;
+            this.buttonAbsenceCurrentMonth.Click += new System.EventHandler(this.buttonAbsenceCurrentMonth_Click);
+            // 
+            // buttonAbsenceNew
+            // 
+            this.buttonAbsenceNew.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.buttonAbsenceNew.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.buttonAbsenceNew.Depth = 0;
+            this.buttonAbsenceNew.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonAbsenceNew.HighEmphasis = true;
+            this.buttonAbsenceNew.Icon = null;
+            this.buttonAbsenceNew.Location = new System.Drawing.Point(544, 6);
+            this.buttonAbsenceNew.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.buttonAbsenceNew.MouseState = MaterialSkin.MouseState.HOVER;
+            this.buttonAbsenceNew.Name = "buttonAbsenceNew";
+            this.buttonAbsenceNew.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.buttonAbsenceNew.Size = new System.Drawing.Size(172, 42);
+            this.buttonAbsenceNew.TabIndex = 3;
+            this.buttonAbsenceNew.Text = "Добавить";
+            this.buttonAbsenceNew.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.buttonAbsenceNew.UseAccentColor = false;
+            this.buttonAbsenceNew.UseVisualStyleBackColor = true;
+            this.buttonAbsenceNew.Click += new System.EventHandler(this.buttonAbsenceNew_Click);
+            // 
+            // buttonAbsenceDelete
+            // 
+            this.buttonAbsenceDelete.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.buttonAbsenceDelete.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.buttonAbsenceDelete.Depth = 0;
+            this.buttonAbsenceDelete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonAbsenceDelete.Enabled = false;
+            this.buttonAbsenceDelete.HighEmphasis = true;
+            this.buttonAbsenceDelete.Icon = null;
+            this.buttonAbsenceDelete.Location = new System.Drawing.Point(724, 6);
+            this.buttonAbsenceDelete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.buttonAbsenceDelete.MouseState = MaterialSkin.MouseState.HOVER;
+            this.buttonAbsenceDelete.Name = "buttonAbsenceDelete";
+            this.buttonAbsenceDelete.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.buttonAbsenceDelete.Size = new System.Drawing.Size(172, 42);
+            this.buttonAbsenceDelete.TabIndex = 4;
+            this.buttonAbsenceDelete.Text = "🗑 Удалить";
+            this.buttonAbsenceDelete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.buttonAbsenceDelete.UseAccentColor = true;
+            this.buttonAbsenceDelete.UseVisualStyleBackColor = true;
+            this.buttonAbsenceDelete.Click += new System.EventHandler(this.buttonAbsenceDelete_Click);
+            // 
+            // tableLayoutPanel26
+            // 
+            this.tableLayoutPanel26.ColumnCount = 1;
+            this.tableLayoutPanel26.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel26.Controls.Add(this.gridViewAbsence, 0, 1);
+            this.tableLayoutPanel26.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel26.Location = new System.Drawing.Point(3, 63);
+            this.tableLayoutPanel26.Name = "tableLayoutPanel26";
+            this.tableLayoutPanel26.RowCount = 2;
+            this.tableLayoutPanel26.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
+            this.tableLayoutPanel26.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel26.Size = new System.Drawing.Size(1234, 471);
+            this.tableLayoutPanel26.TabIndex = 1;
+            // 
+            // gridViewAbsence
+            // 
+            this.gridViewAbsence.AllowUserToAddRows = false;
+            this.gridViewAbsence.AllowUserToDeleteRows = false;
+            this.gridViewAbsence.AllowUserToResizeColumns = false;
+            this.gridViewAbsence.AllowUserToResizeRows = false;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.gridViewAbsence.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            this.gridViewAbsence.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.gridViewAbsence.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridViewAbsence.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            this.gridViewAbsence.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridViewAbsence.ColumnHeadersVisible = false;
+            this.gridViewAbsence.Cursor = System.Windows.Forms.Cursors.Hand;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridViewAbsence.DefaultCellStyle = dataGridViewCellStyle5;
+            this.gridViewAbsence.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridViewAbsence.Location = new System.Drawing.Point(3, 8);
+            this.gridViewAbsence.MultiSelect = false;
+            this.gridViewAbsence.Name = "gridViewAbsence";
+            this.gridViewAbsence.ReadOnly = true;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridViewAbsence.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            this.gridViewAbsence.RowHeadersVisible = false;
+            this.gridViewAbsence.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.gridViewAbsence.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.gridViewAbsence.Size = new System.Drawing.Size(1228, 460);
+            this.gridViewAbsence.TabIndex = 3;
+            this.gridViewAbsence.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridViewAbsence_CellDoubleClick);
+            this.gridViewAbsence.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gridViewAbsence_CellMouseDown);
+            this.gridViewAbsence.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.gridViewAbsence_RowPostPaint);
+            this.gridViewAbsence.SelectionChanged += new System.EventHandler(this.gridViewAbsence_SelectionChanged);
             // 
             // tabPage4
             // 
@@ -611,6 +862,7 @@ namespace Production_planning
             this.tableLayoutPanel20.Controls.Add(this.textBoxUserAssigmentEquip, 2, 4);
             this.tableLayoutPanel20.Controls.Add(this.textBoxUserContactPhone, 0, 5);
             this.tableLayoutPanel20.Controls.Add(this.textBoxUserSchedule, 2, 5);
+            this.tableLayoutPanel20.Controls.Add(this.buttonUserAbsenceAdd, 2, 7);
             this.tableLayoutPanel20.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel20.Location = new System.Drawing.Point(532, 58);
             this.tableLayoutPanel20.Name = "tableLayoutPanel20";
@@ -766,7 +1018,7 @@ namespace Production_planning
             this.textBoxUserAssigmentArea.Depth = 0;
             this.textBoxUserAssigmentArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxUserAssigmentArea.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.textBoxUserAssigmentArea.Hint = "Производственный участок";
+            this.textBoxUserAssigmentArea.Hint = "Рабочий участок";
             this.textBoxUserAssigmentArea.LeadingIcon = null;
             this.textBoxUserAssigmentArea.Location = new System.Drawing.Point(386, 168);
             this.textBoxUserAssigmentArea.MaxLength = 50;
@@ -786,7 +1038,7 @@ namespace Production_planning
             this.textBoxUserAssigmentEquip.Depth = 0;
             this.textBoxUserAssigmentEquip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxUserAssigmentEquip.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.textBoxUserAssigmentEquip.Hint = "Закрепленное оборудование";
+            this.textBoxUserAssigmentEquip.Hint = "Рабочее место";
             this.textBoxUserAssigmentEquip.LeadingIcon = null;
             this.textBoxUserAssigmentEquip.Location = new System.Drawing.Point(386, 223);
             this.textBoxUserAssigmentEquip.MaxLength = 50;
@@ -839,6 +1091,28 @@ namespace Production_planning
             this.textBoxUserSchedule.Text = "";
             this.textBoxUserSchedule.TrailingIcon = null;
             // 
+            // buttonUserAbsenceAdd
+            // 
+            this.buttonUserAbsenceAdd.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.buttonUserAbsenceAdd.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.buttonUserAbsenceAdd.Depth = 0;
+            this.buttonUserAbsenceAdd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonUserAbsenceAdd.Enabled = false;
+            this.buttonUserAbsenceAdd.HighEmphasis = true;
+            this.buttonUserAbsenceAdd.Icon = null;
+            this.buttonUserAbsenceAdd.Location = new System.Drawing.Point(387, 391);
+            this.buttonUserAbsenceAdd.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.buttonUserAbsenceAdd.MouseState = MaterialSkin.MouseState.HOVER;
+            this.buttonUserAbsenceAdd.Name = "buttonUserAbsenceAdd";
+            this.buttonUserAbsenceAdd.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.buttonUserAbsenceAdd.Size = new System.Drawing.Size(308, 43);
+            this.buttonUserAbsenceAdd.TabIndex = 12;
+            this.buttonUserAbsenceAdd.Text = "Новый период отсутствия";
+            this.buttonUserAbsenceAdd.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.buttonUserAbsenceAdd.UseAccentColor = false;
+            this.buttonUserAbsenceAdd.UseVisualStyleBackColor = true;
+            this.buttonUserAbsenceAdd.Click += new System.EventHandler(this.buttonUserAbsenceAdd_Click);
+            // 
             // tableLayoutPanel23
             // 
             this.tableLayoutPanel23.ColumnCount = 1;
@@ -864,6 +1138,7 @@ namespace Production_planning
             this.materialButtonUserViewFullCard.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.materialButtonUserViewFullCard.Depth = 0;
             this.materialButtonUserViewFullCard.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialButtonUserViewFullCard.Enabled = false;
             this.materialButtonUserViewFullCard.HighEmphasis = true;
             this.materialButtonUserViewFullCard.Icon = null;
             this.materialButtonUserViewFullCard.Location = new System.Drawing.Point(4, 61);
@@ -2181,6 +2456,12 @@ namespace Production_planning
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPlan)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            this.tableLayoutPanel24.ResumeLayout(false);
+            this.tableLayoutPanel25.ResumeLayout(false);
+            this.tableLayoutPanel25.PerformLayout();
+            this.tableLayoutPanel26.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gridViewAbsence)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tableLayoutPanel19.ResumeLayout(false);
             this.tableLayoutPanel20.ResumeLayout(false);
@@ -2333,6 +2614,16 @@ namespace Production_planning
         private TableLayoutPanel tableLayoutPanel23;
         private MaterialSkin.Controls.MaterialButton materialButtonUserAdd;
         private MaterialSkin.Controls.MaterialComboBox comboBoxUserPosition;
+        private TableLayoutPanel tableLayoutPanel24;
+        private TableLayoutPanel tableLayoutPanel25;
+        private MaterialSkin.Controls.MaterialComboBox comboBoxAbsenceYear;
+        private MaterialSkin.Controls.MaterialComboBox comboBoxAbsenceMonth;
+        private MaterialSkin.Controls.MaterialButton buttonAbsenceCurrentMonth;
+        private MaterialSkin.Controls.MaterialButton buttonAbsenceNew;
+        private TableLayoutPanel tableLayoutPanel26;
+        private DoubleBufferedDataGridView gridViewAbsence;
+        private MaterialSkin.Controls.MaterialButton buttonAbsenceDelete;
+        private MaterialSkin.Controls.MaterialButton buttonUserAbsenceAdd;
     }
 }
 

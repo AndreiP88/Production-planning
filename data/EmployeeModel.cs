@@ -3,6 +3,19 @@ using System.Collections.Generic;
 
 namespace data
 {
+    public class ActiveEmployeeRow
+    {
+        // Системный идентификатор (индекс)
+        public ulong Id { get; set; }
+
+        // Полные Фамилия Имя Отчество
+        public string FullName { get; set; } = string.Empty;
+
+        // Фамилия и инициалы (например, Иванов И.И.)
+        public string ShortName { get; set; } = string.Empty;
+    }
+
+
     /// <summary>
     /// Модель для общего списка сотрудников (Краткая сводка)
     /// </summary>
@@ -217,4 +230,26 @@ namespace data
             }
         }
     }
+
+    public class AvailableEmployeeRow
+    {
+        public ulong EmployeeId { get; set; }
+        public string EmployeeName { get; set; }
+        public ulong? OverrideId { get; set; }
+        public string CurrentActivity { get; set; }
+        public string AdjacentBefore { get; set; }
+        public string AdjacentAfter { get; set; }
+        public int StatusCode { get; set; }
+        public string CurrentStatus { get; set; }
+        public string DisplayText => $"{EmployeeName} [{CurrentActivity}]";
+    }
+
+    public enum EmployeeShiftStatus
+    {
+        Absent = 0,         // ❌ Отсутствует (Больничный/Отпуск)
+        Busy = 1,           // ⛔ Занят
+        AvailableAdjacent = 2, // 🟡 Доступен (смежные смены)
+        Available = 3       // 🟢 Полностью доступен
+    }
+
 }

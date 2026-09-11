@@ -81,6 +81,7 @@
     <Compile Include="ShiftDefinitionModel.cs" />
     <Compile Include="Staffing.cs" />
     <Compile Include="StaffingViewItem.cs" />
+    <Compile Include="TODO.cs" />
     <Compile Include="WorkAreas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

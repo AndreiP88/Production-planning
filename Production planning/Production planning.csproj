@@ -110,6 +110,24 @@
     <Compile Include="FormAddUser.Designer.cs">
       <DependentUpon>FormAddUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormAddAbsence.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAddAbsence.Designer.cs">
+      <DependentUpon>FormAddAbsence.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSelectAssignmentUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSelectAssignmentUser.Designer.cs">
+      <DependentUpon>FormSelectAssignmentUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSelectAssignmentEquipUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSelectAssignmentEquipUser.Designer.cs">
+      <DependentUpon>FormSelectAssignmentEquipUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormSelectUserAssignmentSchedule.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -181,6 +199,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormAddUser.resx">
       <DependentUpon>FormAddUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAddAbsence.resx">
+      <DependentUpon>FormAddAbsence.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSelectAssignmentUser.resx">
+      <DependentUpon>FormSelectAssignmentUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSelectAssignmentEquipUser.resx">
+      <DependentUpon>FormSelectAssignmentEquipUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormSelectUserAssignmentSchedule.resx">
       <DependentUpon>FormSelectUserAssignmentSchedule.cs</DependentUpon>

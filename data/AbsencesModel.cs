@@ -47,9 +47,10 @@ namespace data
         public string AbsenceTypeName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public string StatusColor { get; set; } = "#FF6347";
 
         public string PeriodText => EndDate.HasValue
-            ? $"{StartDate:dd.MM.yyyy} — {EndDate:dd.MM.yyyy}"
+            ? $"{StartDate:dd.MM.yyyy} — {EndDate:dd.MM.yyyy}. Всего дней: {(EndDate.Value - StartDate).TotalDays + 1}"
             : $"{StartDate:dd.MM.yyyy} — Открытый больничный";
 
         // Свойство для C# 7.3: проверка активности на переданную дату
@@ -59,4 +60,30 @@ namespace data
                    (!EndDate.HasValue || targetDate.Date <= EndDate.Value.Date);
         }
     }
+
+    public class AbsenceGridRow
+    {
+        public ulong Id { get; set; }
+        public string EmployeeFullName { get; set; } = string.Empty;
+        public string AbsenceTypeName { get; set; } = string.Empty;
+        public string PeriodText { get; set; } = string.Empty;
+        public string StatusColor { get; set; } = "#FF9800"; // Мапится из status_color
+
+        // Массив булевых значений: true - человек отсутствует в этот день, false - работает
+        public bool[] Days { get; set; }
+
+        public AbsenceGridRow(int daysInMonth)
+        {
+            Days = new bool[daysInMonth];
+        }
+    }
+
+    public class AbsenceType
+    {
+        public ulong Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public bool IsEndDateRequired { get; set; } // Мапится из is_end_date_required
+        public string StatusColor { get; set; } = "#FF6347"; // Мапится из status_color
+    }
+
 }

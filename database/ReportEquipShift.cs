@@ -17,7 +17,7 @@ namespace database
             _connectionString = connectionString;
         }
 
-        public async Task<EquipmentShiftCard> GetEquipmentShiftCardAsync(DateTime targetDate, int shiftNumber, int equipmentId)
+        public async Task<EquipmentShiftCard> GetEquipmentShiftCardAsync(DateTime targetDate, int shiftNumber, ulong equipmentId)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -41,12 +41,17 @@ namespace database
                 var card = new EquipmentShiftCard
                 {
                     EquipmentName = firstRow.Equipment_name,
+                    ShiftID = firstRow.Shift_id,
                     ShiftName = firstRow.Shift_name,
                     TimeStart = firstRow.Time_start,
                     TimeEnd = firstRow.Time_end,
                     EdpId = firstRow.Edp_id,
                     IsEquipmentCancelled = firstRow.Is_equipment_cancelled == 1,
-                    StaffingRequirement = firstRow.Staffing_requirement
+                    StaffingRequirement = firstRow.Staffing_requirement,
+                    IsWorkingByPlan = firstRow.Is_equipment_working_by_plan == 1,
+                    ActiveStaffingMode = firstRow.Active_staffing_mode,
+                    StaffingRequirementCode = firstRow.Staffing_requirement_code,
+                    ActiveStaffCount = firstRow.Active_staff_count
                 };
 
                 // 2. Группируем списки сотрудников по категориям
@@ -60,7 +65,8 @@ namespace database
                             EmployeeId = r.Plan_employee_id.Value,
                             EmployeeName = r.Plan_employee_name,
                             PlanStatus = r.Plan_status,
-                            FinalFactStatus = r.Final_fact_status
+                            FinalFactStatus = r.Final_fact_status,
+                            PlanOverrideId = r.Plan_override_id
                         });
                     }
 
@@ -87,6 +93,43 @@ namespace database
                 }
 
                 return card;
+            }
+        }
+        // Действие: Создание оверрайда (Активация смены с 0 или Остановка с 1)
+        public async Task SaveEquipmentOverrideAsync(DateTime date, ulong shiftId, ulong equipmentId, bool isCancelled)
+        {
+            const string sql = @"
+                INSERT INTO equipment_daily_plan (plan_date, shift_id, equipment_id, is_cancelled)
+                VALUES (@PlanDate, @ShiftId, @EquipmentId, @IsCancelled)
+                ON DUPLICATE KEY UPDATE is_cancelled = @IsCancelled;";
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                await conn.ExecuteAsync(sql, new
+                {
+                    PlanDate = date.Date,
+                    ShiftId = shiftId,
+                    EquipmentId = equipmentId,
+                    IsCancelled = isCancelled ? 1 : 0
+                });
+            }
+        }
+
+        // Действие: Полное удаление оверрайда (Возврат станка к стандартному базовому циклу шаблона)
+        public async Task RemoveEquipmentOverrideAsync(DateTime date, ulong shiftId, ulong equipmentId)
+        {
+            const string sql = @"
+                DELETE FROM equipment_daily_plan 
+                WHERE plan_date = @PlanDate AND shift_id = @ShiftId AND equipment_id = @EquipmentId;";
+
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                await conn.ExecuteAsync(sql, new
+                {
+                    PlanDate = date.Date,
+                    ShiftId = shiftId,
+                    EquipmentId = equipmentId
+                });
             }
         }
     }
