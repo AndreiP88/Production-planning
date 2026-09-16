@@ -55,6 +55,9 @@ namespace database
                                 {
                                     Number = s.ShiftNum,
                                     Name = s.Shift,
+                                    TimeStart = s.TimeStart,
+                                    TimeEnd = s.TimeEnd,
+                                    StatusCode = s.NeedStatusCode,
                                     Status = s.NeedStatus,
                                     PlannedStaff = SplitCsv(s.PlanAndStatuses),
                                     Assignments = SplitCsv(s.Assignments),
@@ -69,5 +72,16 @@ namespace database
                 return report;
             }
         }
+
+        public async Task<Dictionary<int, StatusColorStyle>> GetColorPaletteAsync()
+        {
+            const string sql = "SELECT status_code AS StatusCode, hex_back_color AS HexBackColor, hex_fore_color AS HexForeColor FROM status_color_palette;";
+            using (var conn = new MySqlConnection(_connectionString))
+            {
+                var list = await conn.QueryAsync<StatusColorStyle>(sql);
+                return list.ToDictionary(x => x.StatusCode);
+            }
+        }
+
     }
 }

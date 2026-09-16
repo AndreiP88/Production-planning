@@ -66,6 +66,7 @@ namespace Production_planning
             this.lblStaffingRequirement = new System.Windows.Forms.Label();
             this.lblEquipmentState = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonClose = new MaterialSkin.Controls.MaterialButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
@@ -75,6 +76,7 @@ namespace Production_planning
             this.tableLayoutPanel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewUserOverride)).BeginInit();
             this.tableLayoutPanel8.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -396,7 +398,7 @@ namespace Production_planning
             dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.Aquamarine;
             dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.ControlText;
             dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.gridViewUserOverride.DefaultCellStyle = dataGridViewCellStyle7;
@@ -527,16 +529,37 @@ namespace Production_planning
             // 
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tableLayoutPanel3.Controls.Add(this.buttonClose, 2, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(18, 562);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(666, 49);
             this.tableLayoutPanel3.TabIndex = 16;
+            // 
+            // buttonClose
+            // 
+            this.buttonClose.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.buttonClose.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.buttonClose.Depth = 0;
+            this.buttonClose.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonClose.HighEmphasis = true;
+            this.buttonClose.Icon = null;
+            this.buttonClose.Location = new System.Drawing.Point(510, 6);
+            this.buttonClose.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.buttonClose.MouseState = MaterialSkin.MouseState.HOVER;
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.buttonClose.Size = new System.Drawing.Size(152, 37);
+            this.buttonClose.TabIndex = 0;
+            this.buttonClose.Text = "Выход";
+            this.buttonClose.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.buttonClose.UseAccentColor = false;
+            this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
             // EditShiftForm
             // 
@@ -565,6 +588,8 @@ namespace Production_planning
             ((System.ComponentModel.ISupportInitialize)(this.gridViewUserOverride)).EndInit();
             this.tableLayoutPanel8.ResumeLayout(false);
             this.tableLayoutPanel8.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -594,5 +619,6 @@ namespace Production_planning
         private TableLayoutPanel tableLayoutPanel6;
         private Label lblEquipmentState;
         private TableLayoutPanel tableLayoutPanel3;
+        private MaterialSkin.Controls.MaterialButton buttonClose;
     }
 }

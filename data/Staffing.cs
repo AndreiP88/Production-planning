@@ -12,6 +12,9 @@ namespace data.Models
         public string EquipCode { get; set; }
         public int ShiftNum { get; set; }
         public string Shift { get; set; }
+        public TimeSpan TimeStart { get; set; }
+        public TimeSpan TimeEnd { get; set; }
+        public int NeedStatusCode { get; set; }
         public string NeedStatus { get; set; }
         public string PlanAndStatuses { get; set; }
         public string Assignments { get; set; }
@@ -38,10 +41,21 @@ namespace data.Models
     {
         public int Number { get; set; }
         public string Name { get; set; }
+        public TimeSpan TimeStart { get; set; }
+        public TimeSpan TimeEnd { get; set; }
+        public int StatusCode { get; set; }
         public string Status { get; set; }
         public List<string> PlannedStaff { get; set; } // План
         public List<string> Assignments { get; set; }  // Ручные назначения
         public List<string> Drafts { get; set; }       // Черновики
         public List<string> FinalStaff { get; set; }   // Итоговый факт
     }
+
+    public class StatusColorStyle
+    {
+        public int StatusCode { get; set; }
+        public string HexBackColor { get; set; } = string.Empty;
+        public string HexForeColor { get; set; } = string.Empty;
+    }
+
 }

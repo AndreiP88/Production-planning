@@ -2,8 +2,8 @@
 using database;
 using MaterialSkin.Controls;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -201,71 +201,6 @@ namespace Production_planning
             }
         }
 
-        public void FillGeneralShiftInfoOLD(EquipmentShiftCard card)
-        {
-            if (card == null) return;
-
-            // 1. Заполняем текстовые заголовки на форме
-            labelShiftDate.Text = $"{_date.ToString("D")}, {card.ShiftName} ({card.TimeStart} — {card.TimeEnd})";
-
-            // 2. Управляем кнопками самого оборудования (Остановка / Запуск станка)
-            /*buttonEquipCancel.Enabled = !card.IsEquipmentCancelled; // Активна, если станок РАБОТАЕТ
-            buttonEquipCancel.Enabled = card.IsEquipmentCancelled; // Активна, если станок ОСТАНОВЛЕН*/
-
-            if (!card.IsEquipmentCancelled) //работает
-            {
-                btnManageEquipment.Enabled = true;
-                btnManageEquipment.Text = "Отменить смену";
-            }
-            else
-            {
-                btnManageEquipment.Enabled = true;
-                btnManageEquipment.Text = "Назначить смену";
-            }
-
-            // По умолчанию разрешаем назначение новых сотрудников
-            btnAssignEmployee.Enabled = true;
-
-            // 3. Визуальное оформление и раскраска статуса потребности
-            if (card.IsEquipmentCancelled)
-            {
-                // Если станок принудительно остановлен в плане
-                lblStaffingRequirement.Text = "🛑 СМЕНА НА РАБОЧЕМ МЕСТЕ ОТМЕНЕНА";
-                lblStaffingRequirement.Font = new Font("Roboto", 11, FontStyle.Bold);
-                lblStaffingRequirement.ForeColor = Color.Red;
-
-                // Запрещаем добавлять людей на неработающее оборудование
-                btnAssignEmployee.Enabled = false;
-            }
-            else
-            {
-                // Если станок работает, выводим статус потребности из базы
-                lblStaffingRequirement.Text = card.StaffingRequirement;
-
-                // Раскрашиваем текст в зависимости от алертов процедуры
-                if (card.StaffingRequirement.Contains("🚨") || card.StaffingRequirement.Contains("ТРЕБУЕТСЯ"))
-                {
-                    lblStaffingRequirement.ForeColor = Color.Red;
-                }
-                else if (card.StaffingRequirement.Contains("✅") || card.StaffingRequirement.Contains("Укомплектовано"))
-                {
-                    lblStaffingRequirement.ForeColor = Color.ForestGreen;
-                }
-                else
-                {
-                    // Статусы: "Не требуется", "Вне графика", "Ожидание назначения"
-                    lblStaffingRequirement.ForeColor = Color.DimGray;
-
-                    // Если по графику у станка простой — блокируем кнопку ручного назначения людей
-                    if (card.StaffingRequirement.Contains("графика") || card.StaffingRequirement.Contains("плана"))
-                    {
-                        btnAssignEmployee.Enabled = false;
-                        btnManageEquipment.Text = "Назначить смену";
-                    }
-                }
-            }
-        }
-
         /// <summary>
         /// Шаг 2: Инициализация и наполнение списков персонала (План по графику и Назначения/Замены)
         /// </summary>
@@ -294,22 +229,56 @@ namespace Production_planning
             {
                 foreach (var employee in card.PlannedStaff)
                 {
-                    int rowIndex = gridViewUserSchedule.Rows.Add(employee.EmployeeName, employee.PlanStatus);
+                    string finalStatusText = employee.PlanStatus;
+
+                    // Приводим числовой код из базы к нашему строгому Enum [2026-09-09]
+                    PlannedEmployeeStatusType statusType = (PlannedEmployeeStatusType)employee.PlanStatusCode;
+
+                    // 1. ЦИФРОВОЕ ПРАВИЛО: Если станок остановлен, а человек здоров (Active) [2026-09-09]
+                    if (card.IsEquipmentCancelled && statusType == PlannedEmployeeStatusType.Active)
+                    {
+                        finalStatusText = "⚠️ Без рабочего места";
+                    }
+
+                    // 2. Добавляем строку в верхнюю таблицу плана [2026-09-01]
+                    int rowIndex = gridViewUserSchedule.Rows.Add(employee.EmployeeName, finalStatusText);
                     gridViewUserSchedule.Rows[rowIndex].DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular);
 
+                    // Упаковываем комбинированный тег (ID_сотрудника;ID_оверрайда) [2026-09-04]
                     ulong overrideId = employee.PlanOverrideId ?? 0;
-
-                    // Прячем Id сотрудника в Tag строки для точечной отмены/удаления
                     gridViewUserSchedule.Rows[rowIndex].Tag = $"{employee.EmployeeId};{overrideId}";
 
-                    // Раскрашиваем ячейку статуса (болен, отмена, в графике)
-                    ColorizeStatusCell(gridViewUserSchedule.Rows[rowIndex].Cells, employee.PlanStatus);
+                    // 3. СТРОГАЯ ЦИФРОВАЯ РАСКРАСКА ЦВЕТОВ (БЕЗ ПАРСИНГА СТРОК) [2026-09-09]
+                    var statusCell = gridViewUserSchedule.Rows[rowIndex].Cells[1]; // Вторая колонка — Статус
 
-                    if (card.IsEquipmentCancelled)
+                    // Если сработал алерт остановки станка для здорового человека
+                    if (card.IsEquipmentCancelled && statusType == PlannedEmployeeStatusType.Active)
                     {
-                        gridViewUserSchedule.Rows[rowIndex].Cells[1].Value = "⚠️ Без рабочего места";
-                        gridViewUserSchedule.Rows[rowIndex].Cells[1].Style.ForeColor = Color.DarkOrange;
-                        gridViewUserSchedule.Rows[rowIndex].Cells[1].Style.Font = new Font(gridViewUserSchedule.Font, FontStyle.Bold);
+                        statusCell.Style.ForeColor = Color.DarkOrange;
+                        statusCell.Style.Font = new Font(gridViewUserSchedule.Font, FontStyle.Bold);
+                    }
+                    else
+                    {
+                        // Раскрашиваем строго по системному Enum [2026-09-09]
+                        switch (statusType)
+                        {
+                            case PlannedEmployeeStatusType.Active: // Код 0
+                                statusCell.Style.ForeColor = Color.ForestGreen; // ✅ В графике
+                                break;
+
+                            case PlannedEmployeeStatusType.Absence: // Код 1
+                                statusCell.Style.ForeColor = Color.Red; // ❌ Больничный / Отпуск
+                                statusCell.Style.Font = new Font(gridViewUserSchedule.Font, FontStyle.Bold);
+                                break;
+
+                            case PlannedEmployeeStatusType.Cancelled: // Код 2
+                                statusCell.Style.ForeColor = Color.DarkOrange; // 🚫 Отмена
+                                break;
+
+                            case PlannedEmployeeStatusType.Transferred: // Код 3
+                                statusCell.Style.ForeColor = Color.DodgerBlue; // ➡️ Переведен
+                                break;
+                        }
                     }
                 }
             }
@@ -327,11 +296,24 @@ namespace Production_planning
             {
                 foreach (var approved in card.ApprovedStaff)
                 {
-                    int rowIndex = gridViewUserOverride.Rows.Add(approved.EmployeeName, "✅ Замена (Утверждено)");
+                    // Добавляем строку (ФИО, статус по умолчанию)
+                    int rowIndex = gridViewUserOverride.Rows.Add(approved.EmployeeName, "Замена (Утверждено)");
                     gridViewUserOverride.Rows[rowIndex].DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular);
+                    gridViewUserOverride.Rows[rowIndex].Tag = approved.OverrideId; // Храним ID оверрайда для удаления
 
-                    gridViewUserOverride.Rows[rowIndex].Tag = approved.OverrideId; // Храним ID оверрайда для его удаления
-                    gridViewUserOverride.Rows[rowIndex].Cells[1].Style.ForeColor = Color.ForestGreen;
+                    // 🌟 НАША НОВАЯ ПРОВЕРКА: Если станок остановили, а ручная замена уже была назначена
+                    if (card.IsEquipmentCancelled)
+                    {
+                        // Точно так же бьем тревогу и красим ячейку в глубокий оранжевый цвет!
+                        gridViewUserOverride.Rows[rowIndex].Cells[1].Value = "⚠️ Без рабочего места";
+                        gridViewUserOverride.Rows[rowIndex].Cells[1].Style.ForeColor = Color.DarkOrange;
+                        gridViewUserOverride.Rows[rowIndex].Cells[1].Style.Font = new Font(gridViewUserOverride.Font, FontStyle.Bold);
+                    }
+                    else
+                    {
+                        // Если станок работает штатно — замена горит стандартным зеленым цветом
+                        gridViewUserOverride.Rows[rowIndex].Cells[1].Style.ForeColor = Color.ForestGreen;
+                    }
                 }
             }
 
@@ -433,7 +415,58 @@ namespace Production_planning
 
         private void gridViewUserSchedule_SelectionChanged(object sender, EventArgs e)
         {
-            if (gridViewUserSchedule.CurrentRow != null)
+            // 1. ЗАЩИТА: Если строка не выбрана или это пустая заглушка ("Никто не запланирован")
+            if (gridViewUserSchedule.CurrentRow == null || gridViewUserSchedule.CurrentRow.Tag == null || gridViewUserSchedule.CurrentRow.Index < 0)
+            {
+                buttonScheduleShiftCancel.Enabled = false;
+                buttonScheduleEquipReplace.Enabled = false;
+                buttonScheduleReturn.Enabled = false;
+                return;
+            }
+
+            // 2. РАЗБИРАЕМ КОМБИНИРОВАННЫЙ ТЕГ СТРОКИ
+            string[] idParts = gridViewUserSchedule.CurrentRow.Tag.ToString().Split(';');
+            ulong employeeId = ulong.Parse(idParts[0]);
+            ulong overrideId = ulong.Parse(idParts[1]); // ID оверрайда из базы или 0
+
+            // 3. НАХОДИМ ОБЪЕКТ СОТРУДНИКА В СПИСКЕ КАРТОЧКИ, ЧТОБЫ УЗНАТЬ ЕГО ЦИФРОВОЙ СТАТУС
+            // (_currentCard — сохраненный объект EquipmentShiftCard текущего окна)
+            var employee = _shiftCard.PlannedStaff.FirstOrDefault(x => x.EmployeeId == employeeId);
+            if (employee == null) return;
+
+            // Приводим числовой код из базы к нашему строгому Enum [2026-09-09, 2026-09-11]
+            PlannedEmployeeStatusType statusType = (PlannedEmployeeStatusType)employee.PlanStatusCode;
+
+            // ===================================================================
+            // 🌟 ЖЕСТКАЯ ЦИФРОВАЯ БЛОКИРОВКА КНОПОК ПЛАНА (ЗАЩИТА ОТ ДУРАКА) 🌟
+            // ===================================================================
+            switch (statusType)
+            {
+                case PlannedEmployeeStatusType.Active:
+                    // Сотрудник здоров и в графике: можно отменить или перевести. Возвращать нечего.
+                    buttonScheduleShiftCancel.Enabled = true;
+                    buttonScheduleEquipReplace.Enabled = true;
+                    buttonScheduleReturn.Enabled = false;
+                    break;
+
+                case PlannedEmployeeStatusType.Absence:
+                    // Сотрудник официально БОЛЕЕТ или в ОТПУСКЕ: 
+                    // Жестко блокируем ВСЕ кнопки! Корректировать системное отсутствие из этого окна нельзя.
+                    buttonScheduleShiftCancel.Enabled = false;
+                    buttonScheduleEquipReplace.Enabled = false;
+                    buttonScheduleReturn.Enabled = false;
+                    break;
+
+                case PlannedEmployeeStatusType.Cancelled:
+                case PlannedEmployeeStatusType.Transferred:
+                    // Сотрудник УЖЕ ручками отменен или переведен мастером (есть overrideId > 0):
+                    // Повторно отменять или переводить нельзя. Разрешаем только СБРОСИТЬ изменения (Вернуть по графику).
+                    buttonScheduleShiftCancel.Enabled = false;
+                    buttonScheduleEquipReplace.Enabled = false;
+                    buttonScheduleReturn.Enabled = overrideId > 0; // Активна, если оверрайд физически существует
+                    break;
+            }
+            /*if (gridViewUserSchedule.CurrentRow != null)
             {
                 int rowIndex = gridViewUserSchedule.CurrentRow.Index;
 
@@ -469,7 +502,7 @@ namespace Production_planning
                 buttonScheduleShiftCancel.Enabled = false;
                 buttonScheduleEquipReplace.Enabled = false;
                 buttonScheduleReturn.Enabled = false;
-            }
+            }*/
         }
 
         private void gridViewUserOverride_SelectionChanged(object sender, EventArgs e)
@@ -480,13 +513,18 @@ namespace Production_planning
                 buttonAssignReturn.Enabled = false;
                 return;
             }
+            else
+            {
+                buttonAssignReturn.Enabled = true;
+                return;
+            }
 
             // 2. Извлекаем текст статуса из второй колонки (индекс 1) [2026-08-31, 2026-09-05]
             string currentStatusText = gridViewUserOverride.CurrentRow.Cells[1].Value?.ToString() ?? string.Empty;
 
             // 3. БИЗНЕС-ПРАВИЛО: Кнопка активна ТОЛЬКО для ручных замен или черновиков
             // Если строка содержит "По графику" или "Без рабочего места" — удалять тут нечего, это базовый план!
-            if (currentStatusText.Contains("По графику") || currentStatusText.Contains("Без рабочего места"))
+            /*if (currentStatusText.Contains("По графику") || currentStatusText.Contains("Без рабочего места"))
             {
                 buttonAssignReturn.Enabled = false; // Блокируем кнопку удаления
             }
@@ -494,7 +532,7 @@ namespace Production_planning
             {
                 // Если статус содержит "Замена" или "Черновик" — разрешаем удаление оверрайда! [2026-09-05]
                 buttonAssignReturn.Enabled = true; // Активируем кнопку
-            }
+            }*/
         }
 
         private async void buttonScheduleShiftCancel_Click(object sender, EventArgs e)
@@ -611,7 +649,7 @@ namespace Production_planning
             string currentStatusText = gridViewUserOverride.CurrentRow.Cells[1].Value?.ToString() ?? string.Empty;
 
             // 2. ЗАЩИТНАЯ ПРОВЕРКА: Если строка "По графику" — отправляем мастера в верхний блок кнопок!
-            if (currentStatusText.Contains("По графику") || currentStatusText.Contains("Без рабочего места"))
+            if (currentStatusText.Contains("По графику"))
             {
                 MessageBox.Show(
                     "Этот сотрудник работает по своему постоянному плановому графику.\n\n" +
@@ -626,7 +664,7 @@ namespace Production_planning
 
             // 3. Если это реальная ручная замена или черновик (статус содержит "Замена" или "Черновик")
             var confirm = MessageBox.Show(
-                "Вы уверены, что хотите снять данное ручное назначение (замену) с этого станка?",
+                "Вы уверены, что хотите снять данное ручное назначение?",
                 "Подтверждение",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question
@@ -720,6 +758,12 @@ namespace Production_planning
             {
                 btnManageEquipment.Enabled = true;
             }
+        }
+
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+            Close();
         }
     }
 }

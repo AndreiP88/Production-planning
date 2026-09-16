@@ -19,5 +19,17 @@
 
             return connString;
         }
+
+        public string GetSQLServerConnectionString()
+        {
+            string host = "SRV-ACS\\DSACS";
+            string database = "asystem";
+            string username = "ds";
+            string password = "1";
+
+            string connString = "Data Source = " + host + "; Initial Catalog = " + database + "; Persist Security Info = True; User ID = " + username + "; Password = " + password;
+
+            return connString;
+        }
     }
 }

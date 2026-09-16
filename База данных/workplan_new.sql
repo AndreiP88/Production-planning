@@ -1,17 +1,17 @@
 /*
  Navicat Premium Dump SQL
 
- Source Server         : local
+ Source Server         : localhost_3309
  Source Server Type    : MySQL
- Source Server Version : 80400 (8.4.0)
+ Source Server Version : 80046 (8.0.46)
  Source Host           : localhost:3309
  Source Schema         : workplan
 
  Target Server Type    : MySQL
- Target Server Version : 80400 (8.4.0)
+ Target Server Version : 80046 (8.0.46)
  File Encoding         : 65001
 
- Date: 15/09/2026 18:50:55
+ Date: 16/09/2026 07:48:01
 */
 
 SET NAMES utf8mb4;
@@ -1044,7 +1044,7 @@ BEGIN
     EquipmentShifts AS (
         SELECT 
             c.day_date, eq.id AS eq_id, eq.name AS eq_name, eq.code AS eq_code, eq.sort_order AS eq_sort,
-            sd.id AS shift_id, sd.name AS shift_name, sd.shift_number,
+            sd.id AS shift_id, sd.name AS shift_name, sd.shift_number, sd.start_time AS shift_start_time, sd.end_time AS shift_end_time,
             COALESCE((SELECT is_cancelled FROM equipment_daily_plan edp WHERE edp.equipment_id = eq.id AND edp.plan_date = c.day_date AND edp.shift_id = sd.id), 0) as is_cancelled,
             COALESCE((SELECT staffing_mode FROM equipment_staffing_history WHERE equipment_id = eq.id AND valid_from <= c.day_date ORDER BY valid_from DESC LIMIT 1), eq.staffing_mode) AS active_mode,
             EXISTS (SELECT 1 FROM equipment_daily_plan edp2 WHERE edp2.equipment_id = eq.id AND edp2.plan_date = c.day_date AND edp2.shift_id = sd.id) AS has_plan_entry
@@ -1076,6 +1076,8 @@ BEGIN
         SELECT 
             edp_m.plan_date AS day_date, eq_m.id AS eq_id, eq_m.name AS eq_name, eq_m.code AS eq_code, eq_m.sort_order AS eq_sort,
             sd_m.id AS shift_id, sd_m.name AS shift_name, sd_m.shift_number,
+            sd_m.start_time AS shift_start_time,
+            sd_m.end_time AS shift_end_time,
             edp_m.is_cancelled,
             COALESCE((SELECT staffing_mode FROM equipment_staffing_history WHERE equipment_id = eq_m.id AND valid_from <= edp_m.plan_date ORDER BY valid_from DESC LIMIT 1), eq_m.staffing_mode) AS active_mode,
             1 AS has_plan_entry
@@ -1105,6 +1107,8 @@ BEGIN
         qs.eq_code AS `EquipCode`,
         qs.shift_number AS `ShiftNum`,
         qs.shift_name AS `Shift`,
+        qs.shift_start_time AS `TimeStart`,
+        qs.shift_end_time AS `TimeEnd`,
         CASE 
             WHEN qs.is_cancelled = 1 THEN 0                           -- Отмена
             WHEN qs.active_mode = 'manual_only' AND NOT qs.has_plan_entry THEN 1 -- Вне плана
@@ -1139,7 +1143,7 @@ BEGIN
         GROUP_CONCAT(DISTINCT CASE WHEN ( (esl.l_type = 'OVR' AND esl.l_status = 2 AND esl.eq_id = qs.eq_id AND esl.shift_id = qs.shift_id AND esl.is_cancellation = 0) OR (esl.l_type = 'PLAN' AND esl.eq_id = qs.eq_id AND esl.shift_id = qs.shift_id AND NOT EXISTS (SELECT 1 FROM absences a WHERE a.employee_id = esl.emp_id AND qs.day_date BETWEEN a.start_date AND COALESCE(a.end_date, '2099-12-31')) AND NOT EXISTS (SELECT 1 FROM schedule_overrides o4 WHERE o4.employee_id = esl.emp_id AND o4.override_date = qs.day_date AND o4.shift_id = qs.shift_id AND o4.status = 2)) ) THEN esl.full_name END SEPARATOR ', ') AS `ApprovedFact`
     FROM CombinedGrid qs
     LEFT JOIN EmployeeLinks esl ON qs.day_date = esl.day_date AND qs.shift_id = esl.shift_id
-    GROUP BY qs.day_date, qs.eq_id, qs.eq_name, qs.eq_code, qs.shift_id, qs.shift_name, qs.shift_number, qs.is_cancelled, qs.active_mode, qs.has_plan_entry, qs.eq_sort
+    GROUP BY qs.day_date, qs.eq_id, qs.eq_name, qs.eq_code, qs.shift_id, qs.shift_name, qs.shift_number, qs.shift_start_time, qs.shift_end_time, qs.is_cancelled, qs.active_mode, qs.has_plan_entry, qs.eq_sort
     ORDER BY qs.day_date, qs.eq_sort, qs.eq_id, qs.shift_number;
 END
 ;;

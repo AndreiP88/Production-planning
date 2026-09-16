@@ -66,7 +66,8 @@ namespace database
                             EmployeeName = r.Plan_employee_name,
                             PlanStatus = r.Plan_status,
                             FinalFactStatus = r.Final_fact_status,
-                            PlanOverrideId = r.Plan_override_id
+                            PlanOverrideId = r.Plan_override_id,
+                            PlanStatusCode = r.Plan_status_code
                         });
                     }
 

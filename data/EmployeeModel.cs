@@ -252,4 +252,12 @@ namespace data
         Available = 3       // 🟢 Полностью доступен
     }
 
+    public enum PlannedEmployeeStatusType
+    {
+        Active = 0,       // ✅ В графике (Здоров и готов к работе)
+        Absence = 1,      // ❌ Больничный / Отпуск / Законное отсутствие
+        Cancelled = 2,    // 🚫 Отмена смены мастером вручную
+        Transferred = 3   // ➡️ Переведен на другое оборудование
+    }
+
 }

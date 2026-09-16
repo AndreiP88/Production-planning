@@ -1,10 +1,13 @@
-﻿using data;
+﻿using Dapper;
+using data;
 using database;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Production_planning
 {
@@ -13,6 +16,121 @@ namespace Production_planning
         public ValueOrders()
         {
 
+        }
+
+        public async Task<List<ProductionJobCard>> GetProductionJobsAsync(DateTime startDate, DateTime endDate, string externalConnString)
+        {
+            // Текст SQL-запроса из Элемента 1
+            string sql = @"SELECT
+                  man_planjob.id_man_planjob AS IdPlanJob,
+                  man_planjob.date_begin AS DateBegin,
+                  man_planjob.date_end AS DateEnd,
+                  man_planjob.id_equip AS IdEquip,
+                  man_planjob_list.id_norm_operation AS IdNormOperation,
+                  norm_operation_table.ord AS Ord,
+                  COALESCE(man_planjob_list.plan_out_qty, 0) AS PlanOutQty,
+                  COALESCE(man_planjob_list.normtime, 0) AS NormTime,
+                  COALESCE(order_head.order_num, '') AS OrderNum,
+                  COALESCE(order_head.order_name, '') AS OrderName,
+                  COALESCE(common_ul_directory.ul_name, '') AS UlName,
+                  COALESCE(idletime_directory.idletime_name, '') AS IdleTimeName
+                FROM dbo.man_planjob
+                LEFT JOIN dbo.man_planjob_list ON man_planjob.id_man_order_job_item = man_planjob_list.id_man_order_job_item
+                LEFT JOIN dbo.man_order_job_item ON man_planjob.id_man_order_job_item = man_order_job_item.id_man_order_job_item
+                LEFT JOIN dbo.man_order_job ON man_order_job_item.id_man_order_job = man_order_job.id_man_order_job
+                LEFT JOIN dbo.order_head ON man_order_job.id_order_head = order_head.id_order_head
+                LEFT JOIN dbo.common_ul_directory ON order_head.id_customer = common_ul_directory.id_common_ul_directory
+                LEFT JOIN dbo.man_idletime ON man_order_job.id_man_order_job = man_idletime.id_man_order_job
+                LEFT JOIN dbo.idletime_directory ON man_idletime.id_idletime = idletime_directory.id_idletime_directory
+                LEFT JOIN dbo.norm_operation_table ON man_planjob_list.id_norm_operation = norm_operation_table.id_norm_operation 
+                WHERE man_planjob.status <> 2 
+                  AND man_planjob.flags <> 1 
+                  AND man_planjob.id_equip is not NULL
+                  AND man_planjob.date_begin <= @EndDate 
+                  AND man_planjob.date_end >= @StartDate
+                ORDER BY man_planjob.date_begin ASC;
+                ";
+
+            // Жесткий лимит ожидания ответа от удаленной сети — 4 секунды
+            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(4)))
+            {
+                try
+                {
+                    using (var conn = new SqlConnection(externalConnString))
+                    {
+                        await conn.OpenAsync(cts.Token);
+
+                        // Качаем сырой плоский поток строк асинхронно
+                        var rawRows = await conn.QueryAsync(new CommandDefinition(
+                            sql,
+                            new { StartDate = startDate.Date, EndDate = endDate.Date },
+                            cancellationToken: cts.Token
+                        ));
+
+                        // ИНТЕЛЛЕКТУАЛЬНАЯ СБОРКА И СКЛЕЙКА ФАЗ
+                        var structuredJobs = rawRows
+                            .GroupBy(r => r.Ord == null
+                                ? $"IDLE_{r.IdPlanJob}_{r.DateBegin:yyyyMMdd}_{r.IdEquip}" // -- Уникальный ключ для простоев
+                                : $"JOB_{r.IdPlanJob}_{r.IdEquip}")                        // -- Уникальный ключ для технологических заданий
+                            .Select(group =>
+                            {
+                                var baseRow = group.First();
+
+                                var card = new ProductionJobCard
+                                {
+                                    IdPlanJob = (long)baseRow.IdPlanJob,
+                                    DateBegin = (DateTime)baseRow.DateBegin,
+                                    DateEnd = (DateTime)baseRow.DateEnd,
+                                    IdEquip = (int)baseRow.IdEquip,
+                                    OrderNum = (string)baseRow.OrderNum,
+                                    OrderName = (string)baseRow.OrderName,
+                                    UlName = (string)baseRow.UlName,
+                                    IsIdleTime = baseRow.Ord == null,
+                                    IdleTimeName = (string)baseRow.IdleTimeName,
+
+                                    SetupCount = 0,
+                                    SetupNormTime = 0,
+                                    RunNormTime = 0,
+                                    RunQty = 0
+                                };
+
+                                if (!card.IsIdleTime)
+                                {
+                                    // Фаза 1: Приладка (ord = 0). Может отсутствовать при печати на потоке!
+                                    var setupRow = group.FirstOrDefault(r => r.Ord == 0);
+                                    if (setupRow != null)
+                                    {
+                                        card.SetupCount = (double)setupRow.PlanOutQty;
+                                        // 🌟 Ваше правило: делим normtime на plan_out_qty только для приладки
+                                        card.SetupNormTime = (double)setupRow.PlanOutQty > 0
+                                            ? (double)setupRow.NormTime / (double)setupRow.PlanOutQty
+                                            : 0;
+                                    }
+
+                                    // Фаза 2: Выполнение (ord = 1)
+                                    var runRow = group.FirstOrDefault(r => r.Ord == 1);
+                                    if (runRow != null)
+                                    {
+                                        card.RunQty = (double)runRow.PlanOutQty;
+                                        card.RunNormTime = (double)runRow.NormTime; // Время выполнения НЕ делим
+                                    }
+                                }
+
+                                return card;
+                            })
+                            .ToList();
+
+                        return structuredJobs;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Если сеть лежит или сработал таймаут 4 сек — мягко возвращаем null.
+                    // Приложение не упадет, а графики людей загрузятся штатно!
+                    Console.WriteLine("ERROR: GetProductionJobsAsync " + ex.Message);
+                    return null;
+                }
+            }
         }
 
         public List<OrdersLoad> GetPlan(int idMachine, CancellationToken token)

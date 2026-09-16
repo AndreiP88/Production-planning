@@ -1,7 +1,6 @@
 ﻿using data;
 using data.Models;
 using database;
-using DevAge.Windows.Forms;
 using MaterialSkin;
 using MaterialSkin.Controls;
 using System;
@@ -30,6 +29,7 @@ namespace Production_planning
             gridViewAbsence.DefaultCellStyle.SelectionBackColor = gridViewAbsence.DefaultCellStyle.BackColor;
             gridViewAbsence.DefaultCellStyle.SelectionForeColor = gridViewAbsence.DefaultCellStyle.ForeColor;
         }
+        private ConnectionParameter parameter = new ConnectionParameter();
 
         CancellationTokenSource cancelTokenSource;
 
@@ -41,9 +41,44 @@ namespace Production_planning
         List<ScheduleCycleModel> scheduleCycles;
         List<ScheduleTemplateModel> scheduleTemplates;
         List<EmployeeShortRow> employeeShorts;
+        private Dictionary<int, StatusColorStyle> _colorPalette = new Dictionary<int, StatusColorStyle>();
+        private Dictionary<int, DataGridViewCellStyle> _cellStyles = new Dictionary<int, DataGridViewCellStyle>();
+        private int _lastSelectedRowIndex = -1;
+        private int _lastSelectedColumnIndex = -1;
+        private int _firstVisibleRowIndex = -1;
+        //private int _firstVisibleColumnIndex = -1;
+        private int _horizontalPixelOffset = 0;
+        private bool _editShift = false;
 
-        private void Form1_Load(object sender, EventArgs e)
+        private async void Form1_Load(object sender, EventArgs e)
         {
+            var service = new ReportStaffing(parameter.GetMySQLConnectionString());
+
+            _colorPalette = await service.GetColorPaletteAsync();
+
+            foreach (var color in _colorPalette)
+            {
+                var style = new DataGridViewCellStyle();
+                style.BackColor = ColorTranslator.FromHtml(color.Value.HexBackColor);
+                style.ForeColor = ColorTranslator.FromHtml(color.Value.HexForeColor);
+
+                // Можно сразу задать шрифт и выравнивание, чтобы таблица не тратила на это время
+                //style.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+                _cellStyles[color.Key] = style;
+            }
+
+            // Жестко отключаем авто-расчет высоты строк (самый тяжелый процесс)
+            //dataGridPlanning.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+
+            // Жестко отключаем авто-расчет ширины колонок по ячейкам
+            dataGridPlanning.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+
+            // Отключаем авто-размер заголовков
+            dataGridPlanning.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dataGridPlanning.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+
+
             // Текст выделенной ячейки будет такого же цвета, как и у обычной ячейки
             dataGridPlanning.DefaultCellStyle.SelectionForeColor = dataGridPlanning.DefaultCellStyle.ForeColor;
 
@@ -217,7 +252,16 @@ namespace Production_planning
 
             // 3 строка: Утвержденные (Факт)
             if (s.Assignments.Any())
-                sb.Append(/*"✅ " + */string.Join(", ", s.Assignments));
+            {
+                if (s.PlannedStaff.Any())
+                {
+                    sb.Append(/*"✅ " + */string.Join(", ", s.Assignments));
+                }
+                else
+                {
+                    sb.AppendLine(/*"✅ " + */string.Join(", ", s.Assignments));
+                }
+            }
 
             return sb.ToString();
         }
@@ -241,18 +285,35 @@ namespace Production_planning
             //task.Start();
 
             //await LoadStaffPlanningAsync(cancelTokenSource.Token, startDate, endDate, idArea);
-            BuildPivotGrid(startDate, idArea);
+            await BuildPivotGrid(startDate, idArea);
         }
 
-        public async void BuildPivotGrid(DateTime monthStart, int areaId)
+        public async Task BuildPivotGrid(DateTime monthStart, int areaId)
         {
-            ConnectionParameter parameter = new ConnectionParameter();
+            //ConnectionParameter parameter = new ConnectionParameter();
 
             var service = new ReportStaffing(parameter.GetMySQLConnectionString());
+            
 
             DateTime monthEnd = monthStart.AddMonths(1).AddDays(-1);
 
             var reportData = await service.GetStaffingReportAsync(monthStart, monthEnd, areaId);
+
+
+
+            // 1. ПЕРЕД СТАРТОМ foreach-циклов СКАЧИВАЕМ ЗАКАЗЫ ИЗ ВНЕШНЕЙ БАЗЫ С ТАЙМАУТОМ:
+            var servicePlanning = new ValueOrders();
+
+            string extConnStr = parameter.GetSQLServerConnectionString();
+            
+            List<ProductionJobCard> productionJobsList = await servicePlanning.GetProductionJobsAsync(monthStart, monthEnd, extConnStr);
+
+            // Группируем заказы по оборудованию в Lookup для моментального поиска в памяти
+            ILookup<int, ProductionJobCard> ordersLookup = productionJobsList != null
+                ? productionJobsList.ToLookup(j => j.IdEquip)
+                : null;
+
+            dataGridPlanning.SuspendLayout();
 
             dataGridPlanning.Columns.Clear();
             dataGridPlanning.Rows.Clear();
@@ -295,7 +356,239 @@ namespace Production_planning
                 var col = new DataGridViewTextBoxColumn();
                 col.Name = $"day_{d}";
                 col.HeaderText = headerText;
-                col.Width = 220;
+                col.Width = 300;
+                col.DefaultCellStyle.WrapMode = DataGridViewTriState.True; // Разрешаем перенос строк
+                dataGridPlanning.Columns.Add(col);
+
+                int curCol = dataGridPlanning.Rows[columnFirst].Cells[$"day_{d}"].ColumnIndex;
+
+                //GridHelper.MergeCells(dataGridPlanning, "Смена", 0, curCol, 1, 1, Color.Gray);
+                //GridHelper.MergeCells(dataGridPlanning, "Смена", 1, curCol, 1, 1, Color.Gray);
+
+                string fullDayName = headerDate.ToString("dddd", new CultureInfo("ru-RU"));
+                string capitalizedDay = char.ToUpper(fullDayName[0]) + fullDayName.Substring(1);
+
+                int russianIndex = ((int)headerDate.DayOfWeek == 0) ? 7 : (int)headerDate.DayOfWeek;
+
+                Color color = Color.White;
+
+                if (russianIndex >= 6)
+                {
+                    color = Color.DarkRed;
+                }
+
+                dataGridPlanning.Rows[columnFirst].Cells[curCol].Value = headerText;
+                dataGridPlanning.Rows[columnSecond].Cells[curCol].Value = capitalizedDay;
+
+                dataGridPlanning.Rows[columnFirst].Cells[curCol].Style.BackColor = Color.Gray;
+                dataGridPlanning.Rows[columnFirst].Cells[curCol].Style.ForeColor = color;
+                dataGridPlanning.Rows[columnFirst].Cells[curCol].Style.Font = new Font("Arial", 10, FontStyle.Bold);
+
+                dataGridPlanning.Rows[columnSecond].Cells[curCol].Style.BackColor = Color.Gray;
+                dataGridPlanning.Rows[columnSecond].Cells[curCol].Style.ForeColor = color;
+                dataGridPlanning.Rows[columnSecond].Cells[curCol].Style.Font = new Font("Arial", 10, FontStyle.Bold);
+            }
+
+            // 3. Заполняем строки (по 2 на каждую смену)
+            // Группируем всё оборудование, чтобы знать список смен
+            var allEquip = reportData.SelectMany(d => d.Equipments)
+                                     .GroupBy(e => new { e.Id, e.Name, e.Code })
+                                     .ToList();
+
+            foreach (var eq in allEquip)
+            {
+                // Для каждой смены оборудования создаем 2 строки
+                var shiftNames = eq.SelectMany(s => s.Shifts).Select(s => s.Number).Distinct().ToList();
+                int activeShiftsCount = shiftNames.Count(x => x != 0);
+                int currentShiftNumber = 1;
+
+                int firstRow = 0;
+
+                foreach (var sName in shiftNames)
+                {
+                    if (sName != 0)
+                    {
+                        // Строка 1: Инфо о сотрудниках
+                        int r1 = dataGridPlanning.Rows.Add(eq.Key.Id);
+                        dataGridPlanning.Rows[r1].HeaderCell.Value = eq.Key.Id;
+                        //dataGridPlanning.Rows[r1].HeaderCell.Tag = eq.SelectMany(s => s.Shifts).Select(s => s.Number);
+                        //MessageBox.Show(eq.SelectMany(s => s.Shifts).Select(s => s.Number) + "");
+                        // Строка 2: Пустая (для будущего)
+                        int r2 = dataGridPlanning.Rows.Add(eq.Key.Id);
+                        dataGridPlanning.Rows[r2].HeaderCell.Value = eq.Key.Id;
+
+                        dataGridPlanning.Rows[r2].MinimumHeight = 2;
+
+                        if (currentShiftNumber == 1)
+                        {
+                            firstRow = r1;
+                        }
+
+                        if (activeShiftsCount == currentShiftNumber)
+                        {
+                            GridHelper.MergeCells(dataGridPlanning, eq.Key.Name, firstRow, 0, shiftNames.Count(x => x != 0) * 2, 1, Color.Gray);
+
+                            dataGridPlanning.Rows[r2].Tag = "LastEquipRow";
+                        }
+
+                        GridHelper.MergeCells(dataGridPlanning, sName.ToString(), r1, 1, 2, 1, Color.Gray);
+
+                        //dataGridPlanning.Rows[r1].Cells["Equip"].Value = eq.Key.Name;
+                        dataGridPlanning.Rows[r1].Cells["Shift"].Value = sName;
+                        //dataGridPlanning.Rows[r1].DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 255);
+
+                        //dataGridPlanning.Rows[r2].Cells["Equip"].Value = eq.Key.Name;
+                        dataGridPlanning.Rows[r2].Cells["Shift"].Value = sName;
+                        dataGridPlanning.Rows[r2].DefaultCellStyle.BackColor = Color.FromArgb(245, 245, 245);
+
+                        // Заполняем данные по дням для этой смены
+                        foreach (var dayData in reportData)
+                        {
+                            int dayNum = dayData.Date.Day;
+                            var currentEq = dayData.Equipments.FirstOrDefault(e => e.Id == eq.Key.Id);
+                            var currentShift = currentEq?.Shifts.FirstOrDefault(s => s.Number == sName);
+
+                            if (currentShift != null)
+                            {
+                                var cell = dataGridPlanning.Rows[r1].Cells[$"day_{dayNum}"];
+
+                                cell.Value = PrepareCellText(currentShift);
+
+                                int statusCode = currentShift.StatusCode;
+
+                                if (_cellStyles.TryGetValue(statusCode, out DataGridViewCellStyle targetStyle))
+                                {
+                                    cell.Style = targetStyle;
+                                }
+
+
+
+
+                                // ЗАПОЛНЯЕМ ВТOРУЮ СТРОКУ (ЗАКАЗЫ ИЛИ ПРОСТОИ) [2026-09-01]
+                                var orderCell = dataGridPlanning.Rows[r2].Cells[$"day_{dayNum}"];
+
+                                if (productionJobsList == null)
+                                {
+                                    // Внешняя БД не ответила за 4 секунды
+                                    orderCell.Value = "[БД Заказов недоступна]";
+                                    orderCell.Style.ForeColor = Color.IndianRed;
+                                }
+                                else
+                                {
+                                    // Рассчитываем точные временные рамки текущей смены станка [2026-09-04]
+                                    DateTime shiftStartDT = dayData.Date.Date.Add(currentShift.TimeStart);
+                                    DateTime shiftEndDT = currentShift.TimeEnd < currentShift.TimeStart
+                                        ? dayData.Date.Date.AddDays(1).Add(currentShift.TimeEnd) // Переходящая ночь
+                                        : dayData.Date.Date.Add(currentShift.TimeEnd);
+
+                                    // Вытаскиваем заказы этого станка и проверяем пересечение интервалов времени [2026-09-14]
+                                    if (int.TryParse(eq.Key.Code, out int result))
+                                    {
+                                        var equipJobs = ordersLookup[result];
+
+                                        var activeJobsInShift = equipJobs
+                                            .Where(j => j.DateBegin < shiftEndDT && j.DateEnd > shiftStartDT)
+                                            .Select(j => new ShortOrderView(j).DisplayText) // Превращаем в краткий текст [2026-09-14]
+                                            .ToList();
+
+                                        if (activeJobsInShift.Count > 0)
+                                        {
+                                            orderCell.Value = string.Join("\n", activeJobsInShift);
+                                        }
+                                        else
+                                        {
+                                            orderCell.Value = "—"; // Смена пустая, заказов на эти часы нет
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        currentShiftNumber++;
+                    }
+                }
+            }
+
+            dataGridPlanning.ResumeLayout(true);
+
+            // Автоматическая высота строк под контент
+            //dataGridPlanning.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            
+            if (_editShift)
+            {
+                RestoreLastSelectedCell();
+
+                _editShift = false;
+            }
+            else
+            {
+                ScrollToCurrentDay();
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+        public async Task BuildPivotGrid1111111(DateTime monthStart, int areaId)
+        {
+            //ConnectionParameter parameter = new ConnectionParameter();
+
+            var service = new ReportStaffing(parameter.GetMySQLConnectionString());
+
+            DateTime monthEnd = monthStart.AddMonths(1).AddDays(-1);
+
+            var reportData = await service.GetStaffingReportAsync(monthStart, monthEnd, areaId);
+
+            dataGridPlanning.SuspendLayout();
+
+            dataGridPlanning.Columns.Clear();
+            dataGridPlanning.Rows.Clear();
+
+            // 1. Создаем фиксированные столбцы
+            dataGridPlanning.Columns.Add("Equip", "Оборудование");
+            dataGridPlanning.Columns.Add("Shift", "Смена");
+
+            dataGridPlanning.Columns["Shift"].Frozen = true;
+
+            dataGridPlanning.Columns["Equip"].Width = 180;
+            dataGridPlanning.Columns["Shift"].Width = 20;
+
+            //dataGridPlanning.Columns["Equip"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomCenter;
+            //dataGridPlanning.Columns["Shift"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomCenter;
+
+            int columnFirst = dataGridPlanning.Rows.Add();
+            int columnSecond = dataGridPlanning.Rows.Add();
+
+            dataGridPlanning.Rows[columnSecond].Frozen = true;
+
+            dataGridPlanning.Rows[columnFirst].MinimumHeight = 40;
+            dataGridPlanning.Rows[columnSecond].MinimumHeight = 40;
+
+            dataGridPlanning.Rows[columnFirst].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridPlanning.Rows[columnSecond].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            GridHelper.MergeCells(dataGridPlanning, "Рабочее место", 0, 0, 2, 1, Color.Gray);
+            GridHelper.MergeCells(dataGridPlanning, "Смена", 0, 1, 2, 1, Color.Gray);
+
+            dataGridPlanning.Rows[columnFirst].Cells[0].Value = "Рабочее место";
+            dataGridPlanning.Rows[columnSecond].Cells[1].Value = "Смена";
+
+            // 2. Создаем динамические столбцы для дней месяца (1, 2, 3...)
+            for (int d = 1; d <= monthEnd.Day; d++)
+            {
+                DateTime headerDate = new DateTime(monthStart.Year, monthStart.Month, d);
+                string headerText = headerDate.ToString("dd.MM.yyyy");
+
+                var col = new DataGridViewTextBoxColumn();
+                col.Name = $"day_{d}";
+                col.HeaderText = headerText;
+                col.Width = 300;
                 col.DefaultCellStyle.WrapMode = DataGridViewTriState.True; // Разрешаем перенос строк
                 dataGridPlanning.Columns.Add(col);
 
@@ -338,6 +631,7 @@ namespace Production_planning
             {
                 // Для каждой смены оборудования создаем 2 строки
                 var shiftNames = eq.SelectMany(s => s.Shifts).Select(s => s.Number).Distinct().ToList();
+                int activeShiftsCount = shiftNames.Count(x => x != 0);
                 int currentShiftNumber = 1;
 
                 int firstRow = 0;
@@ -355,23 +649,25 @@ namespace Production_planning
                         int r2 = dataGridPlanning.Rows.Add(eq.Key.Id);
                         dataGridPlanning.Rows[r2].HeaderCell.Value = eq.Key.Id;
 
-                        dataGridPlanning.Rows[r2].MinimumHeight = 60;
+                        dataGridPlanning.Rows[r2].MinimumHeight = 2;
 
                         if (currentShiftNumber == 1)
                         {
                             firstRow = r1;
                         }
 
-                        if (shiftNames.Count(x => x != 0) == currentShiftNumber)
+                        if (activeShiftsCount == currentShiftNumber)
                         {
                             GridHelper.MergeCells(dataGridPlanning, eq.Key.Name, firstRow, 0, shiftNames.Count(x => x != 0) * 2, 1, Color.Gray);
+
+                            dataGridPlanning.Rows[r2].Tag = "LastEquipRow";
                         }
 
                         GridHelper.MergeCells(dataGridPlanning, sName.ToString(), r1, 1, 2, 1, Color.Gray);
 
                         //dataGridPlanning.Rows[r1].Cells["Equip"].Value = eq.Key.Name;
                         dataGridPlanning.Rows[r1].Cells["Shift"].Value = sName;
-                        dataGridPlanning.Rows[r1].DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 255);
+                        //dataGridPlanning.Rows[r1].DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 255);
 
                         //dataGridPlanning.Rows[r2].Cells["Equip"].Value = eq.Key.Name;
                         dataGridPlanning.Rows[r2].Cells["Shift"].Value = sName;
@@ -386,7 +682,29 @@ namespace Production_planning
 
                             if (currentShift != null)
                             {
-                                dataGridPlanning.Rows[r1].Cells[$"day_{dayNum}"].Value = PrepareCellText(currentShift);
+                                var cell = dataGridPlanning.Rows[r1].Cells[$"day_{dayNum}"];
+
+                                cell.Value = PrepareCellText(currentShift);
+
+                                int statusCode = currentShift.StatusCode;
+
+                                if (_cellStyles.TryGetValue(statusCode, out DataGridViewCellStyle targetStyle))
+                                {
+                                    cell.Style = targetStyle;
+                                }
+
+                                /*if (_colorPalette.TryGetValue(statusCode, out StatusColorStyle colorStyle))
+                                {
+                                    // Переводим HEX-строку из БД в понятный для WinForms системный Color
+                                    cell.Style.BackColor = ColorTranslator.FromHtml(colorStyle.HexBackColor);
+                                    cell.Style.ForeColor = ColorTranslator.FromHtml(colorStyle.HexForeColor);
+                                }
+                                else
+                                {
+                                    // Страховочный дефолтный цвет, если кода нет в палитре
+                                    cell.Style.BackColor = Color.White;
+                                    cell.Style.ForeColor = Color.Black;
+                                }*/
                             }
                         }
 
@@ -395,8 +713,21 @@ namespace Production_planning
                 }
             }
 
+            dataGridPlanning.ResumeLayout(true);
+
             // Автоматическая высота строк под контент
-            dataGridPlanning.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            //dataGridPlanning.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+            if (_editShift)
+            {
+                RestoreLastSelectedCell();
+
+                _editShift = false;
+            }
+            else
+            {
+                ScrollToCurrentDay();
+            }
         }
 
         private async Task UpdateShiftsDefinitionAsync()
@@ -687,7 +1018,72 @@ namespace Production_planning
             await StartLoadingStaffPlanningAsync();
         }
 
-        private void dataGridPlanning_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void ScrollToCurrentDay()
+        {
+            // 1. Проверяем, что выбранный в фильтре месяц и год совпадают с текущей датой [2026-09-12]
+            // Замените cmbMonth и cmbYear на ваши элементы управления (или переменные) фильтра дат
+            int selectedMonth = planComboBoxMonth.SelectedIndex + 1;
+            int selectedYear = Convert.ToInt32(planComboBoxYear.Text);
+
+            DateTime now = DateTime.Now; // [2026-09-12]
+
+            if (selectedMonth == now.Month && selectedYear == now.Year)
+            {
+                // 2. Формируем имя колонки для текущего дня (например, "day_12")
+                string currentDayColumnName = $"day_{now.Day}";
+
+                if (dataGridPlanning.Columns.Contains(currentDayColumnName))
+                {
+                    int columnIndex = dataGridPlanning.Columns[currentDayColumnName].Index;
+
+                    // 3. Гарантируем, что ячейка видна на экране (прокрутка по горизонтали)
+                    dataGridPlanning.FirstDisplayedScrollingColumnIndex = columnIndex;
+                }
+            }
+        }
+        private void RestoreLastSelectedCell()
+        {
+            // Замораживаем отрисовку формы, чтобы скрыть переходные процессы скролла
+            dataGridPlanning.SuspendLayout();
+
+            try
+            {
+                // 1. ВОССТАНАВЛИВАЕМ ВЕРТИКАЛЬНЫЙ СКРОЛЛ СТРОК
+                if (_firstVisibleRowIndex >= 0 && _firstVisibleRowIndex < dataGridPlanning.Rows.Count)
+                {
+                    dataGridPlanning.FirstDisplayedScrollingRowIndex = _firstVisibleRowIndex;
+                }
+
+                // 2. 🌟 ВОССТАНАВЛИВАЕМ ГОРИЗОНТАЛЬНЫЙ СКРОЛЛ ТОЧНО В ПИКСЕЛЯХ 🌟
+                // Это железно вернет левый край таблицы на то же самое место без микро-прыжков!
+                if (_horizontalPixelOffset >= 0)
+                {
+                    dataGridPlanning.HorizontalScrollingOffset = _horizontalPixelOffset;
+                }
+
+                // 3. ВОССТАНАВЛИВАЕМ ВЫДЕЛЕНИЕ НА РЕДАКТИРУЕМУЮ ЯЧЕЙКУ
+                if (_lastSelectedRowIndex >= 0 && _lastSelectedRowIndex < dataGridPlanning.Rows.Count &&
+                    _lastSelectedColumnIndex >= 0 && _lastSelectedColumnIndex < dataGridPlanning.Columns.Count)
+                {
+                    dataGridPlanning.ClearSelection();
+
+                    dataGridPlanning.CurrentCell = dataGridPlanning.Rows[_lastSelectedRowIndex].Cells[_lastSelectedColumnIndex];
+                    dataGridPlanning.Rows[_lastSelectedRowIndex].Cells[_lastSelectedColumnIndex].Selected = true;
+                }
+            }
+            catch (Exception)
+            {
+                // Страховочный блок на случай изменения размеров колонок динамически
+            }
+            finally
+            {
+                // Возвращаем отрисовку сетки
+                dataGridPlanning.ResumeLayout();
+            }
+        }
+
+
+        private async void dataGridPlanning_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             // 1. Проверяем, что клик был в рабочей области:
             // Игнорируем шапку (e.RowIndex < 0 или e.ColumnIndex < 0)
@@ -699,6 +1095,13 @@ namespace Production_planning
                 // Если кликнули по объединенному блоку, данные привязаны к его "мастер-ячейке" (началу блока).
                 int targetRow = e.RowIndex;
                 int targetCol = e.ColumnIndex;
+
+                _lastSelectedRowIndex = e.RowIndex;
+                _lastSelectedColumnIndex = e.ColumnIndex;
+
+                _firstVisibleRowIndex = dataGridPlanning.FirstDisplayedScrollingRowIndex;
+                //_firstVisibleColumnIndex = dataGridPlanning.FirstDisplayedScrollingColumnIndex;
+                _horizontalPixelOffset = dataGridPlanning.HorizontalScrollingOffset;
 
                 if (dataGridPlanning.Rows[e.RowIndex].Cells[e.ColumnIndex] is BiMergedCell clickedCell)
                 {
@@ -723,8 +1126,20 @@ namespace Production_planning
                 object blockValue = dataGridPlanning.Rows[targetRow].Cells[targetCol].Value;
                 string taskText = blockValue != null ? blockValue.ToString() : string.Empty;
 
+                DialogResult result = DialogResult.Cancel;
+
+                await Task.Delay(100);
+
                 EditShiftForm form = new EditShiftForm(Convert.ToDateTime(columnNameDate), shiftNumber, machineID);
-                form.ShowDialog();
+                result = form.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    _editShift = true;
+                    
+                    await StartLoadingStaffPlanningAsync();
+                    Thread.Sleep(200);
+                }
 
                 // --- ВАШ КОД ОБРАБОТКИ ---
                 // Теперь у вас есть все переменные. Вы можете передать их в новую форму или обработать.
@@ -1934,6 +2349,25 @@ namespace Production_planning
         private void dataGridPlanning_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void dataGridPlanning_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            // Проверяем, что это не шапка и строка содержит наш маркер последней строки станка
+            if (e.RowIndex >= 0 && dataGridPlanning.Rows[e.RowIndex].Tag?.ToString() == "LastEquipRow")
+            {
+                // Вычисляем координаты для линии (под текущей строкой по всей ширине таблицы)
+                int rowBottom = e.RowBounds.Bottom - 1;
+                int leftCoord = e.RowBounds.Left;
+                int rightCoord = e.RowBounds.Right;
+
+                // Создаем оранжевое перо толщиной в 2 пикселя (можете настроить толщину и оттенок)
+                using (Pen orangePen = new Pen(Color.DarkOrange, 1))
+                {
+                    // Рисуем разделительную линию под ячейками
+                    e.Graphics.DrawLine(orangePen, leftCoord, rowBottom, rightCoord, rowBottom);
+                }
+            }
         }
     }
 }

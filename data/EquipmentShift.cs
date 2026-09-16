@@ -19,8 +19,7 @@ namespace data
         public string Time_end { get; set; }
         public ulong? Edp_id { get; set; }
         public int Is_equipment_cancelled { get; set; }
-        
-        public int? Plan_employee_id { get; set; }
+        public ulong? Plan_employee_id { get; set; }
         public string Plan_employee_name { get; set; }
         public string Plan_status { get; set; }
         public ulong? Plan_override_id { get; set; }
@@ -34,6 +33,7 @@ namespace data
         public string Active_staffing_mode { get; set; } = string.Empty;
         public int Staffing_requirement_code { get; set; } // Поле из MySQL
         public int Active_staff_count { get; set; }
+        public int Plan_status_code { get; set; }
     }
 
     // Удобная древовидная модель карточки для логики приложения
@@ -59,11 +59,12 @@ namespace data
 
     public class PlannedEmployeeInfo
     {
-        public int EmployeeId { get; set; }
+        public ulong EmployeeId { get; set; }
         public string EmployeeName { get; set; }
         public string PlanStatus { get; set; }
         public string FinalFactStatus { get; set; }
         public ulong? PlanOverrideId { get; set; }
+        public int PlanStatusCode { get; set; }
     }
 
     public class DraftEmployeeInfo
