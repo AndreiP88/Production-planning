@@ -45,12 +45,17 @@ namespace Production_planning
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -159,12 +164,14 @@ namespace Production_planning
             this.columnHeader34 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel17 = new System.Windows.Forms.TableLayoutPanel();
-            this.materialExpansionPanel2 = new MaterialSkin.Controls.MaterialExpansionPanel();
-            this.tableLayoutPanel21 = new System.Windows.Forms.TableLayoutPanel();
-            this.materialExpansionPanel1 = new MaterialSkin.Controls.MaterialExpansionPanel();
             this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
-            this.materialExpansionPanel5 = new MaterialSkin.Controls.MaterialExpansionPanel();
-            this.tableLayoutPanel22 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel21 = new System.Windows.Forms.TableLayoutPanel();
+            this.materialButton3 = new MaterialSkin.Controls.MaterialButton();
+            this.materialButton4 = new MaterialSkin.Controls.MaterialButton();
+            this.materialButton5 = new MaterialSkin.Controls.MaterialButton();
+            this.materialButton6 = new MaterialSkin.Controls.MaterialButton();
+            this.materialSwitch1 = new MaterialSkin.Controls.MaterialSwitch();
+            this.doubleBufferedDataGridView1 = new Production_planning.Form1.DoubleBufferedDataGridView();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.materialCheckbox1 = new MaterialSkin.Controls.MaterialCheckbox();
             this.materialCheckbox2 = new MaterialSkin.Controls.MaterialCheckbox();
@@ -175,6 +182,7 @@ namespace Production_planning
             this.materialCheckbox7 = new MaterialSkin.Controls.MaterialCheckbox();
             this.materialCheckbox8 = new MaterialSkin.Controls.MaterialCheckbox();
             this.materialCheckbox9 = new MaterialSkin.Controls.MaterialCheckbox();
+            this.label1 = new System.Windows.Forms.Label();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -207,9 +215,9 @@ namespace Production_planning
             this.tableLayoutPanel14.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.tableLayoutPanel17.SuspendLayout();
-            this.materialExpansionPanel2.SuspendLayout();
-            this.materialExpansionPanel1.SuspendLayout();
-            this.materialExpansionPanel5.SuspendLayout();
+            this.tableLayoutPanel18.SuspendLayout();
+            this.tableLayoutPanel21.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.doubleBufferedDataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -266,22 +274,30 @@ namespace Production_planning
             // 
             this.dataGridPlanning.AllowUserToAddRows = false;
             this.dataGridPlanning.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dataGridPlanning.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dataGridPlanning.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridPlanning.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             this.dataGridPlanning.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridPlanning.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridPlanning.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridPlanning.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridPlanning.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridPlanning.ColumnHeadersVisible = false;
             this.dataGridPlanning.Cursor = System.Windows.Forms.Cursors.Hand;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridPlanning.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridPlanning.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridPlanning.Location = new System.Drawing.Point(3, 63);
             this.dataGridPlanning.MultiSelect = false;
@@ -455,8 +471,8 @@ namespace Production_planning
             // 
             this.tableLayoutPanel4.ColumnCount = 4;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 280F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 280F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 400F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 400F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.Controls.Add(this.materialButton1, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.workPlanAreaComboBox, 1, 0);
@@ -510,7 +526,7 @@ namespace Production_planning
             this.workPlanAreaComboBox.MaxDropDownItems = 4;
             this.workPlanAreaComboBox.MouseState = MaterialSkin.MouseState.OUT;
             this.workPlanAreaComboBox.Name = "workPlanAreaComboBox";
-            this.workPlanAreaComboBox.Size = new System.Drawing.Size(274, 49);
+            this.workPlanAreaComboBox.Size = new System.Drawing.Size(394, 49);
             this.workPlanAreaComboBox.StartIndex = 0;
             this.workPlanAreaComboBox.TabIndex = 1;
             this.workPlanAreaComboBox.SelectedIndexChanged += new System.EventHandler(this.workPlanAreaComboBox_SelectedIndexChanged);
@@ -531,11 +547,11 @@ namespace Production_planning
             this.workPlanEquipComboBox.Hint = "Оборудование";
             this.workPlanEquipComboBox.IntegralHeight = false;
             this.workPlanEquipComboBox.ItemHeight = 43;
-            this.workPlanEquipComboBox.Location = new System.Drawing.Point(463, 3);
+            this.workPlanEquipComboBox.Location = new System.Drawing.Point(583, 3);
             this.workPlanEquipComboBox.MaxDropDownItems = 4;
             this.workPlanEquipComboBox.MouseState = MaterialSkin.MouseState.OUT;
             this.workPlanEquipComboBox.Name = "workPlanEquipComboBox";
-            this.workPlanEquipComboBox.Size = new System.Drawing.Size(274, 49);
+            this.workPlanEquipComboBox.Size = new System.Drawing.Size(394, 49);
             this.workPlanEquipComboBox.StartIndex = 0;
             this.workPlanEquipComboBox.TabIndex = 2;
             this.workPlanEquipComboBox.SelectedIndexChanged += new System.EventHandler(this.workPlanEquipComboBox_SelectedIndexChanged);
@@ -545,8 +561,17 @@ namespace Production_planning
             this.dataGridViewPlan.AllowUserToAddRows = false;
             this.dataGridViewPlan.AllowUserToDeleteRows = false;
             this.dataGridViewPlan.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dataGridViewPlan.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewPlan.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewPlan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewPlan.ColumnHeadersVisible = false;
+            this.dataGridViewPlan.Cursor = System.Windows.Forms.Cursors.Hand;
             this.dataGridViewPlan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewPlan.Location = new System.Drawing.Point(3, 63);
             this.dataGridViewPlan.MultiSelect = false;
@@ -752,42 +777,42 @@ namespace Production_planning
             this.gridViewAbsence.AllowUserToDeleteRows = false;
             this.gridViewAbsence.AllowUserToResizeColumns = false;
             this.gridViewAbsence.AllowUserToResizeRows = false;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.gridViewAbsence.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.gridViewAbsence.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             this.gridViewAbsence.BackgroundColor = System.Drawing.SystemColors.Control;
             this.gridViewAbsence.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridViewAbsence.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridViewAbsence.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.gridViewAbsence.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridViewAbsence.ColumnHeadersVisible = false;
             this.gridViewAbsence.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridViewAbsence.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridViewAbsence.DefaultCellStyle = dataGridViewCellStyle7;
             this.gridViewAbsence.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridViewAbsence.Location = new System.Drawing.Point(3, 8);
             this.gridViewAbsence.MultiSelect = false;
             this.gridViewAbsence.Name = "gridViewAbsence";
             this.gridViewAbsence.ReadOnly = true;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridViewAbsence.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridViewAbsence.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
             this.gridViewAbsence.RowHeadersVisible = false;
             this.gridViewAbsence.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.gridViewAbsence.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -2150,11 +2175,11 @@ namespace Production_planning
             // tableLayoutPanel17
             // 
             this.tableLayoutPanel17.AutoScroll = true;
-            this.tableLayoutPanel17.ColumnCount = 1;
+            this.tableLayoutPanel17.ColumnCount = 3;
+            this.tableLayoutPanel17.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tableLayoutPanel17.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel17.Controls.Add(this.materialExpansionPanel2, 0, 1);
-            this.tableLayoutPanel17.Controls.Add(this.materialExpansionPanel1, 0, 0);
-            this.tableLayoutPanel17.Controls.Add(this.materialExpansionPanel5, 0, 2);
+            this.tableLayoutPanel17.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
+            this.tableLayoutPanel17.Controls.Add(this.tableLayoutPanel18, 1, 3);
             this.tableLayoutPanel17.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel17.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel17.Name = "tableLayoutPanel17";
@@ -2166,114 +2191,183 @@ namespace Production_planning
             this.tableLayoutPanel17.Size = new System.Drawing.Size(1240, 597);
             this.tableLayoutPanel17.TabIndex = 3;
             // 
-            // materialExpansionPanel2
+            // tableLayoutPanel18
             // 
-            this.materialExpansionPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialExpansionPanel2.CancelButtonText = "Скрыть";
-            this.materialExpansionPanel2.Collapse = true;
-            this.materialExpansionPanel2.Controls.Add(this.tableLayoutPanel21);
-            this.materialExpansionPanel2.Depth = 0;
-            this.materialExpansionPanel2.Description = "Description аап ";
-            this.materialExpansionPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.materialExpansionPanel2.ExpandHeight = 200;
-            this.materialExpansionPanel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialExpansionPanel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialExpansionPanel2.Location = new System.Drawing.Point(16, 50);
-            this.materialExpansionPanel2.Margin = new System.Windows.Forms.Padding(16, 1, 16, 0);
-            this.materialExpansionPanel2.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialExpansionPanel2.Name = "materialExpansionPanel2";
-            this.materialExpansionPanel2.Padding = new System.Windows.Forms.Padding(24, 64, 24, 16);
-            this.materialExpansionPanel2.ShowValidationButtons = false;
-            this.materialExpansionPanel2.Size = new System.Drawing.Size(1208, 48);
-            this.materialExpansionPanel2.TabIndex = 4;
-            this.materialExpansionPanel2.Title = "Название";
+            this.tableLayoutPanel18.ColumnCount = 1;
+            this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel18.Controls.Add(this.tableLayoutPanel21, 0, 1);
+            this.tableLayoutPanel18.Controls.Add(this.doubleBufferedDataGridView1, 0, 2);
+            this.tableLayoutPanel18.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel18.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel18.Location = new System.Drawing.Point(8, 3);
+            this.tableLayoutPanel18.Name = "tableLayoutPanel18";
+            this.tableLayoutPanel18.RowCount = 5;
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel18.Size = new System.Drawing.Size(1224, 591);
+            this.tableLayoutPanel18.TabIndex = 0;
             // 
             // tableLayoutPanel21
             // 
-            this.tableLayoutPanel21.ColumnCount = 2;
-            this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel21.ColumnCount = 6;
+            this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel21.Controls.Add(this.materialButton3, 0, 0);
+            this.tableLayoutPanel21.Controls.Add(this.materialButton4, 1, 0);
+            this.tableLayoutPanel21.Controls.Add(this.materialButton5, 2, 0);
+            this.tableLayoutPanel21.Controls.Add(this.materialButton6, 3, 0);
+            this.tableLayoutPanel21.Controls.Add(this.materialSwitch1, 4, 0);
             this.tableLayoutPanel21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel21.Location = new System.Drawing.Point(24, 64);
+            this.tableLayoutPanel21.Location = new System.Drawing.Point(3, 43);
             this.tableLayoutPanel21.Name = "tableLayoutPanel21";
-            this.tableLayoutPanel21.RowCount = 2;
-            this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel21.Size = new System.Drawing.Size(1160, 0);
-            this.tableLayoutPanel21.TabIndex = 2;
+            this.tableLayoutPanel21.RowCount = 1;
+            this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel21.Size = new System.Drawing.Size(1218, 49);
+            this.tableLayoutPanel21.TabIndex = 0;
             // 
-            // materialExpansionPanel1
+            // materialButton3
             // 
-            this.materialExpansionPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialExpansionPanel1.CancelButtonText = "Скрыть";
-            this.materialExpansionPanel1.Collapse = true;
-            this.materialExpansionPanel1.Controls.Add(this.tableLayoutPanel18);
-            this.materialExpansionPanel1.Depth = 0;
-            this.materialExpansionPanel1.Description = "Description аап ";
-            this.materialExpansionPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.materialExpansionPanel1.ExpandHeight = 369;
-            this.materialExpansionPanel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialExpansionPanel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialExpansionPanel1.Location = new System.Drawing.Point(16, 1);
-            this.materialExpansionPanel1.Margin = new System.Windows.Forms.Padding(16, 1, 16, 0);
-            this.materialExpansionPanel1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialExpansionPanel1.Name = "materialExpansionPanel1";
-            this.materialExpansionPanel1.Padding = new System.Windows.Forms.Padding(24, 64, 24, 16);
-            this.materialExpansionPanel1.ShowValidationButtons = false;
-            this.materialExpansionPanel1.Size = new System.Drawing.Size(1208, 48);
-            this.materialExpansionPanel1.TabIndex = 3;
-            this.materialExpansionPanel1.Title = "Название";
-            this.materialExpansionPanel1.ValidationButtonEnable = true;
+            this.materialButton3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton3.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton3.Depth = 0;
+            this.materialButton3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialButton3.HighEmphasis = true;
+            this.materialButton3.Icon = null;
+            this.materialButton3.Location = new System.Drawing.Point(4, 6);
+            this.materialButton3.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton3.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton3.Name = "materialButton3";
+            this.materialButton3.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton3.Size = new System.Drawing.Size(152, 37);
+            this.materialButton3.TabIndex = 0;
+            this.materialButton3.Text = "Добавить";
+            this.materialButton3.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton3.UseAccentColor = false;
+            this.materialButton3.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel18
+            // materialButton4
             // 
-            this.tableLayoutPanel18.ColumnCount = 2;
-            this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel18.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel18.Location = new System.Drawing.Point(24, 64);
-            this.tableLayoutPanel18.Name = "tableLayoutPanel18";
-            this.tableLayoutPanel18.RowCount = 2;
-            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel18.Size = new System.Drawing.Size(1160, 0);
-            this.tableLayoutPanel18.TabIndex = 2;
+            this.materialButton4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton4.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton4.Depth = 0;
+            this.materialButton4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialButton4.HighEmphasis = true;
+            this.materialButton4.Icon = null;
+            this.materialButton4.Location = new System.Drawing.Point(164, 6);
+            this.materialButton4.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton4.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton4.Name = "materialButton4";
+            this.materialButton4.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton4.Size = new System.Drawing.Size(152, 37);
+            this.materialButton4.TabIndex = 1;
+            this.materialButton4.Text = "Редактировать";
+            this.materialButton4.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton4.UseAccentColor = false;
+            this.materialButton4.UseVisualStyleBackColor = true;
             // 
-            // materialExpansionPanel5
+            // materialButton5
             // 
-            this.materialExpansionPanel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialExpansionPanel5.CancelButtonText = "Скрыть";
-            this.materialExpansionPanel5.Collapse = true;
-            this.materialExpansionPanel5.Controls.Add(this.tableLayoutPanel22);
-            this.materialExpansionPanel5.Depth = 0;
-            this.materialExpansionPanel5.Description = "Description аап ";
-            this.materialExpansionPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.materialExpansionPanel5.ExpandHeight = 200;
-            this.materialExpansionPanel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialExpansionPanel5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialExpansionPanel5.Location = new System.Drawing.Point(16, 99);
-            this.materialExpansionPanel5.Margin = new System.Windows.Forms.Padding(16, 1, 16, 0);
-            this.materialExpansionPanel5.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialExpansionPanel5.Name = "materialExpansionPanel5";
-            this.materialExpansionPanel5.Padding = new System.Windows.Forms.Padding(24, 64, 24, 16);
-            this.materialExpansionPanel5.ShowValidationButtons = false;
-            this.materialExpansionPanel5.Size = new System.Drawing.Size(1208, 48);
-            this.materialExpansionPanel5.TabIndex = 5;
-            this.materialExpansionPanel5.Title = "Название";
+            this.materialButton5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton5.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton5.Depth = 0;
+            this.materialButton5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialButton5.HighEmphasis = true;
+            this.materialButton5.Icon = null;
+            this.materialButton5.Location = new System.Drawing.Point(324, 6);
+            this.materialButton5.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton5.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton5.Name = "materialButton5";
+            this.materialButton5.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton5.Size = new System.Drawing.Size(152, 37);
+            this.materialButton5.TabIndex = 2;
+            this.materialButton5.Text = "Деактивировать";
+            this.materialButton5.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton5.UseAccentColor = false;
+            this.materialButton5.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel22
+            // materialButton6
             // 
-            this.tableLayoutPanel22.ColumnCount = 2;
-            this.tableLayoutPanel22.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel22.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel22.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel22.Location = new System.Drawing.Point(24, 64);
-            this.tableLayoutPanel22.Name = "tableLayoutPanel22";
-            this.tableLayoutPanel22.RowCount = 2;
-            this.tableLayoutPanel22.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel22.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel22.Size = new System.Drawing.Size(1160, 0);
-            this.tableLayoutPanel22.TabIndex = 2;
+            this.materialButton6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton6.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton6.Depth = 0;
+            this.materialButton6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialButton6.HighEmphasis = true;
+            this.materialButton6.Icon = null;
+            this.materialButton6.Location = new System.Drawing.Point(484, 6);
+            this.materialButton6.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton6.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton6.Name = "materialButton6";
+            this.materialButton6.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton6.Size = new System.Drawing.Size(42, 37);
+            this.materialButton6.TabIndex = 3;
+            this.materialButton6.Text = "🗑";
+            this.materialButton6.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton6.UseAccentColor = true;
+            this.materialButton6.UseVisualStyleBackColor = true;
+            // 
+            // materialSwitch1
+            // 
+            this.materialSwitch1.AutoSize = true;
+            this.materialSwitch1.Depth = 0;
+            this.materialSwitch1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialSwitch1.Location = new System.Drawing.Point(530, 0);
+            this.materialSwitch1.Margin = new System.Windows.Forms.Padding(0);
+            this.materialSwitch1.MouseLocation = new System.Drawing.Point(-1, -1);
+            this.materialSwitch1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialSwitch1.Name = "materialSwitch1";
+            this.materialSwitch1.Ripple = true;
+            this.materialSwitch1.Size = new System.Drawing.Size(200, 49);
+            this.materialSwitch1.TabIndex = 4;
+            this.materialSwitch1.Text = "отображать все";
+            this.materialSwitch1.UseVisualStyleBackColor = true;
+            // 
+            // doubleBufferedDataGridView1
+            // 
+            this.doubleBufferedDataGridView1.AllowUserToAddRows = false;
+            this.doubleBufferedDataGridView1.AllowUserToDeleteRows = false;
+            this.doubleBufferedDataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.doubleBufferedDataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            this.doubleBufferedDataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.doubleBufferedDataGridView1.ColumnHeadersVisible = false;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.doubleBufferedDataGridView1.DefaultCellStyle = dataGridViewCellStyle10;
+            this.doubleBufferedDataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.doubleBufferedDataGridView1.Location = new System.Drawing.Point(3, 98);
+            this.doubleBufferedDataGridView1.MultiSelect = false;
+            this.doubleBufferedDataGridView1.Name = "doubleBufferedDataGridView1";
+            this.doubleBufferedDataGridView1.ReadOnly = true;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.doubleBufferedDataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            this.doubleBufferedDataGridView1.RowHeadersVisible = false;
+            this.doubleBufferedDataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.doubleBufferedDataGridView1.Size = new System.Drawing.Size(1218, 410);
+            this.doubleBufferedDataGridView1.TabIndex = 2;
             // 
             // imageList
             // 
@@ -2433,6 +2527,17 @@ namespace Production_planning
             this.materialCheckbox9.ThreeState = true;
             this.materialCheckbox9.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(1218, 40);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Причины отсутствия";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2493,12 +2598,11 @@ namespace Production_planning
             this.tableLayoutPanel14.PerformLayout();
             this.tabPage7.ResumeLayout(false);
             this.tableLayoutPanel17.ResumeLayout(false);
-            this.materialExpansionPanel2.ResumeLayout(false);
-            this.materialExpansionPanel2.PerformLayout();
-            this.materialExpansionPanel1.ResumeLayout(false);
-            this.materialExpansionPanel1.PerformLayout();
-            this.materialExpansionPanel5.ResumeLayout(false);
-            this.materialExpansionPanel5.PerformLayout();
+            this.tableLayoutPanel18.ResumeLayout(false);
+            this.tableLayoutPanel18.PerformLayout();
+            this.tableLayoutPanel21.ResumeLayout(false);
+            this.tableLayoutPanel21.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.doubleBufferedDataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2594,12 +2698,6 @@ namespace Production_planning
         private ColumnHeader columnHeader16;
         private ColumnHeader columnHeader6;
         private TableLayoutPanel tableLayoutPanel17;
-        private MaterialSkin.Controls.MaterialExpansionPanel materialExpansionPanel5;
-        private TableLayoutPanel tableLayoutPanel22;
-        private MaterialSkin.Controls.MaterialExpansionPanel materialExpansionPanel2;
-        private TableLayoutPanel tableLayoutPanel21;
-        private MaterialSkin.Controls.MaterialExpansionPanel materialExpansionPanel1;
-        private TableLayoutPanel tableLayoutPanel18;
         private TableLayoutPanel tableLayoutPanel19;
         private MaterialSkin.Controls.MaterialListBox listBoxUsers;
         private TableLayoutPanel tableLayoutPanel20;
@@ -2628,6 +2726,15 @@ namespace Production_planning
         private DoubleBufferedDataGridView gridViewAbsence;
         private MaterialSkin.Controls.MaterialButton buttonAbsenceDelete;
         private MaterialSkin.Controls.MaterialButton buttonUserAbsenceAdd;
+        private TableLayoutPanel tableLayoutPanel18;
+        private TableLayoutPanel tableLayoutPanel21;
+        private MaterialSkin.Controls.MaterialButton materialButton3;
+        private MaterialSkin.Controls.MaterialButton materialButton4;
+        private DoubleBufferedDataGridView doubleBufferedDataGridView1;
+        private MaterialSkin.Controls.MaterialButton materialButton5;
+        private MaterialSkin.Controls.MaterialButton materialButton6;
+        private MaterialSkin.Controls.MaterialSwitch materialSwitch1;
+        private Label label1;
     }
 }
 

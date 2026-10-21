@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Dapper;
+using data;
+using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using Dapper;
-using MySql.Data.MySqlClient;
-using data;
 
 namespace Production_planning
 {
@@ -222,6 +223,81 @@ namespace Production_planning
                 return affectedRows > 0;
             }
         }
+        public async Task<bool> SaveEmployeeTransferAsync(
+            ulong employeeId,
+            ulong targetEquipmentId,
+            ulong targetShiftId,
+            DateTime transferDate,
+            string comment,
+            bool isCrossShiftTransfer = false, // 🌟 Флаг: перевод в ДРУГУЮ смену
+            int? parentPlanShiftId = null)      // 🌟 ID исходной плановой смены
+        {
+            // Строим чистый SQL-запрос для вставки записи перевода (оверрайда)
+            const string sql = @"
+                INSERT INTO schedule_overrides (
+                    employee_id, 
+                    equipment_id, 
+                    shift_id, 
+                    override_date, 
+                    status, 
+                    is_cancellation, 
+                    comment,
+                    parent_plan_shift_id -- Новое поле связи смен
+                ) VALUES (
+                    @EmployeeId, 
+                    @EquipmentId, 
+                    @ShiftId, 
+                    @TransferDate, 
+                    2, -- Статус: 2 (Утверждено сразу)
+                    0, -- Отмена: 0 (Это назначение, а не удаление смены)
+                    @Comment,
+                    @ParentPlanShiftId
+                );";
+
+            try
+            {
+                using (var conn = new MySqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
+
+                    // Логика определения parent_plan_shift_id перед отправкой в базу:
+                    int? dbParentShiftId = null;
+
+                    if (isCrossShiftTransfer && parentPlanShiftId.HasValue)
+                    {
+                        // Сценарий 1: Межсменный перевод (например, с 1-й на 2-ю)
+                        dbParentShiftId = parentPlanShiftId.Value;
+                    }
+                    else if (!isCrossShiftTransfer)
+                    {
+                        // Сценарий 2: Перевод внутри одной и той же смены (как было раньше)
+                        // Чтобы старый станок автоматически погас, исходная смена совпадает с целевой
+                        dbParentShiftId = (int?)targetShiftId;
+                    }
+                    // Сценарий 3: Если это просто СВЕРХУРОЧНЫЙ ВЫХОД (доп. смена), 
+                    // то dbParentShiftId останется NULL (базовый план не пострадает)
+
+                    var parameters = new
+                    {
+                        EmployeeId = employeeId,
+                        EquipmentId = targetEquipmentId,
+                        ShiftId = targetShiftId,
+                        TransferDate = transferDate.Date,
+                        Comment = string.IsNullOrWhiteSpace(comment) ? (object)DBNull.Value : comment,
+                        ParentPlanShiftId = dbParentShiftId.HasValue ? (object)dbParentShiftId.Value : DBNull.Value
+                    };
+
+                    int rowsAffected = await conn.ExecuteAsync(sql, parameters);
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR: SaveEmployeeTransferAsync -> " + ex.Message);
+                return false;
+            }
+        }
+
         /// <summary>
         /// Назначает сотрудника на смену/станок с указанием статуса утверждения и комментария
         /// </summary>

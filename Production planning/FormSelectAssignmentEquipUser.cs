@@ -124,6 +124,58 @@ namespace Production_planning
 
             var report = new EmployeeManagementService(parameter.GetMySQLConnectionString());
 
+            bool isCrossShift = true;
+            int? sourceShiftId = isCrossShift ? (int?)_shiftId : null;
+
+            var selectedEquipment = (EquipmentLookupDto)comboBoxAssignment.SelectedItem;
+            var selectedShift = (ShiftDefinitionModel)comboBoxTargetShifts.SelectedItem;
+
+            ulong targetEquipId = selectedEquipment.Id;
+            string newEquipmentName = selectedEquipment.Name; // Название нового станка
+
+            ulong targetShiftId = selectedShift.Id; // ID новой смены [2026-09-05]
+            string newShiftName = selectedShift.Name; // Название новой смены (например, "1 смена (08:00 - 20:00)")
+
+            try
+            {
+                buttonAdd.Enabled = false;
+
+                bool isSaved = await report.SaveEmployeeTransferAsync(
+                    _userId,
+                    targetEquipId,
+                    targetShiftId,
+                    _date,
+                    textBoxComment.Text,
+                    isCrossShiftTransfer: isCrossShift,
+                    parentPlanShiftId: sourceShiftId
+                );
+
+                if (isSaved)
+                {
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }               
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при выполнении перевода: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                buttonAdd.Enabled = true;
+            }
+        }
+
+        /*private async Task SaveAssignmentEquip()
+        {
+            if (comboBoxAssignment.SelectedValue == null || comboBoxTargetShifts.SelectedValue == null)
+            {
+                MessageBox.Show("Выберите оборудование и целевую смену!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var report = new EmployeeManagementService(parameter.GetMySQLConnectionString());
+
             var selectedEquipment = (EquipmentLookupDto)comboBoxAssignment.SelectedItem;
             var selectedShift = (ShiftDefinitionModel)comboBoxTargetShifts.SelectedItem;
 
@@ -175,8 +227,7 @@ namespace Production_planning
             {
                 buttonAdd.Enabled = true;
             }
-        }
-
+        }*/
 
         private async void materialButton1_Click(object sender, EventArgs e)
         {
@@ -199,21 +250,21 @@ namespace Production_planning
             // -----------------------------------------------------------------
             // ПРОВЕРКА 1: Запрет перевода на тот же самый станок
             // -----------------------------------------------------------------
-            if (selectedEquipId == _currentValue)
+            /*if (selectedEquipId == _currentValue)
             {
-                /*MessageBox.Show(
+                *//*MessageBox.Show(
                     $"Сотрудник уже запланирован на станцию '{_sourceEquipmentName}'.\n" +
                     "Перевод на тот же самый станок невозможен. Выберите другое оборудование.",
                     "Внимание",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning
-                );*/
+                );*//*
 
                 buttonAdd.Enabled = false; // Блокируем кнопку сохранения
-                comboBoxTargetShifts.Enabled = false;
+                //comboBoxTargetShifts.Enabled = false;
                 comboBoxTargetShifts.DataSource = null;
                 return;
-            }
+            }*/
 
             // Если выбрали другой станок — возвращаем кнопке "ОК" активность
             buttonAdd.Enabled = true;
@@ -240,7 +291,7 @@ namespace Production_planning
                 comboBoxTargetShifts.SelectedValue = identicalShift.Id;
 
                 // 🔒 БЛОКИРУЕМ список смен! Концепция перевода "в рамках одной смены" работает автоматически.
-                comboBoxTargetShifts.Enabled = false;
+                //comboBoxTargetShifts.Enabled = false;
                 comboBoxTargetShifts.Visible = true;
             }
             else
@@ -253,7 +304,7 @@ namespace Production_planning
                     comboBoxTargetShifts.SelectedValue = matchingNumberShift.Id;
 
                     // Раз графики и индексы разные — РАЗБЛОКИРУЕМ комбобокс, чтобы мастер мог скорректировать смену
-                    comboBoxTargetShifts.Enabled = true;
+                    //comboBoxTargetShifts.Enabled = true;
                     comboBoxTargetShifts.Visible = true;
                 }
                 else
@@ -261,10 +312,36 @@ namespace Production_planning
                     // Если графики совсем не пересекаются — просто ставим первую доступную смену станка
                     if (availableShifts.Count > 0) comboBoxTargetShifts.SelectedIndex = 0;
 
-                    comboBoxTargetShifts.Enabled = true;
+                    //comboBoxTargetShifts.Enabled = true;
                     comboBoxTargetShifts.Visible = true;
                 }
             }
+
+            EnabledButton();
+        }
+
+        private void EnabledButton()
+        {
+            ulong selectedEquipId = (ulong)comboBoxAssignment.SelectedValue;
+            ulong selectedShiftId = (ulong)comboBoxTargetShifts.SelectedValue;
+
+            if (selectedEquipId == _currentValue && selectedShiftId == _shiftId)
+            {
+                buttonAdd.Enabled = false;
+            }
+            else
+            {
+                buttonAdd.Enabled = true;
+            }
+
+            return;
+        }
+
+        private void comboBoxTargetShifts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxTargetShifts.SelectedValue == null) return;
+
+            EnabledButton();
         }
     }
 }

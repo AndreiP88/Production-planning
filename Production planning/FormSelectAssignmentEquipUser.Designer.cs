@@ -118,7 +118,6 @@
             this.comboBoxTargetShifts.DropDownHeight = 174;
             this.comboBoxTargetShifts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTargetShifts.DropDownWidth = 121;
-            this.comboBoxTargetShifts.Enabled = false;
             this.comboBoxTargetShifts.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
             this.comboBoxTargetShifts.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.comboBoxTargetShifts.FormattingEnabled = true;
@@ -132,6 +131,7 @@
             this.comboBoxTargetShifts.Size = new System.Drawing.Size(201, 49);
             this.comboBoxTargetShifts.StartIndex = 0;
             this.comboBoxTargetShifts.TabIndex = 1;
+            this.comboBoxTargetShifts.SelectedIndexChanged += new System.EventHandler(this.comboBoxTargetShifts_SelectedIndexChanged);
             // 
             // tableLayoutPanel3
             // 

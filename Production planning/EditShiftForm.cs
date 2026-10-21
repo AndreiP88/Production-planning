@@ -80,7 +80,7 @@ namespace Production_planning
             }
         }
 
-        public void FillGeneralShiftInfo(EquipmentShiftCard card)
+        /*public void FillGeneralShiftInfo(EquipmentShiftCard card)
         {
             if (card == null) return;
 
@@ -88,8 +88,8 @@ namespace Production_planning
             labelShiftDate.Text = $"{_date:D}, {card.ShiftName} ({card.TimeStart} — {card.TimeEnd})";
 
             // 2. Управляем кнопками самого оборудования (Остановка / Запуск станка)
-            /*buttonEquipCancel.Enabled = !card.IsEquipmentCancelled; // Активна, если станок РАБОТАЕТ
-            buttonEquipCancel.Enabled = card.IsEquipmentCancelled; // Активна, если станок ОСТАНОВЛЕН*/
+            *//*buttonEquipCancel.Enabled = !card.IsEquipmentCancelled; // Активна, если станок РАБОТАЕТ
+            buttonEquipCancel.Enabled = card.IsEquipmentCancelled; // Активна, если станок ОСТАНОВЛЕН*//*
 
             // Включаем кнопку ручного добавления сотрудников по умолчанию
             btnAssignEmployee.Enabled = true;
@@ -199,7 +199,132 @@ namespace Production_planning
                     lblStaffingRequirement.ForeColor = Color.DimGray; // Серый цвет
                     break;
             }
+        }*/
+
+        public void FillGeneralShiftInfo(EquipmentShiftCard card)
+        {
+            if (card == null) return;
+
+            // 1. Заполняем текстовые заголовки на форме
+            labelShiftDate.Text = $"{_date:D}, {card.ShiftName} ({card.TimeStart} — {card.TimeEnd})";
+
+            // Включаем кнопку ручного добавления сотрудников по умолчанию
+            btnAssignEmployee.Enabled = true;
+            lblStaffingRequirement.Text = card.StaffingRequirement;
+
+            _currentEquipmentState = (EquipmentShiftState)card.StaffingRequirementCode;
+            StaffingRequirementType requirement = (StaffingRequirementType)card.StaffingRequirementCode;
+            //MessageBox.Show(_currentEquipmentState + ", " + requirement);
+            // 🌟 ИСПРАВЛЕНИЕ: Если база вернула код 3 (Станок в плане, но людей нет), 
+            // для C# UI мы принудительно переключаем состояние в ActiveByPlan (Код 2),
+            // чтобы кнопка "+" была активна и не выводилась плашка Выходного!
+            if (card.StaffingRequirementCode == 3)
+            {
+                _currentEquipmentState = EquipmentShiftState.ActiveByPlan;
+            }
+
+            // ВЫСТАВЛЯЕМ ИНТЕРФЕЙС СТРОГО ПО КОДУ СОСТОЯНИЯ ИЗ БД
+            switch (_currentEquipmentState)
+            {
+                case EquipmentShiftState.CancelledManually: // Код 0
+                    lblEquipmentState.Text = "ℹ️ ПРИНУДИТЕЛЬНО ОСТАНОВЛЕНО";
+                    lblEquipmentState.ForeColor = Color.Red;
+                    lblStaffingRequirement.ForeColor = Color.Red;
+
+                    btnManageEquipment.Text = "🔄 Вернуть в график";
+                    btnManageEquipment.UseAccentColor = false;
+                    btnAssignEmployee.Enabled = false;
+                    break;
+
+                case EquipmentShiftState.ManualActive: // Код 1
+                    lblEquipmentState.Text = "ℹ️ РУЧНАЯ СМЕНА АКТИВИРОВАНА";
+                    lblEquipmentState.ForeColor = Color.ForestGreen;
+
+                    btnManageEquipment.Text = "🔄 Отменить смену";
+                    btnManageEquipment.UseAccentColor = false;
+                    break;
+
+                case EquipmentShiftState.ActiveByPlan: // Код 2 (Сюда же теперь попадает код 3 из БД)
+
+                    // Если смена создана вручную вне штатного циклического графика
+                    if (card.EdpId.HasValue && !card.IsWorkingByPlan)
+                    {
+                        _currentEquipmentState = EquipmentShiftState.ManualActive;
+
+                        lblEquipmentState.Text = "ℹ️ СМЕНА АКТИВИРОВАНА ВНЕ ПЛАНА";
+                        btnManageEquipment.Text = "🔄 Отменить внеплановую смену";
+                        btnManageEquipment.UseAccentColor = false;
+                    }
+                    // Если смена запущена вне плана, но по графику станок ДОЛЖЕН работать
+                    else if (card.EdpId.HasValue && card.IsWorkingByPlan)
+                    {
+                        lblEquipmentState.Text = "ℹ️ СМЕНА ВОССТАНОВЛЕНА ВНЕ ПЛАНА";
+                        btnManageEquipment.Text = "🛑 Снять (отменить) смену";
+                        btnManageEquipment.UseAccentColor = true;
+                    }
+                    // 🌟 Штатная работа по графику (Включая случай, когда плановые люди переведены)
+                    else
+                    {
+                        lblEquipmentState.Text = "ℹ️ РАБОТАЕТ ПО ШТАТНОМУ ГРАФИКУ";
+                        btnManageEquipment.Text = "🛑 Отменить работу";
+                        btnManageEquipment.UseAccentColor = true;
+
+                        // Если людей на станке физически не осталось (перевели), 
+                        // мы ОСТАВЛЯЕМ кнопку добавления персонала активной!
+                        btnAssignEmployee.Enabled = true;
+                    }
+
+                    lblEquipmentState.ForeColor = Color.ForestGreen;
+                    break;
+
+                case EquipmentShiftState.IdleByPlan: // Код 3 (В C# это выходной, но из БД сюда придет код 4)
+                    lblEquipmentState.Text = "ℹ️ ПЛАНОВЫЙ ПРОСТОЙ (Выходной)";
+                    lblEquipmentState.ForeColor = Color.DimGray;
+                    lblStaffingRequirement.ForeColor = Color.DimGray;
+
+                    btnManageEquipment.Text = "🟢 Активировать работу (Вне плана)";
+                    btnManageEquipment.UseAccentColor = true;
+                    btnAssignEmployee.Enabled = false;
+                    break;
+
+                case EquipmentShiftState.ManualWaiting: // Код 4
+                    lblEquipmentState.Text = "ℹ️ РУЧНОЕ НАЗНАЧЕНИЕ (Смена не активна)";
+                    lblEquipmentState.ForeColor = Color.DarkOrange;
+                    lblStaffingRequirement.ForeColor = Color.DimGray;
+
+                    btnManageEquipment.Text = "🟢 Назначить (активировать) смену";
+                    btnManageEquipment.UseAccentColor = true;
+                    btnAssignEmployee.Enabled = false;
+                    break;
+            }
+
+            // РАСПРЕДЕЛЕНИЕ ЦВЕТОВЫХ ИНДИКАТОРОВ ТЕКСТА ПОТРЕБНОСТИ
+            switch (requirement)
+            {
+                case StaffingRequirementType.EquipmentCancelled: // Код 0
+                    lblStaffingRequirement.ForeColor = Color.Firebrick;
+                    break;
+
+                case StaffingRequirementType.Staffed:     // Код 1 
+                case StaffingRequirementType.StaffNeeded: // Код 2
+                case (StaffingRequirementType)3:          // 🌟 Добавили обработку кода 3 из базы! (Работа без людей)
+
+                    if (card.ActiveStaffCount > 0)
+                    {
+                        lblStaffingRequirement.ForeColor = Color.ForestGreen;
+                    }
+                    else
+                    {
+                        lblStaffingRequirement.ForeColor = Color.Red; // Будет гореть ярко-красным!
+                    }
+                    break;
+
+                case StaffingRequirementType.ManualWaiting:  // Код 4
+                    lblStaffingRequirement.ForeColor = Color.DimGray;
+                    break;
+            }
         }
+
 
         /// <summary>
         /// Шаг 2: Инициализация и наполнение списков персонала (План по графику и Назначения/Замены)
@@ -413,7 +538,7 @@ namespace Production_planning
             }
         }
 
-        private void gridViewUserSchedule_SelectionChanged(object sender, EventArgs e)
+        /*private void gridViewUserSchedule_SelectionChanged(object sender, EventArgs e)
         {
             // 1. ЗАЩИТА: Если строка не выбрана или это пустая заглушка ("Никто не запланирован")
             if (gridViewUserSchedule.CurrentRow == null || gridViewUserSchedule.CurrentRow.Tag == null || gridViewUserSchedule.CurrentRow.Index < 0)
@@ -428,7 +553,7 @@ namespace Production_planning
             string[] idParts = gridViewUserSchedule.CurrentRow.Tag.ToString().Split(';');
             ulong employeeId = ulong.Parse(idParts[0]);
             ulong overrideId = ulong.Parse(idParts[1]); // ID оверрайда из базы или 0
-
+            
             // 3. НАХОДИМ ОБЪЕКТ СОТРУДНИКА В СПИСКЕ КАРТОЧКИ, ЧТОБЫ УЗНАТЬ ЕГО ЦИФРОВОЙ СТАТУС
             // (_currentCard — сохраненный объект EquipmentShiftCard текущего окна)
             var employee = _shiftCard.PlannedStaff.FirstOrDefault(x => x.EmployeeId == employeeId);
@@ -466,43 +591,81 @@ namespace Production_planning
                     buttonScheduleReturn.Enabled = overrideId > 0; // Активна, если оверрайд физически существует
                     break;
             }
-            /*if (gridViewUserSchedule.CurrentRow != null)
+        }*/
+        // 🌟 МЕТОД ПОЛНОГО СБРОСА СОСТОЯНИЯ КНОПОК УПРАВЛЕНИЯ ПЕРСОНАЛОМ
+        private void ResetActionButtons()
+        {
+            buttonScheduleShiftCancel.Enabled = false;
+            buttonScheduleEquipReplace.Enabled = false;
+            buttonScheduleReturn.Enabled = false;
+
+            // Если на форме есть DataGridView, принудительно снимаем с него визуальный фокус выборки
+            if (gridViewUserSchedule.CurrentRow != null)
             {
-                int rowIndex = gridViewUserSchedule.CurrentRow.Index;
-
-                object tagValue = gridViewUserSchedule.CurrentRow.Tag;
-
-                if (tagValue != null)
-                {
-                    // 1. Разбиваем строку по разделителю ';'
-                    string[] idParts = gridViewUserSchedule.CurrentRow.Tag.ToString().Split(';');
-
-                    // 2. Парсим обе части в чистые ulong переменные
-                    ulong employeeId = ulong.Parse(idParts[0]);
-                    ulong overrideId = ulong.Parse(idParts[1]);
-
-                    //int id = tagValue != null ? Convert.ToInt32(tagValue) : -1;
-                    if (overrideId == 0)
-                    {
-                        buttonScheduleShiftCancel.Enabled = true;
-                        buttonScheduleEquipReplace.Enabled = true;
-                        buttonScheduleReturn.Enabled = false;
-                    }
-
-                    if (overrideId > 0)
-                    {
-                        buttonScheduleShiftCancel.Enabled = false;
-                        buttonScheduleEquipReplace.Enabled = false;
-                        buttonScheduleReturn.Enabled = true;
-                    }
-                }
+                gridViewUserSchedule.ClearSelection();
             }
-            else
+        }
+
+        private void gridViewUserSchedule_SelectionChanged(object sender, EventArgs e)
+        {
+            // 🌟 Гасим кнопки по умолчанию при любом переключении строки
+            buttonScheduleShiftCancel.Enabled = false;
+            buttonScheduleEquipReplace.Enabled = false;
+            buttonScheduleReturn.Enabled = false;
+
+            // 1. ЗАЩИТА: Если строка не выбрана
+            if (gridViewUserSchedule.CurrentRow == null || gridViewUserSchedule.CurrentRow.Tag == null || gridViewUserSchedule.CurrentRow.Index < 0)
             {
-                buttonScheduleShiftCancel.Enabled = false;
-                buttonScheduleEquipReplace.Enabled = false;
-                buttonScheduleReturn.Enabled = false;
-            }*/
+                return; // Кнопки останутся выключенными, как мы и прописали выше
+            }
+
+            // 2. РАЗБИРАЕМ КОМБИНИРОВАННЫЙ ТЕГ СТРОКИ
+            string[] idParts = gridViewUserSchedule.CurrentRow.Tag.ToString().Split(';');
+            ulong employeeId = ulong.Parse(idParts[0]);
+            ulong overrideId = ulong.Parse(idParts[1]); // Здесь теперь лежит 187!
+            
+            // 3. НАХОДИМ ОБЪЕКТ СОТРУДНИКА В СПИСКЕ КАРТОЧКИ
+            var employee = _shiftCard.PlannedStaff.FirstOrDefault(x => x.EmployeeId == employeeId);
+            if (employee == null) return;
+
+            // Приводим числовой код из базы к нашему строгому Enum
+            // Убедитесь, что ваш Enum содержит код 4, либо приводим к int для надежности:
+            int statusCode = (int)employee.PlanStatusCode;
+
+            // ===================================================================
+            // 🌟 ЖЕСТКАЯ ЦИФРОВАЯ БЛОКИРОВКА КНОПОК ПЛАНА (ОБНОВЛЕННАЯ) 🌟
+            // ===================================================================
+            switch (statusCode)
+            {
+                case 0: // Active (Сотрудник здоров и в графике)
+                    buttonScheduleShiftCancel.Enabled = true;
+                    buttonScheduleEquipReplace.Enabled = true;
+                    buttonScheduleReturn.Enabled = false;
+                    break;
+
+                case 1: // Absence (Больничный или отпуск)
+                    buttonScheduleShiftCancel.Enabled = false;
+                    buttonScheduleEquipReplace.Enabled = false;
+                    buttonScheduleReturn.Enabled = false;
+                    break;
+
+                case 2: // Cancelled (Отмена мастером)
+                case 3: // Transferred (Обычный перевод внутри смены)
+                case 4: // 🌟 НОВОЕ: Перевод в другую смену (Межсменный оверрайд)
+                        // Повторно отменять или переводить нельзя.
+                    buttonScheduleShiftCancel.Enabled = false;
+                    buttonScheduleEquipReplace.Enabled = false;
+
+                    // Кнопка возврата к плану становится активной, так как overrideId (187) > 0!
+                    buttonScheduleReturn.Enabled = overrideId > 0;
+                    break;
+
+                default:
+                    buttonScheduleShiftCancel.Enabled = false;
+                    buttonScheduleEquipReplace.Enabled = false;
+                    buttonScheduleReturn.Enabled = false;
+                    break;
+            }
         }
 
         private void gridViewUserOverride_SelectionChanged(object sender, EventArgs e)
@@ -561,6 +724,8 @@ namespace Production_planning
                     await report.CancelEmployeeShiftAsync(_date, _shiftID, employeeId, comment);
 
                     await RefreshCardDataAsync();
+
+                    ResetActionButtons();
                 }
             }
             catch
@@ -585,6 +750,8 @@ namespace Production_planning
                 {
                     // Нам остается просто обновить сетку на главной форме!
                     await RefreshCardDataAsync();
+
+                    ResetActionButtons();
                 }
             }
         }
@@ -614,6 +781,8 @@ namespace Production_planning
                     await report.DeleteOverrideByIdAsync(overrideId);
 
                     await RefreshCardDataAsync();
+
+                    ResetActionButtons();
                 }
             }
             catch
@@ -764,6 +933,11 @@ namespace Production_planning
         {
             this.DialogResult = DialogResult.OK;
             Close();
+        }
+
+        private void gridViewUserSchedule_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

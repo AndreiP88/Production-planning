@@ -84,6 +84,6 @@ namespace data
         public string Name { get; set; } = string.Empty;
         public bool IsEndDateRequired { get; set; } // Мапится из is_end_date_required
         public string StatusColor { get; set; } = "#FF6347"; // Мапится из status_color
+        public byte IsActive { get; set; }
     }
-
 }

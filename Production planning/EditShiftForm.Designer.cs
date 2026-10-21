@@ -256,6 +256,7 @@ namespace Production_planning
             this.gridViewUserSchedule.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gridViewUserSchedule.Size = new System.Drawing.Size(609, 119);
             this.gridViewUserSchedule.TabIndex = 4;
+            this.gridViewUserSchedule.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridViewUserSchedule_CellContentClick);
             this.gridViewUserSchedule.SelectionChanged += new System.EventHandler(this.gridViewUserSchedule_SelectionChanged);
             // 
             // tableLayoutPanel6

@@ -11,8 +11,13 @@ namespace Production_planning
         public int RightColumn { get; set; }
         public int TopRow { get; set; }
         public int BottomRow { get; set; }
-        public FontStyle FontStyle { get; set; } = FontStyle.Bold;
+        public Font FontCell { get; set; } = new Font("Arial", 10, FontStyle.Bold);
+        public StringAlignment HAlignmentCell { get; set; }
+        public StringAlignment VAlignmentCell { get; set; }
+
+        //public FontStyle FontStyle { get; set; } = FontStyle.Bold;
         public Color MergeBackColor { get; set; } = Color.Gray;
+        public Color MergeForeColor { get; set; } = Color.White;
 
         protected override void Paint(Graphics graphics, Rectangle clipBounds, Rectangle cellBounds, int rowIndex, DataGridViewElementStates cellState, object value, object formattedValue, string errorText, DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle, DataGridViewPaintParts paintParts)
         {
@@ -88,15 +93,17 @@ namespace Production_planning
                 graphics.SetClip(cellBounds, System.Drawing.Drawing2D.CombineMode.Intersect);
 
                 // 6. Рисуем текст строго по центру ВСЕГО виртуального блока rectFullBlock
+                SolidBrush fBrush = new SolidBrush(MergeForeColor);
                 using (StringFormat sf = new StringFormat
                 {
-                    Alignment = StringAlignment.Center,
-                    LineAlignment = StringAlignment.Center,
-                    Trimming = StringTrimming.EllipsisCharacter
+                    Alignment = HAlignmentCell,
+                    LineAlignment = VAlignmentCell,
+                    Trimming = StringTrimming.EllipsisCharacter,
+                    FormatFlags = StringFormatFlags.LineLimit
                 })
-                using (Font font = new Font("Arial", 10, FontStyle))
+                //using (Font font = new Font("Arial", 10, FontStyle.Bold))
                 {
-                    graphics.DrawString(strText, font, Brushes.White, rectFullBlock, sf);
+                    graphics.DrawString(strText, FontCell, fBrush, rectFullBlock, sf);
                 }
 
                 graphics.Clip = oldClip;

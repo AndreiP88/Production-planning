@@ -80,6 +80,30 @@ namespace data
         public string FinalFactStatus { get; set; }
     }
 
+    public class EquipmentStaffingPeriodRow
+    {
+        public DateTime Date { get; set; }
+        public int ShiftNum { get; set; }
+        public string ShiftName { get; set; } = string.Empty;
+        public string StaffNames { get; set; } = string.Empty;
+
+        // Время смены транзитом из MySQL для склейки с заказами [2026-09-04]
+        public TimeSpan TimeStart { get; set; }
+        public TimeSpan TimeEnd { get; set; }
+        public byte IsCancelled { get; set; }
+
+    }
+
+    public class EquipmentPlanRowItem
+    {
+        public ProductionJobCard JobCard { get; set; } // Наша готовая сгруппированная карточка заказа
+        public string StaffName { get; set; } = "—";
+        public string ShiftName { get; set; } = string.Empty;
+        public int ShiftNum { get; set; }
+    }
+
+
+
     public enum EquipmentShiftState
     {
         CancelledManually = 0, // Станок принудительно остановлен (в таблице edp.is_cancelled = 1)

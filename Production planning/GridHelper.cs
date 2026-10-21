@@ -8,7 +8,7 @@ namespace Production_planning
     {
         private static bool isSelectionEventSubscribed = false;
 
-        public static void MergeCells(DataGridView grid, string text, int startRow, int startCol, int rowCount, int colCount, Color backgroundColor)
+        public static void MergeCells(DataGridView grid, string text, int startRow, int startCol, int rowCount, int colCount, Color backgroundColor, Color textColor, Font font, StringAlignment hAlignment, StringAlignment vAlignment)
         {
             if (grid == null || rowCount < 1 || colCount < 1) return;
 
@@ -28,12 +28,16 @@ namespace Production_planning
                         RightColumn = endCol,
                         TopRow = startRow,
                         BottomRow = endRow,
-                        MergeBackColor = backgroundColor
+                        MergeBackColor = backgroundColor,
+                        MergeForeColor = textColor,
+                        FontCell = font,
+                        HAlignmentCell = hAlignment,
+                        VAlignmentCell = vAlignment
                     };
 
                     // Отключаем визуальное выделение синим цветом
                     mergedCell.Style.SelectionBackColor = backgroundColor;
-                    mergedCell.Style.SelectionForeColor = Color.White;
+                    mergedCell.Style.SelectionForeColor = textColor;
 
                     grid.Rows[r].Cells[c] = mergedCell;
                     grid.Rows[r].Cells[c].ReadOnly = true;
