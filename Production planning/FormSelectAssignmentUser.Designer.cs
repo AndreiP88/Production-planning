@@ -151,7 +151,7 @@ namespace Production_planning
             this.buttonAdd.NoAccentTextColor = System.Drawing.Color.Empty;
             this.buttonAdd.Size = new System.Drawing.Size(232, 52);
             this.buttonAdd.TabIndex = 0;
-            this.buttonAdd.Text = "Сохранить";
+            this.buttonAdd.Text = "Выбрать";
             this.buttonAdd.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.buttonAdd.UseAccentColor = false;
             this.buttonAdd.UseVisualStyleBackColor = true;

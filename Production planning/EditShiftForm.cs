@@ -13,7 +13,6 @@ namespace Production_planning
     {
         ConnectionParameter parameter = new ConnectionParameter();
         private DateTime _date;
-        private int _shiftNumber;
         private ulong _shiftID;
         private ulong _equipID;
 
@@ -22,12 +21,12 @@ namespace Production_planning
 
         private EquipmentShiftState _currentEquipmentState;
 
-        public EditShiftForm(DateTime date, int shiftNumber, ulong equipID)
+        public EditShiftForm(DateTime date, ulong shiftId, ulong equipID)
         {
             InitializeComponent();
 
             _date = date;
-            _shiftNumber = shiftNumber;
+            _shiftID = shiftId;
             _equipID = equipID;
         }
 
@@ -58,9 +57,7 @@ namespace Production_planning
             {
                 var report = new ReportEquipShift(parameter.GetMySQLConnectionString());
 
-                _shiftCard = await report.GetEquipmentShiftCardAsync(_date, _shiftNumber, _equipID);
-
-                _shiftID = _shiftCard.ShiftID;
+                _shiftCard = await report.GetEquipmentShiftCardAsync(_date, _shiftID, _equipID);
 
                 FillGeneralShiftInfo(_shiftCard);
                 FillEmployeesTables(_shiftCard);

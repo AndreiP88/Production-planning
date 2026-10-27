@@ -43,13 +43,14 @@ namespace Production_planning
             }
         }
 
-        public async Task<List<AvailableEmployeeRow>> GetAvailableEmployeesForShiftAsync(DateTime targetDate, int shiftNumber)
+        public async Task<List<AvailableEmployeeRow>> GetAvailableEmployeesForShiftAsync(DateTime targetDate, ulong shiftId, ulong equipId)
         {
             using (var conn = new MySqlConnection(_connectionString))
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("p_target_date", targetDate.Date);
-                parameters.Add("p_target_shift_number", shiftNumber);
+                parameters.Add("p_target_shift_id", shiftId);
+                parameters.Add("p_target_equipment_id", equipId);
 
                 var res = await conn.QueryAsync<AvailableEmployeeRow>(
                     "GetAvailableEmployeesForShift",

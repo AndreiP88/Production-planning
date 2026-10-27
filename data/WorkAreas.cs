@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+//using System.Xml;
+using Newtonsoft.Json;
 
 namespace data
 {
@@ -8,6 +10,11 @@ namespace data
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        // Сюда Dapper или Entity Framework запишет сырой JSON-текст из базы данных
+        public string VisibleColumnsJson { get; set; }
+
+        // Удобное свойство для работы в коде программы
+        public WorkAreaVisibleColumns Settings => WorkAreaVisibleColumns.FromJson(VisibleColumnsJson);
         public int SortOrder { get; set; } // Добавили, так как мы им управляем
         public List<EquipmentShortInfo> Equipments { get; set; } = new List<EquipmentShortInfo>();
     }
@@ -59,6 +66,7 @@ namespace data
     {
         public int AreaId { get; set; }
         public string AreaName { get; set; }
+        public string AreaVisibleColumnsJson { get; set; } // Имя свойства совпадает с AS AreaVisibleColumnsJson
         public int AreaSortOrder { get; set; }
         public int? EquipId { get; set; }
         public string EquipName { get; set; }
@@ -73,6 +81,7 @@ namespace data
         public DateTime? StaffingModeValidFrom { get; set; }
         public DateTime? TemplateValidFrom { get; set; }
     }
+
 
     /// <summary>
     /// Модель оборудования
@@ -134,4 +143,111 @@ namespace data
             : "Ручное назначение (Вне плана)";
     }
 
+    public class WorkAreaVisibleColumns
+    {
+        // ==========================================
+        // 🔒 ГРУППА 1. ОБЯЗАТЕЛЬНЫЕ СИСТЕМНЫЕ КОЛОНКИ
+        // ==========================================
+
+        [JsonIgnore] // Не сериализуем в JSON, так как они всегда true
+        public bool Executor => true; // Исполнитель
+
+        [JsonIgnore]
+        public bool OrderNumber => true; // Номер заказа
+
+        [JsonIgnore]
+        public bool Customer => true; // Заказчик
+
+
+        // ==========================================
+        // ⚙️ ГРУППА 2. ОПЦИОНАЛЬНЫЕ ТЕХНОЛОГИЧЕСКИЕ КОЛОНКИ
+        // ==========================================
+
+        [JsonProperty("order_name")]
+        public bool OrderName { get; set; } = true; // Наименование заказа
+
+        [JsonProperty("element")]
+        public bool Element { get; set; } = true; // Элемент тиража
+
+        [JsonProperty("colors")]
+        public bool Colors { get; set; } = true; // Красочность (Лицо/Оборот)
+
+        [JsonProperty("material")]
+        public bool Material { get; set; } = true; // Материал (Бумага)
+
+        [JsonProperty("tech_notes")]
+        public bool TechNotes { get; set; } = true; // Заметки технолога
+
+        [JsonProperty("planned_output")]
+        public bool PlannedOutput { get; set; } = true; // Плановая выработка
+
+        [JsonProperty("date_time_start")]
+        public bool DateTimeStart { get; set; } = true; // Дата/время начала
+
+        [JsonProperty("date_time_end")]
+        public bool DateTimeEnd { get; set; } = true; // Дата/время окончания
+
+        [JsonProperty("duration")]
+        public bool Duration { get; set; } = true; // Длительность
+
+        [JsonProperty("stamp")]
+        public bool Stamp { get; set; } = false; // Штамп (оснастка)
+
+        [JsonProperty("sheet_trimming")]
+        public bool SheetTrimming { get; set; } = false; // Подрезка листа
+
+
+        // ==========================================
+        // 🛠️ МЕТОДЫ ДЛЯ СЕРИАЛИЗАЦИИ И ДЕФОЛТНЫХ НАСТРОЕК
+        // ==========================================
+
+        /// <summary>
+        /// Конвертирует текущий объект настроек в JSON-строку для сохранения в MySQL visible_columns
+        /// </summary>
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(this, Formatting.None);
+        }
+
+        /// <summary>
+        /// Создает объект настроек из JSON-строки, полученной из базы данных MySQL
+        /// </summary>
+        public static WorkAreaVisibleColumns FromJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                return GetDefaultSettings(); // Если в базе NULL, отдаем настройки по умолчанию
+            }
+
+            try
+            {
+                return JsonConvert.DeserializeObject<WorkAreaVisibleColumns>(json);
+            }
+            catch
+            {
+                return GetDefaultSettings(); // Защита от битого JSON в БД
+            }
+        }
+
+        /// <summary>
+        /// Возвращает базовые настройки по умолчанию (например, для новых участков)
+        /// </summary>
+        public static WorkAreaVisibleColumns GetDefaultSettings()
+        {
+            return new WorkAreaVisibleColumns
+            {
+                OrderName = true,
+                Element = true,
+                Colors = true,
+                Material = true,
+                TechNotes = true,
+                PlannedOutput = true,
+                DateTimeStart = true,
+                DateTimeEnd = true,
+                Duration = true,
+                Stamp = false,        // По умолчанию штамп выключен (включим для вырубки)
+                SheetTrimming = false  // По умолчанию подрезка выключена
+            };
+        }
+    }
 }

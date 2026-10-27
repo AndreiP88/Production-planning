@@ -53,6 +53,7 @@ namespace database
                                 Code = eqGroup.Key.EquipCode,
                                 Shifts = eqGroup.Select(s => new ShiftInfo
                                 {
+                                    Id = s.ShiftId,
                                     Number = s.ShiftNum,
                                     Name = s.Shift,
                                     TimeStart = s.TimeStart,

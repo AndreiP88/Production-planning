@@ -17,7 +17,7 @@ namespace database
             _connectionString = connectionString;
         }
 
-        public async Task<EquipmentShiftCard> GetEquipmentShiftCardAsync(DateTime targetDate, int shiftNumber, ulong equipmentId)
+        public async Task<EquipmentShiftCard> GetEquipmentShiftCardAsync(DateTime targetDate, ulong shiftId, ulong equipmentId)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -27,7 +27,7 @@ namespace database
                     new
                     {
                         p_target_date = targetDate,
-                        p_target_shift_number = shiftNumber,
+                        p_target_shift_id = shiftId,
                         p_target_equipment_id = equipmentId
                     },
                     commandType: CommandType.StoredProcedure

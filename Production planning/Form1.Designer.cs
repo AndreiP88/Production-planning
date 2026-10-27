@@ -172,6 +172,7 @@ namespace Production_planning
             this.materialButton6 = new MaterialSkin.Controls.MaterialButton();
             this.materialSwitch1 = new MaterialSkin.Controls.MaterialSwitch();
             this.doubleBufferedDataGridView1 = new Production_planning.Form1.DoubleBufferedDataGridView();
+            this.label1 = new System.Windows.Forms.Label();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.materialCheckbox1 = new MaterialSkin.Controls.MaterialCheckbox();
             this.materialCheckbox2 = new MaterialSkin.Controls.MaterialCheckbox();
@@ -182,7 +183,6 @@ namespace Production_planning
             this.materialCheckbox7 = new MaterialSkin.Controls.MaterialCheckbox();
             this.materialCheckbox8 = new MaterialSkin.Controls.MaterialCheckbox();
             this.materialCheckbox9 = new MaterialSkin.Controls.MaterialCheckbox();
-            this.label1 = new System.Windows.Forms.Label();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -2369,6 +2369,17 @@ namespace Production_planning
             this.doubleBufferedDataGridView1.Size = new System.Drawing.Size(1218, 410);
             this.doubleBufferedDataGridView1.TabIndex = 2;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(1218, 40);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Причины отсутствия";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // imageList
             // 
             this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
@@ -2526,17 +2537,6 @@ namespace Production_planning
             this.materialCheckbox9.Text = "materialCheckbox9";
             this.materialCheckbox9.ThreeState = true;
             this.materialCheckbox9.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(1218, 40);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Причины отсутствия";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // Form1
             // 

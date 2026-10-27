@@ -51,7 +51,7 @@ namespace Production_planning
             {
                 // 1. Вызываем метод репозитория (который теперь дергает Хранимую процедуру)
                 var report = new EmployeeManagementService(parameter.GetMySQLConnectionString());
-                _employees = await report.GetAvailableEmployeesForShiftAsync(_date, _shiftDefinition.ShiftNumber);
+                _employees = await report.GetAvailableEmployeesForShiftAsync(_date, _shiftId, _currentValue);
 
                 // 2. СТРОИМ СТРУКТУРУ КОЛОНОК С НУЛЯ (чтобы исключить баги дизайнера)
                 gridEmployees.Columns.Clear();

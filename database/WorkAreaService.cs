@@ -30,75 +30,77 @@ namespace database
             var todayStr = DateTime.Today.ToString("yyyy-MM-dd");
 
             string sql = $@"
-        SELECT 
-            wa.id AS AreaId, 
-            wa.name AS AreaName, 
-            wa.sort_order AS AreaSortOrder,
-            eq.id AS EquipId, 
-            eq.name AS EquipName, 
-            eq.code AS EquipCode,
-            eq.sort_order AS EquipSortOrder,
-            eq.work_area_id AS WorkAreaId,
-            eq.commissioned_at AS CommissionedAt,
-            eq.decommissioned_at AS DecommissionedAt,
-            
-            -- 1. Режим работы
-            COALESCE(
-                (SELECT staffing_mode FROM equipment_staffing_history 
-                 WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
-                 ORDER BY valid_from DESC LIMIT 1),
-                eq.staffing_mode
-            ) AS StaffingMode,
-            
-            -- Дата начала действия актуального режима работы
-            COALESCE(
-                (SELECT valid_from FROM equipment_staffing_history 
-                 WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
-                 ORDER BY valid_from DESC LIMIT 1),
-                eq.commissioned_at
-            ) AS StaffingModeValidFrom,
-            
-            -- 2. Шаблон/График
-            COALESCE(
-                (SELECT template_id FROM equipment_schedule_history 
-                 WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
-                 ORDER BY valid_from DESC LIMIT 1),
-                eq.template_id
-            ) AS TemplateId,
-            
-            -- Дата начала действия актуального графика
-            COALESCE(
-                (SELECT valid_from FROM equipment_schedule_history 
-                 WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
-                 ORDER BY valid_from DESC LIMIT 1),
-                eq.commissioned_at
-            ) AS TemplateValidFrom,
-            
-            -- Название шаблона
-            (SELECT name FROM schedule_templates 
-             WHERE id = COALESCE(
-                (SELECT template_id FROM equipment_schedule_history 
-                 WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
-                 ORDER BY valid_from DESC LIMIT 1),
-                eq.template_id
-             )
-            ) AS TemplateName
-            
-        FROM work_areas wa
-        LEFT JOIN equipment eq ON wa.id = eq.work_area_id
-        ORDER BY wa.sort_order, wa.name, eq.sort_order, eq.name;";
+                    SELECT 
+                        wa.id AS AreaId, 
+                        wa.name AS AreaName, 
+                        wa.visible_columns AS AreaVisibleColumnsJson, -- Исправили опечатку в алиасе для маппинга
+                        wa.sort_order AS AreaSortOrder,
+                        eq.id AS EquipId, 
+                        eq.name AS EquipName, 
+                        eq.code AS EquipCode,
+                        eq.sort_order AS EquipSortOrder,
+                        eq.work_area_id AS WorkAreaId,
+                        eq.commissioned_at AS CommissionedAt,
+                        eq.decommissioned_at AS DecommissionedAt,
+    
+                        -- 1. Режим работы
+                        COALESCE(
+                            (SELECT staffing_mode FROM equipment_staffing_history 
+                             WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                             ORDER BY valid_from DESC LIMIT 1),
+                            eq.staffing_mode
+                        ) AS StaffingMode,
+    
+                        -- Дата начала действия актуального режима работы
+                        COALESCE(
+                            (SELECT valid_from FROM equipment_staffing_history 
+                             WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                             ORDER BY valid_from DESC LIMIT 1),
+                            eq.commissioned_at
+                        ) AS StaffingModeValidFrom,
+    
+                        -- 2. Шаблон/График
+                        COALESCE(
+                            (SELECT template_id FROM equipment_schedule_history 
+                             WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                             ORDER BY valid_from DESC LIMIT 1),
+                            eq.template_id
+                        ) AS TemplateId,
+    
+                        -- Дата начала действия актуального графика
+                        COALESCE(
+                            (SELECT valid_from FROM equipment_schedule_history 
+                             WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                             ORDER BY valid_from DESC LIMIT 1),
+                            eq.commissioned_at
+                        ) AS TemplateValidFrom,
+    
+                        -- Название шаблона
+                        (SELECT name FROM schedule_templates 
+                         WHERE id = COALESCE(
+                            (SELECT template_id FROM equipment_schedule_history 
+                             WHERE equipment_id = eq.id AND valid_from <= '{todayStr}' 
+                             ORDER BY valid_from DESC LIMIT 1),
+                            eq.template_id
+                         )
+                        ) AS TemplateName
+    
+                    FROM work_areas wa
+                    LEFT JOIN equipment eq ON wa.id = eq.work_area_id
+                    ORDER BY wa.sort_order, wa.name, eq.sort_order, eq.name;";
 
             using (var connection = new MySqlConnection(_connectionString))
             {
                 var rows = await connection.QueryAsync<WorkAreaEquipmentRow>(sql, commandType: CommandType.Text);
 
                 var result = rows
-                    .GroupBy(r => new { r.AreaId, r.AreaName, r.AreaSortOrder })
+                    .GroupBy(r => new { r.AreaId, r.AreaName, r.AreaVisibleColumnsJson, r.AreaSortOrder }) // Добавили поле JSON в группировку
                     .Select(areaGroup => new WorkAreaInfo
                     {
                         Id = areaGroup.Key.AreaId,
                         Name = areaGroup.Key.AreaName,
                         SortOrder = areaGroup.Key.AreaSortOrder,
+                        VisibleColumnsJson = areaGroup.Key.AreaVisibleColumnsJson, // Заполняем свойство в объекте
                         Equipments = areaGroup
                             .Where(r => r.EquipId.HasValue)
                             .Select(r => new EquipmentShortInfo
@@ -113,7 +115,6 @@ namespace database
                                 SortOrder = r.EquipSortOrder,
                                 StaffingMode = r.StaffingMode ?? "strict_schedule",
 
-                                // Передаем новые данные в расширенную модель
                                 TemplateName = r.TemplateName ?? "График не назначен",
                                 StaffingModeValidFrom = r.StaffingModeValidFrom,
                                 TemplateValidFrom = r.TemplateValidFrom
@@ -129,6 +130,7 @@ namespace database
 
 
 
+
         // =========================================================================
         // 2. БЛОК ИЗМЕНЕНИЯ И УПРАВЛЕНИЯ УЧАСТКАМИ
         // =========================================================================
@@ -136,31 +138,32 @@ namespace database
         /// <summary>
         /// ДОБАВЛЕНИЕ: Создает новый участок и ставит его в конец списка по sort_order
         /// </summary>
-        public async Task<int> CreateWorkAreaAsync(string name)
+        public async Task<bool> CreateWorkAreaAsync(string areaName, string visibleColumnsJson)
         {
-            // COALESCE находит максимальный текущий sort_order и делает +1. Если база пуста — ставит 1.
-            const string sql = @"
-                INSERT INTO work_areas (name, sort_order) 
-                VALUES (@Name, COALESCE((SELECT MAX(sort_order) FROM work_areas wa) + 1, 1));
-                SELECT LAST_INSERT_ID();";
+            string sql = @"
+                INSERT INTO work_areas (name, visible_columns, sort_order) 
+                VALUES (@Name, @VisibleColumns, COALESCE((SELECT MAX(sort_order) + 1 FROM work_areas wa), 1));";
 
             using (var connection = new MySqlConnection(_connectionString))
             {
-                return await connection.ExecuteScalarAsync<int>(sql, new { Name = name });
+                int rows = await connection.ExecuteAsync(sql, new { Name = areaName, VisibleColumns = visibleColumnsJson });
+                return rows > 0;
             }
         }
-
         /// <summary>
         /// РЕДАКТИРОВАНИЕ: Меняет только название существующего участка
         /// </summary>
-        public async Task<bool> UpdateWorkAreaNameAsync(int id, string newName)
+        public async Task<bool> UpdateWorkAreaAsync(int areaId, string areaName, string visibleColumnsJson)
         {
-            const string sql = "UPDATE work_areas SET name = @Name WHERE id = @Id;";
+            string sql = @"
+                UPDATE work_areas 
+                SET name = @Name, visible_columns = @VisibleColumns 
+                WHERE id = @Id;";
 
             using (var connection = new MySqlConnection(_connectionString))
             {
-                int rowsAffected = await connection.ExecuteAsync(sql, new { Id = id, Name = newName });
-                return rowsAffected > 0;
+                int rows = await connection.ExecuteAsync(sql, new { Name = areaName, VisibleColumns = visibleColumnsJson, Id = areaId });
+                return rows > 0;
             }
         }
 

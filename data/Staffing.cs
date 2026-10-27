@@ -10,6 +10,7 @@ namespace data.Models
         public long EquipId { get; set; }
         public string EquipName { get; set; }
         public string EquipCode { get; set; }
+        public ulong ShiftId { get; set; }
         public int ShiftNum { get; set; }
         public string Shift { get; set; }
         public TimeSpan TimeStart { get; set; }
@@ -39,6 +40,7 @@ namespace data.Models
 
     public class ShiftInfo
     {
+        public ulong Id { get; set; }
         public int Number { get; set; }
         public string Name { get; set; }
         public TimeSpan TimeStart { get; set; }
