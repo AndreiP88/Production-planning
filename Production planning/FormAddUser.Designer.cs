@@ -32,7 +32,7 @@
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.textBoxLastName = new MaterialSkin.Controls.MaterialTextBox();
             this.textBoxFirstName = new MaterialSkin.Controls.MaterialTextBox();
-            this.textBoxPatronymic = new MaterialSkin.Controls.MaterialTextBox();
+            this.textBoxMiddleName = new MaterialSkin.Controls.MaterialTextBox();
             this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
             this.listViewContacts = new MaterialSkin.Controls.MaterialListView();
             this.ColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -67,7 +67,7 @@
             this.textBoxDateFire = new MaterialSkin.Controls.MaterialMaskedTextBox();
             this.buttonCalendarFire = new MaterialSkin.Controls.MaterialButton();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
-            this.materialComboBox2 = new MaterialSkin.Controls.MaterialComboBox();
+            this.comboBoxExternalStaff = new MaterialSkin.Controls.MaterialComboBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.materialButton1 = new MaterialSkin.Controls.MaterialButton();
             this.materialButton2 = new MaterialSkin.Controls.MaterialButton();
@@ -108,7 +108,7 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.textBoxLastName, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.textBoxFirstName, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.textBoxPatronymic, 0, 4);
+            this.tableLayoutPanel2.Controls.Add(this.textBoxMiddleName, 0, 4);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel10, 0, 6);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 13);
@@ -162,24 +162,24 @@
             this.textBoxFirstName.Text = "";
             this.textBoxFirstName.TrailingIcon = null;
             // 
-            // textBoxPatronymic
+            // textBoxMiddleName
             // 
-            this.textBoxPatronymic.AnimateReadOnly = false;
-            this.textBoxPatronymic.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxPatronymic.Depth = 0;
-            this.textBoxPatronymic.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxPatronymic.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.textBoxPatronymic.Hint = "Отчество";
-            this.textBoxPatronymic.LeadingIcon = null;
-            this.textBoxPatronymic.Location = new System.Drawing.Point(3, 123);
-            this.textBoxPatronymic.MaxLength = 50;
-            this.textBoxPatronymic.MouseState = MaterialSkin.MouseState.OUT;
-            this.textBoxPatronymic.Multiline = false;
-            this.textBoxPatronymic.Name = "textBoxPatronymic";
-            this.textBoxPatronymic.Size = new System.Drawing.Size(435, 50);
-            this.textBoxPatronymic.TabIndex = 3;
-            this.textBoxPatronymic.Text = "";
-            this.textBoxPatronymic.TrailingIcon = null;
+            this.textBoxMiddleName.AnimateReadOnly = false;
+            this.textBoxMiddleName.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxMiddleName.Depth = 0;
+            this.textBoxMiddleName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxMiddleName.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.textBoxMiddleName.Hint = "Отчество";
+            this.textBoxMiddleName.LeadingIcon = null;
+            this.textBoxMiddleName.Location = new System.Drawing.Point(3, 123);
+            this.textBoxMiddleName.MaxLength = 50;
+            this.textBoxMiddleName.MouseState = MaterialSkin.MouseState.OUT;
+            this.textBoxMiddleName.Multiline = false;
+            this.textBoxMiddleName.Name = "textBoxMiddleName";
+            this.textBoxMiddleName.Size = new System.Drawing.Size(435, 50);
+            this.textBoxMiddleName.TabIndex = 3;
+            this.textBoxMiddleName.Text = "";
+            this.textBoxMiddleName.TrailingIcon = null;
             // 
             // tableLayoutPanel10
             // 
@@ -502,7 +502,7 @@
             this.comboBoxTemplates.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBoxTemplates.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.comboBoxTemplates.FormattingEnabled = true;
-            this.comboBoxTemplates.Hint = "Рабочий график (фильтр в бд)";
+            this.comboBoxTemplates.Hint = "Рабочий график";
             this.comboBoxTemplates.IntegralHeight = false;
             this.comboBoxTemplates.ItemHeight = 43;
             this.comboBoxTemplates.Location = new System.Drawing.Point(3, 408);
@@ -957,29 +957,30 @@
             this.dateTimePicker2.TabIndex = 8;
             this.dateTimePicker2.ValueChanged += new System.EventHandler(this.dateTimePicker2_ValueChanged);
             // 
-            // materialComboBox2
+            // comboBoxExternalStaff
             // 
-            this.materialComboBox2.AutoResize = false;
-            this.materialComboBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialComboBox2.Depth = 0;
-            this.materialComboBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.materialComboBox2.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.materialComboBox2.DropDownHeight = 174;
-            this.materialComboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.materialComboBox2.DropDownWidth = 121;
-            this.materialComboBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.materialComboBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialComboBox2.FormattingEnabled = true;
-            this.materialComboBox2.Hint = "Список сотрудников на производстве";
-            this.materialComboBox2.IntegralHeight = false;
-            this.materialComboBox2.ItemHeight = 43;
-            this.materialComboBox2.Location = new System.Drawing.Point(13, 13);
-            this.materialComboBox2.MaxDropDownItems = 4;
-            this.materialComboBox2.MouseState = MaterialSkin.MouseState.OUT;
-            this.materialComboBox2.Name = "materialComboBox2";
-            this.materialComboBox2.Size = new System.Drawing.Size(904, 49);
-            this.materialComboBox2.StartIndex = 0;
-            this.materialComboBox2.TabIndex = 5;
+            this.comboBoxExternalStaff.AutoResize = false;
+            this.comboBoxExternalStaff.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.comboBoxExternalStaff.Depth = 0;
+            this.comboBoxExternalStaff.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxExternalStaff.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.comboBoxExternalStaff.DropDownHeight = 174;
+            this.comboBoxExternalStaff.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxExternalStaff.DropDownWidth = 121;
+            this.comboBoxExternalStaff.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.comboBoxExternalStaff.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.comboBoxExternalStaff.FormattingEnabled = true;
+            this.comboBoxExternalStaff.Hint = "Список сотрудников на производстве";
+            this.comboBoxExternalStaff.IntegralHeight = false;
+            this.comboBoxExternalStaff.ItemHeight = 43;
+            this.comboBoxExternalStaff.Location = new System.Drawing.Point(13, 13);
+            this.comboBoxExternalStaff.MaxDropDownItems = 4;
+            this.comboBoxExternalStaff.MouseState = MaterialSkin.MouseState.OUT;
+            this.comboBoxExternalStaff.Name = "comboBoxExternalStaff";
+            this.comboBoxExternalStaff.Size = new System.Drawing.Size(904, 49);
+            this.comboBoxExternalStaff.StartIndex = 0;
+            this.comboBoxExternalStaff.TabIndex = 5;
+            this.comboBoxExternalStaff.SelectedIndexChanged += new System.EventHandler(this.comboBoxExternalStaff_SelectedIndexChanged);
             // 
             // tableLayoutPanel3
             // 
@@ -1045,7 +1046,7 @@
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.tableLayoutPanel6.Controls.Add(this.materialComboBox2, 1, 1);
+            this.tableLayoutPanel6.Controls.Add(this.comboBoxExternalStaff, 1, 1);
             this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel3, 1, 3);
             this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel1, 1, 2);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1114,7 +1115,7 @@
         private MaterialSkin.Controls.MaterialMaskedTextBox textBoxDateFire;
         private MaterialSkin.Controls.MaterialButton buttonFire;
         private MaterialSkin.Controls.MaterialComboBox comboBoxEquipments;
-        private MaterialSkin.Controls.MaterialComboBox materialComboBox2;
+        private MaterialSkin.Controls.MaterialComboBox comboBoxExternalStaff;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
         private MaterialSkin.Controls.MaterialButton buttonCalendarTemplate;
         private MaterialSkin.Controls.MaterialMaskedTextBox maskedTextBoxTemplateDate;
@@ -1131,7 +1132,7 @@
         private System.Windows.Forms.DateTimePicker dateTimePicker3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private MaterialSkin.Controls.MaterialTextBox textBoxFirstName;
-        private MaterialSkin.Controls.MaterialTextBox textBoxPatronymic;
+        private MaterialSkin.Controls.MaterialTextBox textBoxMiddleName;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
         private MaterialSkin.Controls.MaterialListView listViewContacts;

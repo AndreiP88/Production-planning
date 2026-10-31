@@ -87,7 +87,27 @@ namespace data
         // Масштабируемая коллекция контактов
         public List<EmployeeContactDto> Contacts { get; set; } = new List<EmployeeContactDto>();
     }
+    public class ExternalEmployeeModel
+    {
+        // Первичный ключ сотрудника во внешней базе данных
+        public int id_common_employee { get; set; }
 
+        // Табельный номер (например, 000126)
+        public string employee_no { get; set; }
+
+        public string employee_firstname { get; set; }
+        public string employee_middlename { get; set; }
+        public string employee_lastname { get; set; }
+
+        // Название должности / специальности
+        public string employee_speciality_name { get; set; }
+
+        // Удобное свойство, объединяющее ФИО в одну строчку
+        public string FullName => $"{employee_lastname} {employee_firstname} {employee_middlename}".Trim();
+
+        // 🌟 Свойство для отображения в Комбобоксе: "Должность | ФИО"
+        public string DisplayText => $"[{employee_speciality_name}] — {FullName}";
+    }
     /// <summary>
     /// Модель должности
     /// </summary>

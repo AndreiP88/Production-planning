@@ -101,10 +101,13 @@ namespace data
         public double NormTimeMinutes { get; set; }              // Время текущей строки фазы в минутах
 
         // 3. РАЗДЕЛЬНЫЕ ПОЛЯ ТЕХНОЛОГИЧЕСКИХ ФАЗ ИЗ ПРЕДЫДУЩИХ ВАРЯНТОВ (Сохранены!)
-        public double SetupCount { get; set; }                    // Количество приладок (1, 2)
         public double SetupNormTime { get; set; }                 // ЧИСТОЕ разделенное время приладки
+        public double SetupCount { get; set; }                    // Количество приладок (1, 2)
+        public double SetupCountFact { get; set; }
+
         public double RunNormTime { get; set; }                   // Время выполнения (как есть)
         public double RunQty { get; set; }                       // Тираж (в штуках)
+        public double RunQtyFact { get; set; }
 
         // 4. ТЕХНОЛОГИЧЕСКИЕ ПАРАМЕТРЫ ОПЕРАЦИИ (proc_rpt_job_plan_oper_list)
         public int MainSuboper { get; set; }

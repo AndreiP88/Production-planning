@@ -38,6 +38,26 @@ namespace data
         public string Name { get; set; }
         public int CycleId { get; set; }
         public string CycleName { get; set; } // Название используемой схемы
+        public string TargetTypeRaw { get; set; } // Сюда Dapper запишет строку из ENUM (universal, equipment, employee)
+
+        // Удобное свойство для логики приложения
+        public ScheduleTargetType TargetType
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(TargetTypeRaw)) return ScheduleTargetType.Universal;
+                switch (TargetTypeRaw.ToLower())
+                {
+                    case "equipment": return ScheduleTargetType.Equipment;
+                    case "employee": return ScheduleTargetType.Employee;
+                    default: return ScheduleTargetType.Universal;
+                }
+            }
+            set
+            {
+                TargetTypeRaw = value.ToString().ToLower();
+            }
+        }
         public DateTime BaseDate { get; set; }
     }
 
@@ -48,5 +68,11 @@ namespace data
 
         public static DeleteResult Success() => new DeleteResult { IsSuccess = true };
         public static DeleteResult Fail(string msg) => new DeleteResult { IsSuccess = false, ErrorMessage = msg };
+    }
+    public enum ScheduleTargetType
+    {
+        Universal,   // Универсальный
+        Equipment,   // Только станки
+        Employee     // Только сотрудники
     }
 }

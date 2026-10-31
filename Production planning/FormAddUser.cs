@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static Production_planning.EmployeeManagementService;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Production_planning
@@ -17,6 +18,7 @@ namespace Production_planning
 
         private EmployeeFullCard _employee;
 
+        private List<ExternalEmployeeModel> _externalEmployees;
         private List<PositionLookupDto> _positions;
         private List<EquipmentLookupDto> _equipments;
         private List<ScheduleTemplateModel> _schedules;
@@ -59,12 +61,40 @@ namespace Production_planning
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("ru-RU");
 
+            await LoadExternalEmployeesToComboBox();
+
             await LoadPositions();
             await LoadEquipments();
             await LoadTemplate();
-            
+
             await LoadUser();
         }
+        // Глобальная переменная внутри формы для хранения списка
+        private async Task LoadExternalEmployeesToComboBox()
+        {
+            try
+            {
+                var param = new ConnectionParameter();
+                var externalService = new EmployeeManagementService(param.GetSQLServerConnectionString());
+
+                // Получаем список из MS SQL
+                _externalEmployees = await externalService.GetActiveExternalEmployeesAsync();
+
+                // Очищаем и настраиваем комбобокс
+                comboBoxExternalStaff.DataSource = null;
+                comboBoxExternalStaff.DisplayMember = "DisplayText"; // 🌟 Указываем, какое свойство модели выводить на экран
+                comboBoxExternalStaff.ValueMember = "id_common_employee"; // Идентификатор как значение ячейки
+                comboBoxExternalStaff.DataSource = _externalEmployees;
+
+                // Сбрасываем выбор по умолчанию, чтобы комбобокс изначально был пустым
+                comboBoxExternalStaff.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка импорта базы сотрудников: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private async Task LoadPositions()
         {
@@ -126,7 +156,7 @@ namespace Production_planning
 
             try
             {
-                _schedules = await scheduleTemplate.GetAllTemplatesAsync();
+                _schedules = await scheduleTemplate.GetAllTemplatesAsync(ScheduleTargetType.Employee);
 
                 comboBoxTemplates.Items.Clear();
 
@@ -162,6 +192,10 @@ namespace Production_planning
                 buttonPositionAssignNew.Enabled = false;
                 buttonEquipmentAssignNew.Enabled = false;
                 ButtonTemplateAssignNew.Enabled = false;
+
+                textBoxFirstName.Text = "";
+                textBoxLastName.Text = "";
+                textBoxMiddleName.Text = "";
             }
             else
             {
@@ -184,7 +218,7 @@ namespace Production_planning
 
                     textBoxFirstName.Text = _employee.FirstName;
                     textBoxLastName.Text = _employee.LastName;
-                    textBoxPatronymic.Text = _employee.Patronymic;
+                    textBoxMiddleName.Text = _employee.Patronymic;
 
                     maskedTextBoxPositionDate.Text = _employee.PositionValidFrom?.ToString("dd.MM.yyyy");
                     maskedTextBoxEquipmentDate.Text = _employee.EquipmentValidFrom?.ToString("dd.MM.yyyy");
@@ -267,7 +301,7 @@ namespace Production_planning
             {
                 _employee.LastName = textBoxLastName.Text;
                 _employee.FirstName = textBoxFirstName.Text;
-                _employee.Patronymic = textBoxPatronymic.Text;
+                _employee.Patronymic = textBoxMiddleName.Text;
 
                 _employee.HireDate = Convert.ToDateTime(textBoxDateHire.Text);
                 //_employee.FireDate = Convert.ToDateTime(textBoxDateFire.Text);
@@ -678,6 +712,24 @@ namespace Production_planning
                 comboBoxTemplates.Enabled = false;
                 maskedTextBoxTemplateDate.Enabled = false;
                 buttonCalendarTemplate.Enabled = false;
+            }
+        }
+
+        private void comboBoxExternalStaff_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Проверяем, что элемент действительно выбран пользователем
+            if (comboBoxExternalStaff.SelectedIndex != -1 && comboBoxExternalStaff.SelectedItem is ExternalEmployeeModel selectedEmp)
+            {
+                // 🌟 Автоматически заполняем текстовые поля формы данными из полученной модели
+                textBoxLastName.Text = selectedEmp.employee_lastname;   // Фамилия
+                textBoxFirstName.Text = selectedEmp.employee_firstname; // Имя
+                textBoxMiddleName.Text = selectedEmp.employee_middlename; // Отчество
+                //textBoxTabNumber.Text = selectedEmp.employee_no;        // Табельный номер
+                //textBoxSpeciality.Text = selectedEmp.employee_speciality_name; // Должность
+
+                // Также можно сохранить внешний ID в Tag формы или специальную переменную, 
+                // если планируете хранить сквозную связь баз данных
+                textBoxLastName.Tag = selectedEmp.id_common_employee;
             }
         }
     }

@@ -3,6 +3,7 @@ using database;
 using MaterialSkin.Controls;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -22,6 +23,7 @@ namespace Production_planning
         string _oldStaffingMode;
 
         private readonly bool _edit;
+        private List<ExternalEquipmentRow> _externalEquipments;
         private List<ScheduleTemplateModel> _scheduleTemplates;
         private List<WorkAreaInfo> _workAreas;
         private EquipmentFullCard _equipment;
@@ -50,11 +52,36 @@ namespace Production_planning
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("ru-RU");
 
+            await LoadExternalEquipmentToComboBox();
+
             await LoadTemplate();
             await LoadAreas();
             await LoadEquipment();
         }
+        private async Task LoadExternalEquipmentToComboBox()
+        {
+            try
+            {
+                var parameter = new ConnectionParameter();
+                var externalService = new WorkAreaService(parameter.GetSQLServerConnectionString());
 
+                // Получаем плоский результирующий список строк из сервиса
+                _externalEquipments = await externalService.GetExternalEquipmentWithOrgAsync();
+
+                // Биндим данные к вашему MaterialComboBox/ComboBox
+                comboBoxExternalEquip.DataSource = null;
+                comboBoxExternalEquip.DisplayMember = "DisplayText"; // 🌟 Подключаем наш красивый текстовый вывод
+                comboBoxExternalEquip.ValueMember = "EquipId";        // Внутренний ID станка
+                comboBoxExternalEquip.DataSource = _externalEquipments;
+
+                // Сбрасываем выделение, чтобы поле изначально было пустым для выбора
+                comboBoxExternalEquip.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Не удалось импортировать парк станков: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private async Task LoadTemplate()
         {
             ConnectionParameter parameter = new ConnectionParameter();
@@ -63,7 +90,7 @@ namespace Production_planning
 
             ScheduleTemplateService scheduleTemplate = new ScheduleTemplateService(parameter.GetMySQLConnectionString());
 
-            _scheduleTemplates = await scheduleTemplate.GetAllTemplatesAsync();
+            _scheduleTemplates = await scheduleTemplate.GetAllTemplatesAsync(ScheduleTargetType.Equipment);
 
             comboBoxTemplates.Items.Clear();
 
@@ -101,6 +128,9 @@ namespace Production_planning
                 _isActive = true;
 
                 dateTimePicker1.Value = DateTime.Now;
+
+                textBoxEquipName.Text = "";
+                textBoxEquipCode.Text = "";
 
                 textBoxDateTemplateStart.Enabled = false;
                 textBoxDateStaffingModeStart.Enabled = false;
@@ -484,6 +514,45 @@ namespace Production_planning
                 comboBoxStaffingMode.Enabled = false;
                 textBoxDateStaffingModeStart.Enabled = false;
                 buttonCalendarStaffingMode.Enabled = false;
+            }
+        }
+
+        private void comboBoxExternalEquip_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Проверяем, что элемент реально выбран
+            if (comboBoxExternalEquip.SelectedIndex != -1 && comboBoxExternalEquip.SelectedItem is ExternalEquipmentRow selectedEquip)
+            {
+                // 1. Автоматически прописываем данные в поля формы
+                textBoxEquipName.Text = selectedEquip.EquipName; // Имя станка (например, Roland R 705 3B)
+                textBoxEquipCode.Text = selectedEquip.EquipId.ToString(); // Внешний код MES/ERP
+
+                // 2. Прячем уникальный внешний ID в Tag текстового поля для последующего сохранения в MySQL
+                textBoxEquipName.Tag = selectedEquip.EquipId;
+
+                /*// 3. Умный автоматический подбор вашего внутреннего MySQL участка
+                string externalOrgName = selectedEquip.OrgName?.ToLower() ?? "";
+
+                for (int i = 0; i < comboBoxAreas.Items.Count; i++)
+                {
+                    if (comboBoxAreas.Items[i] is WorkAreaInfo internalArea)
+                    {
+                        string internalAreaName = internalArea.Name.ToLower();
+
+                        // Если станок из печатного цеха внешней базы, выставляем ваш Печатный участок
+                        if (externalOrgName.Contains("печатный") && internalAreaName.Contains("печать"))
+                        {
+                            comboBoxAreas.SelectedIndex = i;
+                            break;
+                        }
+                        // Если послепечатный цех — цепляем Вырубку/Склейку/Послепечать
+                        else if (externalOrgName.Contains("послепечатный") &&
+                                (internalAreaName.Contains("послепечать") || internalAreaName.Contains("вырубка") || internalAreaName.Contains("склейка")))
+                        {
+                            comboBoxAreas.SelectedIndex = i;
+                            break;
+                        }
+                    }
+                }*/
             }
         }
     }

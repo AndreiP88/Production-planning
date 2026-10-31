@@ -5,6 +5,44 @@ using Newtonsoft.Json;
 
 namespace data
 {
+    public class ExternalOrgDirectoryModel
+    {
+        // Первичный ключ записи цеха/участка
+        public long id_common_org_directory { get; set; }
+
+        // Наименование подразделения (например, "2.Печатный цех")
+        public string org_name { get; set; }
+
+        // Ссылка на родительский узел
+        public long? parentid { get; set; }
+    }
+
+    public class ExternalEquipmentRow
+    {
+        // Данные из таблицы станков
+        public long EquipId { get; set; }
+        public string EquipName { get; set; }
+        public decimal EquipType { get; set; }
+
+        // Связующие данные из таблицы структуры компании
+        public long OrgId { get; set; }
+        public string OrgName { get; set; }
+
+        // 🌟 ФОРМАТНЫЙ ВЫВОД ДЛЯ КОМБОБОКСА: "Печатный цех — Roland"
+        // Дополнительно очищаем имя цеха от технологических индексов вроде "2."
+        public string DisplayText
+        {
+            get
+            {
+                string cleanOrgName = string.IsNullOrEmpty(OrgName)
+                    ? "Без цеха"
+                    : OrgName.Substring(OrgName.IndexOf('.') + 1).Trim();
+
+                return $"{cleanOrgName} — {EquipName}";
+            }
+        }
+    }
+
     // Глобальный класс Участка (без изменений)
     public class WorkAreaInfo
     {
@@ -18,7 +56,6 @@ namespace data
         public int SortOrder { get; set; } // Добавили, так как мы им управляем
         public List<EquipmentShortInfo> Equipments { get; set; } = new List<EquipmentShortInfo>();
     }
-
     /// <summary>
     /// БАЗОВАЯ МОДЕЛЬ: Полное соответствие полям таблицы `equipment` в MySQL.
     /// Используется для создания и базового изменения записи.
@@ -33,6 +70,9 @@ namespace data
         public DateTime CommissionedAt { get; set; }
         public DateTime? DecommissionedAt { get; set; }
         public string StaffingMode { get; set; }
+        public string StaffingModeRus => StaffingMode == "strict_schedule"
+            ? "По строгому графику"
+            : "Ручное назначение (Вне плана)";
         public int SortOrder { get; set; }
     }
 

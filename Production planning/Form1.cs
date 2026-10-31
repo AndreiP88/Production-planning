@@ -1532,7 +1532,7 @@ namespace Production_planning
                 dataGridViewPlan.Columns["Qty"].Width = 80;
                 dataGridViewPlan.Columns["Start"].Width = 110;
                 dataGridViewPlan.Columns["End"].Width = 110;
-                dataGridViewPlan.Columns["Duration"].Width = 90;
+                dataGridViewPlan.Columns["Duration"].Width = 100;
                 dataGridViewPlan.Columns["ToolName"].Width = 110;
                 dataGridViewPlan.Columns["Cutting"].Width = 100;
 
@@ -1663,7 +1663,25 @@ namespace Production_planning
             string materialText = job.IsIdleTime ? "—" : job.FullMaterialText;
             string techNote = (job.IsIdleTime || string.IsNullOrEmpty(job.NoteManagerTech)) ? "—" : job.NoteManagerTech;
 
-            string qty = job.IsIdleTime ? "—" : $"{job.RunQty:N0}";
+            string qty;
+
+            if (!job.IsIdleTime)
+            {
+                if (job.RunQtyFact <= 0)
+                {
+                    qty = $"{job.RunQty:N0}";
+                }
+                else
+                {
+                    qty = $"{(job.RunQty - job.RunQtyFact):N0}/{job.RunQty:N0}";
+                }
+            }
+            else
+            {
+                qty = "—";
+            }
+            
+
             string durationText = job.IsIdleTime ? job.NormTime : job.NormTime;
             string toolText = job.IsIdleTime ? "—" : job.ShortToolName;
 
@@ -3567,7 +3585,7 @@ namespace Production_planning
         {
             listViewEquips.Items.Clear();
 
-            buttonEquipAdd.Enabled = false;
+            //buttonEquipAdd.Enabled = false;
             buttonEquipEdit.Enabled = false;
             buttonEquipDelete.Enabled = false;
             buttonEquipMoveUp.Enabled = false;
@@ -3585,7 +3603,7 @@ namespace Production_planning
                     viewItem.Text = (listViewEquips.Items.Count + 1).ToString();
                     viewItem.SubItems.Add(shortInfo.Name);
                     viewItem.SubItems.Add(shortInfo.TemplateName);
-                    viewItem.SubItems.Add(shortInfo.StaffingMode.ToString());
+                    viewItem.SubItems.Add(shortInfo.StaffingModeRus);
                     viewItem.SubItems.Add(shortInfo.IsActive ? "Активен" : "Остановлен");
 
                     listViewEquips.Items.Add(viewItem);
@@ -3735,6 +3753,8 @@ namespace Production_planning
             buttonEquipDelete.Enabled = status;
             buttonEquipMoveUp.Enabled = status;
             buttonEquipMoveDown.Enabled = status;
+
+            buttonEquipAdd.Enabled = listBoxAreas.SelectedIndex >= 0;
         }
 
         private async void buttonEquipEdit_Click(object sender, EventArgs e)

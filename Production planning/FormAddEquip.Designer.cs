@@ -44,7 +44,7 @@
             this.textBoxDateComm = new MaterialSkin.Controls.MaterialMaskedTextBox();
             this.buttonCalendar = new MaterialSkin.Controls.MaterialButton();
             this.buttonDecommission = new MaterialSkin.Controls.MaterialButton();
-            this.materialComboBox2 = new MaterialSkin.Controls.MaterialComboBox();
+            this.comboBoxExternalEquip = new MaterialSkin.Controls.MaterialComboBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.textBoxEquipName = new MaterialSkin.Controls.MaterialTextBox();
             this.textBoxEquipCode = new MaterialSkin.Controls.MaterialTextBox2();
@@ -90,7 +90,7 @@
             this.tableLayoutPanel2.Controls.Add(this.comboBoxAreas, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel4, 0, 4);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel5, 0, 6);
-            this.tableLayoutPanel2.Controls.Add(this.materialComboBox2, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.comboBoxExternalEquip, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel6, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel7, 0, 5);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -230,7 +230,7 @@
             this.comboBoxTemplates.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBoxTemplates.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.comboBoxTemplates.FormattingEnabled = true;
-            this.comboBoxTemplates.Hint = "Рабочий график (фильтр в бд)";
+            this.comboBoxTemplates.Hint = "Рабочий график";
             this.comboBoxTemplates.IntegralHeight = false;
             this.comboBoxTemplates.ItemHeight = 43;
             this.comboBoxTemplates.Location = new System.Drawing.Point(3, 3);
@@ -468,29 +468,30 @@
             this.buttonDecommission.Visible = false;
             this.buttonDecommission.Click += new System.EventHandler(this.buttonDecommission_Click);
             // 
-            // materialComboBox2
+            // comboBoxExternalEquip
             // 
-            this.materialComboBox2.AutoResize = false;
-            this.materialComboBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialComboBox2.Depth = 0;
-            this.materialComboBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.materialComboBox2.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.materialComboBox2.DropDownHeight = 174;
-            this.materialComboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.materialComboBox2.DropDownWidth = 121;
-            this.materialComboBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.materialComboBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialComboBox2.FormattingEnabled = true;
-            this.materialComboBox2.Hint = "Список оборудования на производстве";
-            this.materialComboBox2.IntegralHeight = false;
-            this.materialComboBox2.ItemHeight = 43;
-            this.materialComboBox2.Location = new System.Drawing.Point(3, 58);
-            this.materialComboBox2.MaxDropDownItems = 4;
-            this.materialComboBox2.MouseState = MaterialSkin.MouseState.OUT;
-            this.materialComboBox2.Name = "materialComboBox2";
-            this.materialComboBox2.Size = new System.Drawing.Size(671, 49);
-            this.materialComboBox2.StartIndex = 0;
-            this.materialComboBox2.TabIndex = 5;
+            this.comboBoxExternalEquip.AutoResize = false;
+            this.comboBoxExternalEquip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.comboBoxExternalEquip.Depth = 0;
+            this.comboBoxExternalEquip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxExternalEquip.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.comboBoxExternalEquip.DropDownHeight = 174;
+            this.comboBoxExternalEquip.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxExternalEquip.DropDownWidth = 121;
+            this.comboBoxExternalEquip.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.comboBoxExternalEquip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.comboBoxExternalEquip.FormattingEnabled = true;
+            this.comboBoxExternalEquip.Hint = "Список оборудования на производстве";
+            this.comboBoxExternalEquip.IntegralHeight = false;
+            this.comboBoxExternalEquip.ItemHeight = 43;
+            this.comboBoxExternalEquip.Location = new System.Drawing.Point(3, 58);
+            this.comboBoxExternalEquip.MaxDropDownItems = 4;
+            this.comboBoxExternalEquip.MouseState = MaterialSkin.MouseState.OUT;
+            this.comboBoxExternalEquip.Name = "comboBoxExternalEquip";
+            this.comboBoxExternalEquip.Size = new System.Drawing.Size(671, 49);
+            this.comboBoxExternalEquip.StartIndex = 0;
+            this.comboBoxExternalEquip.TabIndex = 5;
+            this.comboBoxExternalEquip.SelectedIndexChanged += new System.EventHandler(this.comboBoxExternalEquip_SelectedIndexChanged);
             // 
             // tableLayoutPanel6
             // 
@@ -799,7 +800,7 @@
         private MaterialSkin.Controls.MaterialComboBox comboBoxStaffingMode;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private MaterialSkin.Controls.MaterialTextBox2 textBoxEquipCode;
-        private MaterialSkin.Controls.MaterialComboBox materialComboBox2;
+        private MaterialSkin.Controls.MaterialComboBox comboBoxExternalEquip;
         private MaterialSkin.Controls.MaterialComboBox comboBoxAreas;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
         private MaterialSkin.Controls.MaterialButton buttonCalendarTemplate;

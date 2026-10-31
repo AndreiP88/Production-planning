@@ -14,6 +14,14 @@ namespace Production_planning
         private ScheduleTemplateModel _scheduleTemplate;
         private List<ScheduleCycleModel> _scheduleCycles;
 
+        // Вспомогательный словарь для связи текста комбобокса с перечислением
+        private readonly Dictionary<string, ScheduleTargetType> _targetTypeMapping = new Dictionary<string, ScheduleTargetType>
+        {
+            { "Универсальный", ScheduleTargetType.Universal },
+            { "Для рабочих мест", ScheduleTargetType.Equipment },
+            { "Для сотрудников", ScheduleTargetType.Employee }
+        };
+
         public FormAddBrigade(ScheduleTemplateModel scheduleTemplate = null)
         {
             InitializeComponent();
@@ -21,9 +29,22 @@ namespace Production_planning
             _edit = scheduleTemplate != null;
             _scheduleTemplate = scheduleTemplate ?? new ScheduleTemplateModel();
             materialButton1.Text = _edit ? "Сохранить" : "Добавить";
-            
+
             materialButton1.DialogResult = DialogResult.OK;
             materialButton2.DialogResult = DialogResult.Cancel;
+
+            // Наполняем комбобокс вариантов назначения графика
+            PopulateTargetTypeComboBox();
+        }
+
+        private void PopulateTargetTypeComboBox()
+        {
+            comboBoxTargetType.Items.Clear();
+            foreach (var key in _targetTypeMapping.Keys)
+            {
+                comboBoxTargetType.Items.Add(key);
+            }
+            comboBoxTargetType.SelectedIndex = 0; // По умолчанию Универсальный
         }
 
         private async Task LoadCycles()
@@ -48,7 +69,9 @@ namespace Production_planning
         {
             if (!_edit)
             {
-                
+                // Для нового графика выставляем текущую дату по умолчанию
+                textBoxDate.Text = DateTime.Today.ToString("dd.MM.yyyy");
+                dateTimePicker1.Value = DateTime.Today;
             }
             else
             {
@@ -57,13 +80,22 @@ namespace Production_planning
                 textBoxBrigadeName.Text = _scheduleTemplate.Name;
                 textBoxDate.Text = _scheduleTemplate.BaseDate.ToString("dd.MM.yyyy");
                 comboBoxCycles.SelectedIndex = id;
+
+                // 🌟 НАХОДИМ И ВЫСТАВЛЯЕМ ТЕКУЩИЙ ТИП НАЗНАЧЕНИЯ ГРАФИКА
+                foreach (var pair in _targetTypeMapping)
+                {
+                    if (pair.Value == _scheduleTemplate.TargetType)
+                    {
+                        comboBoxTargetType.SelectedItem = pair.Key;
+                        break;
+                    }
+                }
             }
         }
 
         private async Task SaveTemplate()
         {
             ConnectionParameter parameter = new ConnectionParameter();
-
             var shiftService = new ScheduleTemplateService(parameter.GetMySQLConnectionString());
 
             ScheduleTemplateModel newTemplate = _scheduleTemplate;
@@ -72,24 +104,19 @@ namespace Production_planning
             newTemplate.CycleId = _scheduleCycles[comboBoxCycles.SelectedIndex].Id;
             newTemplate.BaseDate = Convert.ToDateTime(textBoxDate.Text);
 
+            // 🌟 ЧИТАЕМ ТИП НАЗНАЧЕНИЯ ГРАФИКА ИЗ КОМБОБОКСА И ПЕРЕДАЕМ В МОДЕЛЬ
+            if (comboBoxTargetType.SelectedItem != null &&
+                _targetTypeMapping.TryGetValue(comboBoxTargetType.SelectedItem.ToString(), out ScheduleTargetType selectedType))
+            {
+                newTemplate.TargetType = selectedType; // Автоматически запишет нужную строку enum в TargetTypeRaw
+            }
+
             if (!_edit)
             {
                 await shiftService.CreateTemplateBindingAsync(newTemplate);
             }
             else
             {
-                /*ShiftDefinitionModel newShift = _shiftDefinition;
-
-                newShift.ShiftNumber = Convert.ToInt32(textBoxShiftNum.Text);
-                newShift.Name = textBoxShiftName.Text;
-                newShift.StartTime = timeStart;
-                newShift.EndTime = timeEnd;*/
-
-                /*var newCycle = new ScheduleCycleModel
-                {
-                    
-                };*/
-
                 await shiftService.UpdateTemplateBindingAsync(newTemplate);
             }
         }
@@ -105,6 +132,27 @@ namespace Production_planning
 
         private async void materialButton1_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(textBoxBrigadeName.Text))
+            {
+                MessageBox.Show("Укажите наименование графика!", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.DialogResult = DialogResult.None;
+                return;
+            }
+
+            if (comboBoxCycles.SelectedIndex == -1)
+            {
+                MessageBox.Show("Выберите схему цикла для графика!", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.DialogResult = DialogResult.None;
+                return;
+            }
+
+            if (textBoxDate.Text.Contains("_") || string.IsNullOrWhiteSpace(textBoxDate.Text))
+            {
+                MessageBox.Show("Укажите корректную базовую дату начала отсчета!", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.DialogResult = DialogResult.None;
+                return;
+            }
+
             await SaveTemplate();
 
             this.DialogResult = DialogResult.OK;
@@ -118,9 +166,6 @@ namespace Production_planning
 
         private void buttonCalendar_Click(object sender, EventArgs e)
         {
-            // Показываем выпадающий календарь стандартного DateTimePicker
-            // Для этого сам datetimePicker1 должен лежать на форме (можно скрыть его)
-            // Проверяем существование даты (защита от 32.01.2026, 29.02.2025 и т.д.)
             string input = textBoxDate.Text;
 
             DateTime parsedDate;
@@ -140,10 +185,7 @@ namespace Production_planning
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
-            // Записываем дату в нужном формате в MaterialTextBox
             textBoxDate.Text = dateTimePicker1.Value.ToString("dd.MM.yyyy");
-
-            // Возвращаем фокус на текстовое поле
             textBoxDate.Focus();
         }
 
@@ -151,14 +193,12 @@ namespace Production_planning
         {
             string input = textBoxDate.Text;
 
-            // Если пользователь ничего не ввел (или ввел только точки маски "__.__.____")
             if (string.IsNullOrWhiteSpace(input) || input == "..")
             {
                 textBoxDate.SetErrorState(false);
                 return;
             }
 
-            // Проверяем существование даты (защита от 32.01.2026, 29.02.2025 и т.д.)
             DateTime parsedDate;
             bool isValidDate = DateTime.TryParseExact(input, "dd.MM.yyyy",
                 System.Globalization.CultureInfo.InvariantCulture,
@@ -166,13 +206,11 @@ namespace Production_planning
 
             if (!isValidDate)
             {
-                // Включаем ошибку в стиле Material
                 textBoxDate.ErrorMessage = "Дата введена неверно";
                 textBoxDate.SetErrorState(true);
             }
             else
             {
-                // Всё ок — сбрасываем ошибку и обновляем скрытый календарь
                 textBoxDate.SetErrorState(false);
                 dateTimePicker1.Value = parsedDate;
             }

@@ -31,11 +31,11 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.textBoxWorkAreaName = new MaterialSkin.Controls.MaterialTextBox();
+            this.checkedListColumns = new MaterialSkin.Controls.MaterialCheckedListBox();
+            this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.materialButton1 = new MaterialSkin.Controls.MaterialButton();
             this.materialButton2 = new MaterialSkin.Controls.MaterialButton();
-            this.checkedListColumns = new MaterialSkin.Controls.MaterialCheckedListBox();
-            this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -96,6 +96,34 @@
             this.textBoxWorkAreaName.Text = "";
             this.textBoxWorkAreaName.TrailingIcon = null;
             // 
+            // checkedListColumns
+            // 
+            this.checkedListColumns.AutoScroll = true;
+            this.checkedListColumns.BackColor = System.Drawing.SystemColors.Control;
+            this.checkedListColumns.Depth = 0;
+            this.checkedListColumns.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkedListColumns.Location = new System.Drawing.Point(3, 87);
+            this.checkedListColumns.MouseState = MaterialSkin.MouseState.HOVER;
+            this.checkedListColumns.Name = "checkedListColumns";
+            this.checkedListColumns.Size = new System.Drawing.Size(546, 414);
+            this.checkedListColumns.Striped = false;
+            this.checkedListColumns.StripeDarkColor = System.Drawing.Color.Empty;
+            this.checkedListColumns.TabIndex = 2;
+            // 
+            // materialLabel1
+            // 
+            this.materialLabel1.AutoSize = true;
+            this.materialLabel1.Depth = 0;
+            this.materialLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialLabel1.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialLabel1.Location = new System.Drawing.Point(3, 54);
+            this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel1.Name = "materialLabel1";
+            this.materialLabel1.Size = new System.Drawing.Size(546, 30);
+            this.materialLabel1.TabIndex = 3;
+            this.materialLabel1.Text = "Столбцы для отображения в плане рабочего места";
+            this.materialLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 3;
@@ -153,34 +181,6 @@
             this.materialButton2.UseAccentColor = false;
             this.materialButton2.UseVisualStyleBackColor = true;
             this.materialButton2.Click += new System.EventHandler(this.materialButton2_Click);
-            // 
-            // checkedListColumns
-            // 
-            this.checkedListColumns.AutoScroll = true;
-            this.checkedListColumns.BackColor = System.Drawing.SystemColors.Control;
-            this.checkedListColumns.Depth = 0;
-            this.checkedListColumns.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkedListColumns.Location = new System.Drawing.Point(3, 87);
-            this.checkedListColumns.MouseState = MaterialSkin.MouseState.HOVER;
-            this.checkedListColumns.Name = "checkedListColumns";
-            this.checkedListColumns.Size = new System.Drawing.Size(546, 414);
-            this.checkedListColumns.Striped = false;
-            this.checkedListColumns.StripeDarkColor = System.Drawing.Color.Empty;
-            this.checkedListColumns.TabIndex = 2;
-            // 
-            // materialLabel1
-            // 
-            this.materialLabel1.AutoSize = true;
-            this.materialLabel1.Depth = 0;
-            this.materialLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.materialLabel1.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel1.Location = new System.Drawing.Point(3, 54);
-            this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel1.Name = "materialLabel1";
-            this.materialLabel1.Size = new System.Drawing.Size(546, 30);
-            this.materialLabel1.TabIndex = 3;
-            this.materialLabel1.Text = "Столбцы для отображения в плане рабочего места";
-            this.materialLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FormAddArea
             // 

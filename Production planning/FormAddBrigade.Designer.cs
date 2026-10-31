@@ -39,10 +39,13 @@
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.materialButton1 = new MaterialSkin.Controls.MaterialButton();
             this.materialButton2 = new MaterialSkin.Controls.MaterialButton();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.comboBoxTargetType = new MaterialSkin.Controls.MaterialComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
+            this.tableLayoutPanel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -54,28 +57,28 @@
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 81);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 88);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(624, 165);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(719, 179);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Controls.Add(this.textBoxBrigadeName, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel4, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel5, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(13, 12);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(13, 13);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(598, 104);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(693, 113);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // textBoxBrigadeName
@@ -92,7 +95,7 @@
             this.textBoxBrigadeName.MouseState = MaterialSkin.MouseState.OUT;
             this.textBoxBrigadeName.Multiline = false;
             this.textBoxBrigadeName.Name = "textBoxBrigadeName";
-            this.textBoxBrigadeName.Size = new System.Drawing.Size(592, 50);
+            this.textBoxBrigadeName.Size = new System.Drawing.Size(474, 50);
             this.textBoxBrigadeName.TabIndex = 1;
             this.textBoxBrigadeName.Text = "";
             this.textBoxBrigadeName.TrailingIcon = null;
@@ -100,8 +103,8 @@
             // tableLayoutPanel4
             // 
             this.tableLayoutPanel4.ColumnCount = 4;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 480F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 0F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel4.Controls.Add(this.comboBoxCycles, 0, 0);
@@ -109,11 +112,11 @@
             this.tableLayoutPanel4.Controls.Add(this.dateTimePicker1, 2, 0);
             this.tableLayoutPanel4.Controls.Add(this.buttonCalendar, 3, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 53);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 57);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(592, 48);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(687, 53);
             this.tableLayoutPanel4.TabIndex = 2;
             // 
             // comboBoxCycles
@@ -136,7 +139,7 @@
             this.comboBoxCycles.MaxDropDownItems = 4;
             this.comboBoxCycles.MouseState = MaterialSkin.MouseState.OUT;
             this.comboBoxCycles.Name = "comboBoxCycles";
-            this.comboBoxCycles.Size = new System.Drawing.Size(399, 49);
+            this.comboBoxCycles.Size = new System.Drawing.Size(474, 49);
             this.comboBoxCycles.StartIndex = 0;
             this.comboBoxCycles.TabIndex = 0;
             // 
@@ -156,7 +159,7 @@
             this.textBoxDate.Hint = "Дата начала";
             this.textBoxDate.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Default;
             this.textBoxDate.LeadingIcon = null;
-            this.textBoxDate.Location = new System.Drawing.Point(408, 3);
+            this.textBoxDate.Location = new System.Drawing.Point(483, 3);
             this.textBoxDate.Mask = "00\\.00\\.0000";
             this.textBoxDate.MaxLength = 32767;
             this.textBoxDate.MouseState = MaterialSkin.MouseState.OUT;
@@ -173,7 +176,7 @@
             this.textBoxDate.SelectionLength = 0;
             this.textBoxDate.SelectionStart = 0;
             this.textBoxDate.ShortcutsEnabled = true;
-            this.textBoxDate.Size = new System.Drawing.Size(129, 48);
+            this.textBoxDate.Size = new System.Drawing.Size(149, 48);
             this.textBoxDate.SkipLiterals = true;
             this.textBoxDate.TabIndex = 3;
             this.textBoxDate.TabStop = false;
@@ -190,9 +193,9 @@
             this.dateTimePicker1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.dateTimePicker1.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateTimePicker1.Location = new System.Drawing.Point(543, 3);
+            this.dateTimePicker1.Location = new System.Drawing.Point(638, 3);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(0, 21);
+            this.dateTimePicker1.Size = new System.Drawing.Size(0, 20);
             this.dateTimePicker1.TabIndex = 2;
             this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
@@ -205,12 +208,12 @@
             this.buttonCalendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonCalendar.HighEmphasis = true;
             this.buttonCalendar.Icon = null;
-            this.buttonCalendar.Location = new System.Drawing.Point(544, 6);
+            this.buttonCalendar.Location = new System.Drawing.Point(639, 6);
             this.buttonCalendar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonCalendar.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonCalendar.Name = "buttonCalendar";
             this.buttonCalendar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonCalendar.Size = new System.Drawing.Size(44, 36);
+            this.buttonCalendar.Size = new System.Drawing.Size(44, 41);
             this.buttonCalendar.TabIndex = 4;
             this.buttonCalendar.Text = "🗓️";
             this.buttonCalendar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -227,11 +230,11 @@
             this.tableLayoutPanel3.Controls.Add(this.materialButton1, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.materialButton2, 2, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 122);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 132);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(598, 40);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(693, 44);
             this.tableLayoutPanel3.TabIndex = 2;
             // 
             // materialButton1
@@ -242,12 +245,12 @@
             this.materialButton1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.materialButton1.HighEmphasis = true;
             this.materialButton1.Icon = null;
-            this.materialButton1.Location = new System.Drawing.Point(362, 6);
+            this.materialButton1.Location = new System.Drawing.Point(457, 6);
             this.materialButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton1.Name = "materialButton1";
             this.materialButton1.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton1.Size = new System.Drawing.Size(112, 28);
+            this.materialButton1.Size = new System.Drawing.Size(112, 32);
             this.materialButton1.TabIndex = 0;
             this.materialButton1.Text = "Добавить";
             this.materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -263,12 +266,12 @@
             this.materialButton2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.materialButton2.HighEmphasis = true;
             this.materialButton2.Icon = null;
-            this.materialButton2.Location = new System.Drawing.Point(482, 6);
+            this.materialButton2.Location = new System.Drawing.Point(577, 6);
             this.materialButton2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton2.Name = "materialButton2";
             this.materialButton2.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton2.Size = new System.Drawing.Size(112, 28);
+            this.materialButton2.Size = new System.Drawing.Size(112, 32);
             this.materialButton2.TabIndex = 1;
             this.materialButton2.Text = "Отмена";
             this.materialButton2.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -276,17 +279,56 @@
             this.materialButton2.UseVisualStyleBackColor = true;
             this.materialButton2.Click += new System.EventHandler(this.materialButton2_Click);
             // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.ColumnCount = 2;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 480F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.Controls.Add(this.comboBoxTargetType, 1, 0);
+            this.tableLayoutPanel5.Controls.Add(this.textBoxBrigadeName, 0, 0);
+            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 1;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(687, 48);
+            this.tableLayoutPanel5.TabIndex = 3;
+            // 
+            // comboBoxTargetType
+            // 
+            this.comboBoxTargetType.AutoResize = false;
+            this.comboBoxTargetType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.comboBoxTargetType.Depth = 0;
+            this.comboBoxTargetType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxTargetType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.comboBoxTargetType.DropDownHeight = 174;
+            this.comboBoxTargetType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTargetType.DropDownWidth = 121;
+            this.comboBoxTargetType.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.comboBoxTargetType.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.comboBoxTargetType.FormattingEnabled = true;
+            this.comboBoxTargetType.Hint = "Применимость";
+            this.comboBoxTargetType.IntegralHeight = false;
+            this.comboBoxTargetType.ItemHeight = 43;
+            this.comboBoxTargetType.Location = new System.Drawing.Point(483, 3);
+            this.comboBoxTargetType.MaxDropDownItems = 4;
+            this.comboBoxTargetType.MouseState = MaterialSkin.MouseState.OUT;
+            this.comboBoxTargetType.Name = "comboBoxTargetType";
+            this.comboBoxTargetType.Size = new System.Drawing.Size(201, 49);
+            this.comboBoxTargetType.StartIndex = 0;
+            this.comboBoxTargetType.TabIndex = 2;
+            // 
             // FormAddBrigade
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(630, 249);
+            this.ClientSize = new System.Drawing.Size(725, 270);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormStyle = MaterialSkin.Controls.MaterialForm.FormStyles.ActionBar_64;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormAddBrigade";
-            this.Padding = new System.Windows.Forms.Padding(3, 81, 3, 3);
+            this.Padding = new System.Windows.Forms.Padding(3, 88, 3, 3);
             this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "График";
@@ -297,6 +339,7 @@
             this.tableLayoutPanel4.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
+            this.tableLayoutPanel5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -314,5 +357,7 @@
         private MaterialSkin.Controls.MaterialMaskedTextBox textBoxDate;
         private MaterialSkin.Controls.MaterialButton buttonCalendar;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private MaterialSkin.Controls.MaterialComboBox comboBoxTargetType;
     }
 }

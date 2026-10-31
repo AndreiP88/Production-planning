@@ -46,7 +46,7 @@ namespace Production_planning
 
             ScheduleTemplateService scheduleTemplate = new ScheduleTemplateService(parameter.GetMySQLConnectionString());
 
-            _scheduleTemplates = await scheduleTemplate.GetAllTemplatesAsync();
+            _scheduleTemplates = await scheduleTemplate.GetAllTemplatesAsync(ScheduleTargetType.Equipment);
 
             comboBoxTemplates.Items.Clear();
 

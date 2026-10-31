@@ -181,6 +181,31 @@ namespace Production_planning
                 return card;
             }
         }
+        /// <summary>
+        /// Получает список всех работающих сотрудников из внешней базы MS SQL Server
+        /// </summary>
+        public async Task<List<ExternalEmployeeModel>> GetActiveExternalEmployeesAsync()
+        {
+            const string sql = @"
+                SELECT 
+                    ce.id_common_employee,
+                    ce.employee_no,
+                    ce.employee_firstname,
+                    ce.employee_middlename,
+                    ce.employee_lastname,
+                    ces.employee_speciality_name
+                FROM dbo.common_employee ce
+                INNER JOIN dbo.common_employee_speciality ces 
+                    ON ce.id_common_employee_speciality = ces.id_common_employee_speciality 
+                WHERE ce.fire_date IS NULL
+                ORDER BY ces.employee_speciality_name, ce.employee_lastname;";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var result = await connection.QueryAsync<ExternalEmployeeModel>(sql);
+                return result.ToList();
+            }
+        }
 
         public async Task CancelEmployeeShiftAsync(DateTime date, ulong shiftId, ulong employeeId, string comment)
         {

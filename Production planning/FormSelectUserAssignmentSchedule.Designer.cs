@@ -172,7 +172,7 @@
             this.comboBoxTemplates.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBoxTemplates.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.comboBoxTemplates.FormattingEnabled = true;
-            this.comboBoxTemplates.Hint = "Рабочий график (фильтр в бд)";
+            this.comboBoxTemplates.Hint = "Рабочий график";
             this.comboBoxTemplates.IntegralHeight = false;
             this.comboBoxTemplates.ItemHeight = 43;
             this.comboBoxTemplates.Location = new System.Drawing.Point(3, 3);

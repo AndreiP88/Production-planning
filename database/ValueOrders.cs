@@ -260,15 +260,17 @@ namespace Production_planning
                                     var setupRow = group.FirstOrDefault(r => Convert.ToInt32(r.ord) == 0);
                                     if (setupRow != null)
                                     {
-                                        card.SetupCount = setupRow.plan_out_qty != null ? Convert.ToDouble(setupRow.plan_out_qty) : 0;
                                         card.SetupNormTime = setupRow.normtime != null ? Convert.ToDouble(setupRow.normtime) : 0;
+                                        card.SetupCount = setupRow.plan_out_qty != null ? Convert.ToDouble(setupRow.plan_out_qty) : 0;
+                                        card.SetupCountFact = setupRow.fact_out_qty != null ? Convert.ToDouble(setupRow.fact_out_qty) : 0;
                                     }
 
                                     var runRow = group.FirstOrDefault(r => Convert.ToInt32(r.ord) == 1);
                                     if (runRow != null)
                                     {
-                                        card.RunQty = runRow.plan_out_qty != null ? Convert.ToDouble(runRow.plan_out_qty) : 0;
                                         card.RunNormTime = runRow.normtime != null ? Convert.ToDouble(runRow.normtime) : 0;
+                                        card.RunQty = runRow.plan_out_qty != null ? Convert.ToDouble(runRow.plan_out_qty) : 0;
+                                        card.RunQtyFact = runRow.fact_out_qty != null ? Convert.ToDouble(runRow.fact_out_qty) : 0;
                                     }
 
                                     // СУММИРУЕМ ВРЕМЯ ФАЗ В ОДНУ ОБЩУЮ СТРОКУ ЗАКАЗА

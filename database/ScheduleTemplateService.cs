@@ -121,14 +121,37 @@ namespace database
         /// <summary>
         /// ПОЛУЧИТЬ ВСЕ БРИГАДЫ: Возвращает список бригад с названиями их базовых графиков
         /// </summary>
-        public async Task<List<ScheduleTemplateModel>> GetAllTemplatesAsync()
+        public async Task<List<ScheduleTemplateModel>> GetAllTemplatesAsync(ScheduleTargetType? filterType = null)
         {
-            const string sql = @"
-            SELECT st.id AS Id, st.name AS Name, st.base_date AS BaseDate, 
-                   st.cycle_id AS CycleId, sc.name AS CycleName
-            FROM schedule_templates st
-            JOIN schedule_cycles sc ON st.cycle_id = sc.id
-            ORDER BY st.name;";
+            // Базовый SQL-запрос. Добавили выборку поля target_type
+            string sql = @"
+                SELECT st.id AS Id, 
+                       st.name AS Name, 
+                       st.base_date AS BaseDate, 
+                       st.cycle_id AS CycleId, 
+                       st.target_type AS TargetTypeRaw, -- 🌟 Маппим строковый ENUM напрямую в модель
+                       sc.name AS CycleName
+                FROM schedule_templates st
+                JOIN schedule_cycles sc ON st.cycle_id = sc.id";
+
+            // Динамически дописываем фильтрацию в зависимости от переданного аргумента
+            if (filterType.HasValue)
+            {
+                if (filterType.Value == ScheduleTargetType.Equipment)
+                {
+                    sql += " WHERE st.target_type IN ('universal', 'equipment')";
+                }
+                else if (filterType.Value == ScheduleTargetType.Employee)
+                {
+                    sql += " WHERE st.target_type IN ('universal', 'employee')";
+                }
+                else if (filterType.Value == ScheduleTargetType.Universal)
+                {
+                    sql += " WHERE st.target_type = 'universal'";
+                }
+            }
+
+            sql += " ORDER BY st.name;";
 
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -136,6 +159,7 @@ namespace database
                 return result.ToList();
             }
         }
+
 
         /// <summary>
         /// ПОЛУЧИТЬ БРИГАДУ ПО ID: Для формы редактирования конкретной бригады
@@ -155,34 +179,48 @@ namespace database
         /// <summary>
         /// СОЗДАТЬ БРИГАДУ: Привязывает выбранный график к имени бригады и опорной дате
         /// </summary>
-        public async Task<int> CreateTemplateBindingAsync(ScheduleTemplateModel template)
+        public async Task<bool> CreateTemplateBindingAsync(ScheduleTemplateModel model)
         {
             const string sql = @"
-            INSERT INTO schedule_templates (name, cycle_id, base_date) 
-            VALUES (@Name, @CycleId, @BaseDate);
-            SELECT LAST_INSERT_ID();";
+                INSERT INTO schedule_templates (name, cycle_id, base_date, target_type) 
+                VALUES (@Name, @CycleId, @BaseDate, @TargetTypeRaw);";
 
             using (var connection = new MySqlConnection(_connectionString))
             {
-                return await connection.ExecuteScalarAsync<int>(sql, template);
+                int rows = await connection.ExecuteAsync(sql, new
+                {
+                    Name = model.Name,
+                    CycleId = model.CycleId,
+                    BaseDate = model.BaseDate.ToString("yyyy-MM-dd"),
+                    TargetTypeRaw = model.TargetTypeRaw // Передаем строковое значение enum (universal, equipment, employee)
+                });
+                return rows > 0;
             }
         }
 
         /// <summary>
         /// РЕДАКТИРОВАТЬ БРИГАДУ: Позволяет сменить имя бригады, перепривязать к другой схеме или сдвинуть опорную дату
         /// </summary>
-        public async Task<bool> UpdateTemplateBindingAsync(ScheduleTemplateModel template)
+        public async Task<bool> UpdateTemplateBindingAsync(ScheduleTemplateModel model)
         {
             const string sql = @"
-            UPDATE schedule_templates 
-            SET name = @Name, 
-                cycle_id = @CycleId, 
-                base_date = @BaseDate 
-            WHERE id = @Id;";
+                UPDATE schedule_templates 
+                SET name = @Name, 
+                    cycle_id = @CycleId, 
+                    base_date = @BaseDate, 
+                    target_type = @TargetTypeRaw 
+                WHERE id = @Id;";
 
             using (var connection = new MySqlConnection(_connectionString))
             {
-                int rows = await connection.ExecuteAsync(sql, template);
+                int rows = await connection.ExecuteAsync(sql, new
+                {
+                    Name = model.Name,
+                    CycleId = model.CycleId,
+                    BaseDate = model.BaseDate.ToString("yyyy-MM-dd"),
+                    TargetTypeRaw = model.TargetTypeRaw,
+                    Id = model.Id
+                });
                 return rows > 0;
             }
         }

@@ -4,6 +4,7 @@ using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +17,28 @@ namespace database
         public WorkAreaService(string connectionString)
         {
             _connectionString = connectionString;
+        }
+
+        public async Task<List<ExternalEquipmentRow>> GetExternalEquipmentWithOrgAsync()
+        {
+            const string sql = @"
+                SELECT 
+                    eq.id_common_equip_directory AS EquipId,
+                    eq.equip_name AS EquipName,
+                    eq.equip_type AS EquipType,
+                    eq.parentid AS OrgId,
+                    org.org_name AS OrgName
+                FROM dbo.common_equip_directory eq
+                LEFT JOIN dbo.common_org_directory org 
+                    ON eq.parentid = org.id_common_org_directory
+                WHERE eq.equip_name IS NOT NULL AND eq.equip_name != ''
+                ORDER BY org.org_name, eq.equip_name;";
+
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                var result = await connection.QueryAsync<ExternalEquipmentRow>(sql);
+                return result.ToList();
+            }
         }
 
         // =========================================================================
