@@ -2,9 +2,7 @@
 using data;
 using database;
 using MySqlConnector;
-using Mysqlx.Crud;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -1172,9 +1170,11 @@ namespace Production_planning
             List<OrdersLoad> orders = new List<OrdersLoad>();
             int lastItemIndex = -1;
 
+            ConnectionParameter parameter = new ConnectionParameter();
+
             try
             {
-                using (SqlConnection Connect = DBConnection.GetDBConnection())
+                using (SqlConnection Connect = new SqlConnection(parameter.GetSQLServerConnectionString()))
                 {
                     Connect.Open();
                     SqlCommand Command = new SqlCommand

@@ -1,35 +1,41 @@
-﻿namespace database
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.IO;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace database
 {
     public class ConnectionParameter
     {
-        public string Host = "localhost";
-        public readonly int Port = 3309;
-        public string Database = "workplan";
-        public string Username = "oxyfox";
-        public string Password = "root";
+        private readonly string _configFilePath = "settings.json";
 
-        public ConnectionParameter()
+        private string GetConnectionStringFromJson(string key)
         {
+            if (!File.Exists(_configFilePath))
+            {
+                throw new FileNotFoundException($"Конфигурационный файл настроек не найден по пути: {_configFilePath}");
+            }
 
+            try
+            {
+                string jsonText = File.ReadAllText(_configFilePath);
+                var jObject = JObject.Parse(jsonText);
+
+                string connString = jObject["ConnectionStrings"]?[key]?.ToString();
+                if (string.IsNullOrEmpty(connString))
+                {
+                    throw new Exception($"Ключ строки подключения '{key}' не найден внутри секции ConnectionStrings в settings.json.");
+                }
+
+                return connString;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка чтения конфигурации JSON: {ex.Message}");
+            }
         }
 
-        public string GetMySQLConnectionString()
-        {
-            string connString = "Server=" + Host + ";Database=" + Database + ";port=" + Port + ";User Id=" + Username + ";password=" + Password;
-
-            return connString;
-        }
-
-        public string GetSQLServerConnectionString()
-        {
-            string host = "SRV-ACS\\DSACS";
-            string database = "asystem";
-            string username = "ds";
-            string password = "1";
-
-            string connString = "Data Source = " + host + "; Initial Catalog = " + database + "; Persist Security Info = True; User ID = " + username + "; Password = " + password;
-
-            return connString;
-        }
+        public string GetMySQLConnectionString() => GetConnectionStringFromJson("MySQLConnection");
+        public string GetSQLServerConnectionString() => GetConnectionStringFromJson("SQLServerConnection");
     }
 }
