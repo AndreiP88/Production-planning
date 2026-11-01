@@ -52,11 +52,11 @@ namespace Production_planning
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("ru-RU");
 
-            await LoadExternalEquipmentToComboBox();
-
             await LoadTemplate();
             await LoadAreas();
             await LoadEquipment();
+
+            await LoadExternalEquipmentToComboBox();
         }
         private async Task LoadExternalEquipmentToComboBox()
         {
@@ -76,10 +76,13 @@ namespace Production_planning
 
                 // Сбрасываем выделение, чтобы поле изначально было пустым для выбора
                 comboBoxExternalEquip.SelectedIndex = -1;
+                comboBoxExternalEquip.Enabled = true;
             }
             catch (Exception ex)
             {
-                comboBoxExternalEquip.Hint = "Ошибка получения рабочих мест. База не доступна";
+                comboBoxExternalEquip.Hint = "Ошибка получения рабочих мест. База данных не доступна";
+                comboBoxExternalEquip.Enabled = false;
+
                 //MessageBox.Show($"Не удалось импортировать парк станков: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

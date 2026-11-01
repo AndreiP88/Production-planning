@@ -478,6 +478,7 @@
             this.comboBoxExternalEquip.DropDownHeight = 174;
             this.comboBoxExternalEquip.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxExternalEquip.DropDownWidth = 121;
+            this.comboBoxExternalEquip.Enabled = false;
             this.comboBoxExternalEquip.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
             this.comboBoxExternalEquip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.comboBoxExternalEquip.FormattingEnabled = true;

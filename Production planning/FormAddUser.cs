@@ -61,13 +61,13 @@ namespace Production_planning
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("ru-RU");
 
-            await LoadExternalEmployeesToComboBox();
-
             await LoadPositions();
             await LoadEquipments();
             await LoadTemplate();
 
             await LoadUser();
+
+            await LoadExternalEmployeesToComboBox();
         }
         // Глобальная переменная внутри формы для хранения списка
         private async Task LoadExternalEmployeesToComboBox()
@@ -88,10 +88,13 @@ namespace Production_planning
 
                 // Сбрасываем выбор по умолчанию, чтобы комбобокс изначально был пустым
                 comboBoxExternalStaff.SelectedIndex = -1;
+                comboBoxExternalStaff.Enabled = true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка импорта базы сотрудников: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                comboBoxExternalStaff.Hint = "Ошибка получения списка сотрудников. База данныйх недоступна";
+                comboBoxExternalStaff.Enabled = false;
+                //MessageBox.Show($"Ошибка импорта базы сотрудников: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
