@@ -79,7 +79,8 @@ namespace Production_planning
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Не удалось импортировать парк станков: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                comboBoxExternalEquip.Hint = "Ошибка получения рабочих мест. База не доступна";
+                //MessageBox.Show($"Не удалось импортировать парк станков: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private async Task LoadTemplate()

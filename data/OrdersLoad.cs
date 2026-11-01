@@ -143,40 +143,48 @@ namespace data
                 if (string.IsNullOrWhiteSpace(FullToolName) || FullToolName == "—")
                     return "—";
 
-                // Сценарий 1: Ищем знак № с цифрами (например, "№1557")
-                var matchNo = Regex.Match(FullToolName, @"№\s*(\d+)");
-                if (matchNo.Success)
-                    return matchNo.Groups[1].Value;
+                var uniqueCodes = new List<string>();
 
-                // Сценарий 2: Ищем ВСЕ совпадения внутри круглых скобок (например, "(26091807_1)" и "(26091807_2)")
-                // Вытаскивает цифры и знаки подчеркивания внутри скобок
-                var bracketMatches = Regex.Matches(FullToolName, @"\(([^)]+)\)");
-                if (bracketMatches.Count > 0)
+                // Сценарий 1: Ищем ВСЕ знаки № с цифрами (например, "№746" и "№1753")
+                var matchesNo = Regex.Matches(FullToolName, @"№\s*(\d+)");
+                if (matchesNo.Count > 0)
                 {
-                    var uniqueCodes = new List<string>();
-                    foreach (Match m in bracketMatches)
+                    foreach (Match m in matchesNo)
                     {
                         string code = m.Groups[1].Value.Trim();
-                        // Добавляем только уникальные артикулы, чтобы не дублировать
                         if (!uniqueCodes.Contains(code))
                         {
                             uniqueCodes.Add(code);
                         }
                     }
+                }
 
-                    if (uniqueCodes.Count > 0)
+                // Сценарий 2: Ищем ВСЕ совпадения внутри круглых скобок, если по знаку № ничего не нашли
+                if (uniqueCodes.Count == 0)
+                {
+                    var bracketMatches = Regex.Matches(FullToolName, @"\(([^)]+)\)");
+                    foreach (Match m in bracketMatches)
                     {
-                        // Соединяем найденные номера обратно через запятую
-                        return string.Join(", ", uniqueCodes);
+                        string code = m.Groups[1].Value.Trim();
+                        if (!uniqueCodes.Contains(code))
+                        {
+                            uniqueCodes.Add(code);
+                        }
                     }
                 }
 
-                // Сценарий 3: Если скобок нет, но строка является просто коротким номером (например, "186" или "590")
+                // Если нашли номера (по сценарию 1 или 2) — склеиваем их вместе
+                if (uniqueCodes.Count > 0)
+                {
+                    return string.Join(", ", uniqueCodes);
+                }
+
+                // Сценарий 3: Если спец-знаков нет, но строка короткая
                 string cleanTool = FullToolName.Trim();
                 if (cleanTool.Length <= 15)
                     return cleanTool;
 
-                // Дефолтный сценарий: возвращаем оригинал, если структура не подошла
+                // Дефолтный сценарий: возвращаем оригинал
                 return FullToolName;
             }
         }

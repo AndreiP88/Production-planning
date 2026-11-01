@@ -231,58 +231,78 @@ namespace Production_planning
 
                         if (rawPlan == null || !rawPlan.Any()) return new List<ProductionJobCard>();
 
-                        // ГРУППИРУЕМ ПРИЛАДКУ И РАБОТУ В ОДНУ СТРОКУ ЗАКАЗА
-                        var structuredJobs = rawPlan
-                            .GroupBy(r => r.ord == null || string.IsNullOrEmpty(r.order_num?.ToString())
-                                ? $"IDLE_{r.id_man_planjob}_{r.date_begin:yyyyMMdd}"
-                                : $"JOB_{r.id_man_planjob}")
-                            .Select(group =>
+                        var filteredRawPlan = rawPlan.Where(r =>
+                        {
+                            string orderNumStr = r.order_num?.ToString() ?? string.Empty;
+                            string operNameStr = r.operation_name?.ToString() ?? string.Empty;
+
+                            // Жесткий барьер: если это обед (проверяем и номер заказа, и название операции), полностью стираем строку
+                            if (orderNumStr.Contains("***") || r.plan_out_qty == null)
                             {
-                                var baseRow = group.First();
-                                bool isIdle = string.IsNullOrEmpty(baseRow.order_num?.ToString()) || baseRow.ord == null;
+                                return false;
+                            }
 
-                                var card = new ProductionJobCard
+                            // Условие А: Если это легитимный простой станка (ремонт/ТО) — оставляем
+                            bool isIdle = r.ord == null || string.IsNullOrEmpty(orderNumStr);
+                            if (isIdle) return true;
+
+                            // Условие Б: Если это рабочий заказ — пропускаем только с заполненным тиражом
+                            return r.plan_out_qty != null;
+                        })
+                        .ToList();
+
+                        // ГРУППИРУЕМ ПРИЛАДКУ И РАБОТУ В ОДНУ СТРОКУ ЗАКАЗА
+                        var structuredJobs = filteredRawPlan
+                        .GroupBy(r => r.ord == null || string.IsNullOrEmpty(r.order_num?.ToString())
+                            ? $"IDLE_{r.id_man_planjob}_{r.date_begin:yyyyMMdd}"
+                            : $"JOB_{r.id_man_planjob}")
+                        .Select(group =>
+                        {
+                            var baseRow = group.First();
+                            bool isIdle = string.IsNullOrEmpty(baseRow.order_num?.ToString()) || baseRow.ord == null;
+
+                            var card = new ProductionJobCard
+                            {
+                                IdPlanJob = baseRow.id_man_planjob != null ? Convert.ToInt64(baseRow.id_man_planjob) : 0,
+                                IdEquip = baseRow.id_common_equip_directory != null ? Convert.ToInt32(baseRow.id_common_equip_directory) : -1,
+                                OrderNum = baseRow.order_num?.ToString() ?? string.Empty,
+                                CustomerName = baseRow.customer_name?.ToString() ?? string.Empty,
+                                OrderName = baseRow.order_name?.ToString() ?? string.Empty,
+                                DateBegin = group.Min(r => r.date_begin != null ? Convert.ToDateTime(r.date_begin) : DateTime.MaxValue),
+                                DateEnd = group.Max(r => r.date_end != null ? Convert.ToDateTime(r.date_end) : DateTime.MinValue),
+                                IdOrderHead = baseRow.id_order_head != null ? Convert.ToInt32(baseRow.id_order_head) : 0,
+                                IsIdleTime = isIdle,
+                                IdleTimeName = isIdle ? (baseRow.operation_name?.ToString() ?? "Технологический простой") : string.Empty
+                            };
+
+                            if (!card.IsIdleTime)
+                            {
+                                var setupRow = group.FirstOrDefault(r => Convert.ToInt32(r.ord) == 0);
+                                if (setupRow != null)
                                 {
-                                    IdPlanJob = baseRow.id_man_planjob != null ? Convert.ToInt64(baseRow.id_man_planjob) : 0,
-                                    IdEquip = baseRow.id_common_equip_directory != null ? Convert.ToInt32(baseRow.id_common_equip_directory) : -1,
-                                    OrderNum = baseRow.order_num?.ToString() ?? string.Empty,
-                                    CustomerName = baseRow.customer_name?.ToString() ?? string.Empty,
-                                    OrderName = baseRow.order_name?.ToString() ?? string.Empty,
-                                    DateBegin = group.Min(r => r.date_begin != null ? Convert.ToDateTime(r.date_begin) : DateTime.MaxValue),
-                                    DateEnd = group.Max(r => r.date_end != null ? Convert.ToDateTime(r.date_end) : DateTime.MinValue),
-                                    IdOrderHead = baseRow.id_order_head != null ? Convert.ToInt32(baseRow.id_order_head) : 0,
-                                    IsIdleTime = isIdle,
-                                    IdleTimeName = isIdle ? (baseRow.operation_name?.ToString() ?? "Технологический простой") : string.Empty
-                                };
-
-                                if (!card.IsIdleTime)
-                                {
-                                    var setupRow = group.FirstOrDefault(r => Convert.ToInt32(r.ord) == 0);
-                                    if (setupRow != null)
-                                    {
-                                        card.SetupNormTime = setupRow.normtime != null ? Convert.ToDouble(setupRow.normtime) : 0;
-                                        card.SetupCount = setupRow.plan_out_qty != null ? Convert.ToDouble(setupRow.plan_out_qty) : 0;
-                                        card.SetupCountFact = setupRow.fact_out_qty != null ? Convert.ToDouble(setupRow.fact_out_qty) : 0;
-                                    }
-
-                                    var runRow = group.FirstOrDefault(r => Convert.ToInt32(r.ord) == 1);
-                                    if (runRow != null)
-                                    {
-                                        card.RunNormTime = runRow.normtime != null ? Convert.ToDouble(runRow.normtime) : 0;
-                                        card.RunQty = runRow.plan_out_qty != null ? Convert.ToDouble(runRow.plan_out_qty) : 0;
-                                        card.RunQtyFact = runRow.fact_out_qty != null ? Convert.ToDouble(runRow.fact_out_qty) : 0;
-                                    }
-
-                                    // СУММИРУЕМ ВРЕМЯ ФАЗ В ОДНУ ОБЩУЮ СТРОКУ ЗАКАЗА
-                                    card.NormTimeMinutes = card.SetupNormTime + card.RunNormTime;
+                                    card.SetupNormTime = setupRow.normtime != null ? Convert.ToDouble(setupRow.normtime) : 0;
+                                    card.SetupCount = setupRow.plan_out_qty != null ? Convert.ToDouble(setupRow.plan_out_qty) : 0;
+                                    card.SetupCountFact = setupRow.fact_out_qty != null ? Convert.ToDouble(setupRow.fact_out_qty) : 0;
                                 }
-                                else
+
+                                var runRow = group.FirstOrDefault(r => Convert.ToInt32(r.ord) == 1);
+                                if (runRow != null)
                                 {
-                                    card.NormTimeMinutes = baseRow.normtime != null ? Convert.ToDouble(baseRow.normtime) : 0;
+                                    card.RunNormTime = runRow.normtime != null ? Convert.ToDouble(runRow.normtime) : 0;
+                                    card.RunQty = runRow.plan_out_qty != null ? Convert.ToDouble(runRow.plan_out_qty) : 0;
+                                    card.RunQtyFact = runRow.fact_out_qty != null ? Convert.ToDouble(runRow.fact_out_qty) : 0;
                                 }
 
-                                return card;
-                            }).ToList();
+                                // СУММИРУЕМ ВРЕМЯ ФАЗ В ОДНУ ОБЩУЮ СТРОКУ ЗАКАЗА
+                                card.NormTimeMinutes = card.SetupNormTime + card.RunNormTime;
+                            }
+                            else
+                            {
+                                card.NormTimeMinutes = baseRow.normtime != null ? Convert.ToDouble(baseRow.normtime) : 0;
+                            }
+
+                            return card;
+                        }).ToList();
 
                         // -----------------------------------------------------------------
                         // ШАГ 2: Подтягиваем операции (Оригинальный рабочий регистр полей)
@@ -330,12 +350,12 @@ namespace Production_planning
                         // 🌟 ШАГ 2.5: ТОЧЕЧНАЯ КОРРЕКТИРОВКА ОТОБРАЖЕНИЯ КРАСОК (ЛИЦО И ОБОРОТ) 🌟
                         // -----------------------------------------------------------------
                         string techOpSql = @"
-                    SELECT TOP 1 order_job.id_order_technology_op
-                    FROM dbo.man_order_job
-                    INNER JOIN dbo.man_order_job_item ON man_order_job.id_man_order_job = man_order_job_item.id_man_order_job
-                    INNER JOIN dbo.order_job ON man_order_job.id_order_job = order_job.id_order_job
-                    INNER JOIN dbo.man_planjob ON man_order_job_item.id_man_order_job_item = man_planjob.id_man_order_job_item 
-                    WHERE man_order_job_item.itemid = @ItemId AND man_planjob.id_man_planjob = @IdPlanJob";
+                            SELECT TOP 1 order_job.id_order_technology_op
+                        FROM dbo.man_order_job
+                            INNER JOIN dbo.man_order_job_item ON man_order_job.id_man_order_job = man_order_job_item.id_man_order_job
+                            INNER JOIN dbo.order_job ON man_order_job.id_order_job = order_job.id_order_job
+                            INNER JOIN dbo.man_planjob ON man_order_job_item.id_man_order_job_item = man_planjob.id_man_order_job_item 
+                        WHERE man_order_job_item.itemid = @ItemId AND man_planjob.id_man_planjob = @IdPlanJob";
 
                         foreach (var job in structuredJobs)
                         {

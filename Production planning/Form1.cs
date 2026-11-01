@@ -10,9 +10,11 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace Production_planning
 {
@@ -1525,14 +1527,14 @@ namespace Production_planning
                 dataGridViewPlan.Columns["OrderNum"].Width = 110;
                 dataGridViewPlan.Columns["Customer"].Width = 120;
                 dataGridViewPlan.Columns["OrderName"].Width = 170;
-                dataGridViewPlan.Columns["ItemName"].Width = 90;
-                dataGridViewPlan.Columns["OperProp"].Width = 100;
+                dataGridViewPlan.Columns["ItemName"].Width = 140;
+                dataGridViewPlan.Columns["OperProp"].Width = 140;
                 dataGridViewPlan.Columns["Material"].Width = 160;
                 dataGridViewPlan.Columns["TechNote"].Width = 140;
                 dataGridViewPlan.Columns["Qty"].Width = 80;
                 dataGridViewPlan.Columns["Start"].Width = 110;
                 dataGridViewPlan.Columns["End"].Width = 110;
-                dataGridViewPlan.Columns["Duration"].Width = 100;
+                dataGridViewPlan.Columns["Duration"].Width = 110;
                 dataGridViewPlan.Columns["ToolName"].Width = 110;
                 dataGridViewPlan.Columns["Cutting"].Width = 100;
 
@@ -1646,7 +1648,7 @@ namespace Production_planning
             string staffText = "—";
             if (shift != null)
             {
-                string empName = string.IsNullOrEmpty(shift.StaffNames) ? "Персонал не назначен" : shift.StaffNames;
+                string empName = string.IsNullOrEmpty(shift.StaffNames) ? "???" : shift.StaffNames;
                 staffText = shift.IsCancelled == 1
                     ? $"{shift.Date:dd.MM.yy}\n{shift.ShiftName}\n{empName}\n(Отменена)"
                     : $"{shift.Date:dd.MM.yy}\n{shift.ShiftName}\n{empName}";
@@ -1662,6 +1664,8 @@ namespace Production_planning
             string operProp = (job.IsIdleTime || string.IsNullOrEmpty(job.OperProp)) ? "—" : job.OperProp;
             string materialText = job.IsIdleTime ? "—" : job.FullMaterialText;
             string techNote = (job.IsIdleTime || string.IsNullOrEmpty(job.NoteManagerTech)) ? "—" : job.NoteManagerTech;
+
+            string formattedOrderNum = FormatOrderNumberWithTechNotes(orderNum, itemName, techNote);
 
             string qty;
 
@@ -1695,7 +1699,7 @@ namespace Production_planning
 
             // Заполнение ячеек 0 - 13 (Штамп и Подрезка ушли в самый конец)
             row.Cells[0].Value = staffText;
-            row.Cells[1].Value = orderNum;
+            row.Cells[1].Value = formattedOrderNum;
             row.Cells[2].Value = customer;
             row.Cells[3].Value = orderName;
             row.Cells[4].Value = itemName;
@@ -1880,6 +1884,44 @@ namespace Production_planning
             }
         }
 
+        private string FormatOrderNumberWithTechNotes(string originalOrderNum, string elementText, string techNotesText)
+        {
+            if (string.IsNullOrWhiteSpace(originalOrderNum))
+                return originalOrderNum;
+
+            string suffix = "";
+            string elementLower = elementText?.ToLower() ?? "";
+            string notesLower = techNotesText?.ToLower() ?? "";
+
+            // 1. Проверка поля "Элемент" (пакет или коробка)
+            if (elementLower.Contains("пакет"))
+            {
+                suffix += "\nпакет";
+            }
+            else if (elementLower.Contains("коробка") || elementLower.Contains("коробочн"))
+            {
+                suffix += "\nкоробка";
+            }
+
+            // 2. Универсальный поиск прогонов через регулярное выражение
+            // Шаблон ищет: одну или несколько цифр (\d+), за которыми могут идти дефисы, буквы (й, ой, ый) и пробелы,
+            // а затем обязательно идет корень "прогон"
+            var runMatch = Regex.Match(notesLower, @"(\d+)(?:\s*[-—–]?\s*[а-яисмтекхў]*\s*)?прогон");
+
+            if (runMatch.Success)
+            {
+                // Вытаскиваем только чистую цифру из первой группы захвата
+                string runNumber = runMatch.Groups[1].Value;
+                suffix += $"\n{runNumber} прогон";
+            }
+            // 3. Если прогона нет, но есть отметка о присутствии технолога
+            else if (notesLower.Contains("с технологом"))
+            {
+                suffix += "\nтехнолог";
+            }
+
+            return $"{originalOrderNum.Trim()}{suffix}";
+        }
 
 
 
