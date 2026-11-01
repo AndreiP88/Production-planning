@@ -324,57 +324,6 @@ namespace Production_planning
             }
         }
 
-        /// <summary>
-        /// Назначает сотрудника на смену/станок с указанием статуса утверждения и комментария
-        /// </summary>
-        /// <param name="date">Дата назначения</param>
-        /// <param name="shiftId">Внутренний ID смены (из базы данных)</param>
-        /// <param name="equipmentId">ID станка, на который назначается сотрудник</param>
-        /// <param name="employeeId">ID назначаемого сотрудника</param>
-        /// <param name="status">Статус оверрайда (например: 0 - черновик, 2 - утверждено)</param>
-        /// <param name="comment">Текстовый комментарий мастера (причина назначения/замены)</param>
-        public async Task AssignEmployeeToShiftAsync(DateTime date, ulong shiftId, ulong equipmentId, ulong employeeId, int status, string comment)
-        {
-            // Запрос учитывает, что это ручное НАЗНАЧЕНИЕ, поэтому флаг отмены (is_cancellation) жестко сбрасывается в 0
-            const string sql = @"
-                INSERT INTO schedule_overrides (
-                    override_date, 
-                    shift_id, 
-                    employee_id, 
-                    equipment_id, 
-                    status, 
-                    is_cancellation, 
-                    comment
-                )
-                VALUES (
-                    @Date, 
-                    @ShiftId, 
-                    @EmployeeId, 
-                    @EquipmentId, 
-                    @Status, 
-                    0, 
-                    @Comment
-                )
-                ON DUPLICATE KEY UPDATE 
-                    equipment_id = @EquipmentId, 
-                    status = @Status, 
-                    is_cancellation = 0, 
-                    comment = @Comment;";
-
-            using (var conn = new MySqlConnection(_connectionString))
-            {
-                await conn.ExecuteAsync(sql, new
-                {
-                    Date = date.Date,       // Обрезаем время, сохраняем только чистый день
-                    ShiftId = shiftId,
-                    EquipmentId = equipmentId,
-                    EmployeeId = employeeId,
-                    Status = status,
-                    Comment = string.IsNullOrEmpty(comment) ? null : comment // Пишем NULL в базу, если комментарий пустой
-                });
-            }
-        }
-
         // =========================================================================
         // РАЗДЕЛ 2: ДОБАВЛЕНИЕ, РЕДАКТИРОВАНИЕ, ПЕРИОДЫ НАЙМА/УВОЛЬНЕНИЯ
         // =========================================================================

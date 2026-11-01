@@ -204,7 +204,7 @@ namespace Production_planning
             if (status == EmployeeShiftStatus.AvailableAdjacent)
             {
                 var warn = MessageBox.Show(
-                    "Внимание! У сотрудника есть смежные смены (интервал отдыха менее 8 часов).\n" +
+                    "Внимание! У сотрудника есть смежные смены.\n" +
                     "Вы уверены, что хотите назначить его сверхурочно?",
                     "Предупреждение о переработке",
                     MessageBoxButtons.YesNo,
@@ -214,10 +214,25 @@ namespace Production_planning
             }
 
             // Сохраняем оверрайд назначения на текущий станок карточки смены [2026-09-04]
-            await report.AssignEmployeeToShiftAsync(_date, _shiftId, _currentValue, employeeId, 2, comment);
+            bool isAssigned = await report.SaveEmployeeTransferAsync(
+                employeeId: employeeId,
+                targetEquipmentId: _currentValue,
+                targetShiftId: _shiftId,
+                transferDate: _date,
+                comment: comment,
+                isCrossShiftTransfer: false,
+                parentPlanShiftId: null
+            );
 
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            if (isAssigned)
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Не удалось сохранить назначение сотрудника.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /*private async Task SaveAssignmentUser()
