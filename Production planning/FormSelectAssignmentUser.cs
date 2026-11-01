@@ -128,8 +128,99 @@ namespace Production_planning
                 MessageBox.Show($"Ошибка заполнения таблицы сотрудников: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private async Task SaveAssignmentUser()
+        {
+            var report = new EmployeeManagementService(parameter.GetMySQLConnectionString());
+
+            if (gridEmployees.CurrentRow == null || gridEmployees.CurrentRow.Tag == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите сотрудника из таблицы!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int rowId = gridEmployees.CurrentRow.Index;
+            ulong employeeId = (ulong)gridEmployees.CurrentRow.Tag;
+            string comment = textBoxComment.Text.Trim();
+
+            AvailableEmployeeRow employee = _employees[rowId];
+
+            string statusCurrent = employee.CurrentStatus;
+
+            EmployeeShiftStatus status = (EmployeeShiftStatus)employee.StatusCode;
+
+            // 🛑 ЖЕСТКАЯ ЗАЩИТА ТК: Запрещаем назначать занятых!
+            if (status == EmployeeShiftStatus.Busy)
+            {
+                var dialog = MessageBox.Show(
+                    $"Сотрудник в текущую смену уже занят!\nТекущая активность: {employee.CurrentActivity}.\n\n" +
+                    $"Вы уверены, что хотите снять его с предыдущего станка и перевести на текущий?",
+                    "Запрос на переназначение персонала",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (dialog == DialogResult.No) return;
+
+                // Вызываем ваш существующий метод переназначения.
+                // Так как перевод идет внутри одной и той же смены (мастер просто перекидывает человека на соседний станок),
+                // мы передаем isCrossShiftTransfer = false, а метод сам пропишет текущую смену в ParentPlanShiftId
+                // для автоматического гашения старого рабочего места!
+                bool isTransferred = await report.SaveEmployeeTransferAsync(
+                    employeeId: employeeId,
+                    targetEquipmentId: _currentValue, // ID текущего станка карточки
+                    targetShiftId: _shiftId,          // ID текущей смены
+                    transferDate: _date,                     // Дата перевода
+                    comment: comment,
+                    isCrossShiftTransfer: false,
+                    parentPlanShiftId: null
+                );
+
+                if (isTransferred)
+                {
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Не удалось выполнить переназначение сотрудника в базе данных.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                return;
+            }
+
+            // Если статус желтый (смежные смены), выводим предупреждение, но разрешаем (по усмотрению мастера)
+            if (status == EmployeeShiftStatus.Absent)
+            {
+                var warn = MessageBox.Show(
+                    $"Внимание! Текущий статус сотрудника: {statusCurrent}.\n" +
+                    "Вы уверены, что хотите назначить его сверхурочно?",
+                    "Предупреждение о переработке",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+                if (warn == DialogResult.No) return;
+            }
+
+            // Если статус желтый (смежные смены), выводим предупреждение, но разрешаем (по усмотрению мастера)
+            if (status == EmployeeShiftStatus.AvailableAdjacent)
+            {
+                var warn = MessageBox.Show(
+                    "Внимание! У сотрудника есть смежные смены (интервал отдыха менее 8 часов).\n" +
+                    "Вы уверены, что хотите назначить его сверхурочно?",
+                    "Предупреждение о переработке",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+                if (warn == DialogResult.No) return;
+            }
+
+            // Сохраняем оверрайд назначения на текущий станок карточки смены [2026-09-04]
+            await report.AssignEmployeeToShiftAsync(_date, _shiftId, _currentValue, employeeId, 2, comment);
+
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        /*private async Task SaveAssignmentUser()
         {
             var report = new EmployeeManagementService(parameter.GetMySQLConnectionString());
 
@@ -193,7 +284,7 @@ namespace Production_planning
 
             this.DialogResult = DialogResult.OK;
             this.Close();
-        }
+        }*/
 
 
         private async void materialButton1_Click(object sender, EventArgs e)
