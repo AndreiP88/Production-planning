@@ -4807,7 +4807,37 @@ namespace Production_planning
             }
         }
 
-        private void dataGridViewAbsences_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        /*private void dataGridViewAbsences_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex <= 0) return;
+            // Игнорируем клики по шапке таблицы (индекс -1)
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            var grid = (DataGridView)sender;
+
+            // 1. Если кликнули по первой строке (индекс 0) — запрещаем её выделять
+            if (e.RowIndex == 0)
+            {
+                grid.ClearSelection();
+                return;
+            }
+
+            *//*// 2. Если кликнули по ячейкам дней (индекс столбца >= 4)
+            if (e.ColumnIndex >= 4)
+            {
+                // Очищаем старое выделение
+                grid.ClearSelection();
+
+                // Принудительно выделяем ТОЛЬКО текстовую часть КЛИКНУТОЙ строки (e.RowIndex)
+                for (int i = 0; i < 4; i++)
+                {
+                    grid.Rows[e.RowIndex].Cells[i].Selected = true;
+                }
+            }*//*
+
+            grid.Invalidate();
+        }*/
+        private void dataGridViewAbsences_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.RowIndex <= 0) return;
             // Игнорируем клики по шапке таблицы (индекс -1)
@@ -4884,5 +4914,57 @@ namespace Production_planning
                 }
             }
         }
+
+        private async void dataGridViewAbsences_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 1)
+            {
+                var grid = (DataGridView)sender;
+
+                if (dataGridViewAbsences.CurrentRow == null || dataGridViewAbsences.CurrentRow.Tag == null) return;
+
+                ulong id = (ulong)grid.CurrentRow.Tag;
+                var selectedItem = _absenceTypes.Find(x => x.Id == id);
+
+                if (selectedItem == null) return;
+
+                using (var form = new FormAddAbsenceType(selectedItem))
+                {
+                    if (form.ShowDialog() == DialogResult.OK)
+                    {
+                        var param = new ConnectionParameter();
+                        var service = new EmployeeManagementService(param.GetMySQLConnectionString());
+
+                        await service.UpdateAbsenceTypeAsync(form.ResultModel);
+                        await LoadAbsenceTypesGridAsync();
+                    }
+                }
+
+
+                /*// 2. Определяем целевую строку и колонку для сбора данных.
+                // Если кликнули по объединенному блоку, данные привязаны к его "мастер-ячейке" (началу блока).
+                int targetRow = e.RowIndex;
+                int targetCol = e.ColumnIndex;
+
+                if (grid.Rows[e.RowIndex].Cells[e.ColumnIndex] is BiMergedCell clickedCell)
+                {
+                    targetRow = clickedCell.TopRow;
+                    targetCol = clickedCell.LeftColumn;
+                }
+
+                // Получаем содержимое столбца с индексом 1 для этой строки (Номер смены)
+                object rowName = grid.Rows[targetRow].Tag;
+                int id = rowName != null ? Convert.ToInt32(rowName) : -1;
+
+                FormAddAbsence form = new FormAddAbsence(1, id);
+                DialogResult = form.ShowDialog();
+
+                if (DialogResult == DialogResult.OK)
+                {
+                    DateChange();
+                }*/
+            }
+        }
+
     }
 }

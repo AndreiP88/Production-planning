@@ -833,7 +833,7 @@ namespace Production_planning
                 sql += " WHERE is_active = 1";
             }
 
-            sql += " ORDER BY id;";
+            sql += " ORDER BY name ASC;";
 
             using (var connection = new MySqlConnection(_connectionString))
             {

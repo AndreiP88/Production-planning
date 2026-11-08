@@ -85,7 +85,7 @@ namespace Production_planning
             {
                 var service = new EmployeeManagementService(parameter.GetMySQLConnectionString());
 
-                _types = await service.GetAllAbsenceTypesAsync();
+                _types = await service.GetAbsenceTypesAsync(showAll: false);
 
                 comboBoxAbsence.Items.Clear();
 
