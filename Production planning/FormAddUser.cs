@@ -3,12 +3,8 @@ using database;
 using MaterialSkin.Controls;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using static Production_planning.EmployeeManagementService;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Production_planning
 {
@@ -41,6 +37,7 @@ namespace Production_planning
 
         private bool _isActive;
         private bool _isLoad;
+        private bool _isDataLoading = false;
 
         public FormAddUser(int userId = -1)
         {
@@ -74,6 +71,8 @@ namespace Production_planning
         {
             try
             {
+                _isDataLoading = true;
+
                 var param = new ConnectionParameter();
                 var externalService = new EmployeeManagementService(param.GetSQLServerConnectionString());
 
@@ -95,6 +94,11 @@ namespace Production_planning
                 comboBoxExternalStaff.Hint = "Ошибка получения списка сотрудников. База данныйх недоступна";
                 comboBoxExternalStaff.Enabled = false;
                 //MessageBox.Show($"Ошибка импорта базы сотрудников: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // 🌟 ОТКЛЮЧАЕМ БЛОКИРОВКУ: Список полностью готов, теперь клики пользователя легальны
+                _isDataLoading = false;
             }
         }
 
@@ -720,6 +724,8 @@ namespace Production_planning
 
         private void comboBoxExternalStaff_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (_isDataLoading) return;
+
             // Проверяем, что элемент действительно выбран пользователем
             if (comboBoxExternalStaff.SelectedIndex != -1 && comboBoxExternalStaff.SelectedItem is ExternalEmployeeModel selectedEmp)
             {

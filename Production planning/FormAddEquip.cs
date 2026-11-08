@@ -3,12 +3,9 @@ using database;
 using MaterialSkin.Controls;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Production_planning
 {
@@ -31,6 +28,7 @@ namespace Production_planning
         private int _areaID;
         private bool _isActive;
         private bool _isLoad;
+        private bool _isDataLoading = false;
 
         private string[] _staffingMode = { "strict_schedule", "manual_only" };
 
@@ -62,6 +60,8 @@ namespace Production_planning
         {
             try
             {
+                _isDataLoading = true;
+
                 var parameter = new ConnectionParameter();
                 var externalService = new WorkAreaService(parameter.GetSQLServerConnectionString());
 
@@ -84,6 +84,11 @@ namespace Production_planning
                 comboBoxExternalEquip.Enabled = false;
 
                 //MessageBox.Show($"Не удалось импортировать парк станков: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // 🌟 ОТКЛЮЧАЕМ БЛОКИРОВКУ: Список полностью готов, теперь клики пользователя легальны
+                _isDataLoading = false;
             }
         }
         private async Task LoadTemplate()
@@ -523,6 +528,8 @@ namespace Production_planning
 
         private void comboBoxExternalEquip_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (_isDataLoading) return;
+
             // Проверяем, что элемент реально выбран
             if (comboBoxExternalEquip.SelectedIndex != -1 && comboBoxExternalEquip.SelectedItem is ExternalEquipmentRow selectedEquip)
             {
