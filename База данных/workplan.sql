@@ -1,17 +1,17 @@
 /*
  Navicat Premium Dump SQL
 
- Source Server         : local
+ Source Server         : localhost_3309
  Source Server Type    : MySQL
- Source Server Version : 80400 (8.4.0)
+ Source Server Version : 80046 (8.0.46)
  Source Host           : localhost:3309
  Source Schema         : workplan
 
  Target Server Type    : MySQL
- Target Server Version : 80400 (8.4.0)
+ Target Server Version : 80046 (8.0.46)
  File Encoding         : 65001
 
- Date: 06/11/2026 10:03:48
+ Date: 08/11/2026 19:21:13
 */
 
 SET NAMES utf8mb4;
@@ -26,16 +26,19 @@ CREATE TABLE `absence_types`  (
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `is_end_date_required` tinyint(1) NOT NULL DEFAULT 0,
   `status_color` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '#FF6347',
+  `is_active` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Флаг активности: 1 - используется, 0 - деактивирован',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'Развернутое описание причины отсутствия',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of absence_types
 -- ----------------------------
-INSERT INTO `absence_types` VALUES (1, 'Больничный', 0, '#FF6347');
-INSERT INTO `absence_types` VALUES (2, 'Отпуск', 1, '#4CAF50');
-INSERT INTO `absence_types` VALUES (3, 'Отгул', 1, '#FF0000');
+INSERT INTO `absence_types` VALUES (1, 'Больничный', 0, '#FF6347', 1, NULL);
+INSERT INTO `absence_types` VALUES (2, 'Отпуск', 1, '#4CAF50', 1, NULL);
+INSERT INTO `absence_types` VALUES (3, 'Отгул', 1, '#FF0000', 1, '');
+INSERT INTO `absence_types` VALUES (4, 'Сборы', 1, '#FF00FF', 1, 'Военно-полевые сборы по повестке');
 
 -- ----------------------------
 -- Table structure for absences
@@ -59,7 +62,7 @@ INSERT INTO `absences` VALUES (2, 2, 2, '2026-05-07', '2026-05-21');
 INSERT INTO `absences` VALUES (4, 1, 2, '2026-07-19', '2026-08-01');
 INSERT INTO `absences` VALUES (5, 3, 2, '2026-09-03', '2026-09-16');
 INSERT INTO `absences` VALUES (6, 2, 1, '2026-09-01', '2026-09-05');
-INSERT INTO `absences` VALUES (7, 6, 2, '2026-09-09', '2026-09-25');
+INSERT INTO `absences` VALUES (7, 6, 4, '2026-09-09', '2026-09-25');
 INSERT INTO `absences` VALUES (8, 23, 2, '2026-09-14', '2026-09-20');
 INSERT INTO `absences` VALUES (9, 1, 1, '2026-09-14', '2026-09-25');
 INSERT INTO `absences` VALUES (10, 22, 1, '2026-08-26', '2026-10-05');
@@ -101,7 +104,7 @@ CREATE TABLE `employee_contacts`  (
   `contact_value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `emp_contact`(`employee_id` ASC, `contact_type_id` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employee_contacts
@@ -119,7 +122,7 @@ CREATE TABLE `employee_equipment_assignments`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `employee_id`(`employee_id` ASC, `valid_from` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employee_equipment_assignments
@@ -128,7 +131,7 @@ INSERT INTO `employee_equipment_assignments` VALUES (1, 1, 1, '2014-08-14');
 INSERT INTO `employee_equipment_assignments` VALUES (2, 2, 1, '2010-01-01');
 INSERT INTO `employee_equipment_assignments` VALUES (3, 3, 1, '2010-01-01');
 INSERT INTO `employee_equipment_assignments` VALUES (4, 4, 1, '2010-01-01');
-INSERT INTO `employee_equipment_assignments` VALUES (5, 5, 8, '2010-01-01');
+INSERT INTO `employee_equipment_assignments` VALUES (5, 5, 29, '2010-01-01');
 INSERT INTO `employee_equipment_assignments` VALUES (6, 6, 2, '2017-06-20');
 INSERT INTO `employee_equipment_assignments` VALUES (7, 7, 2, '2012-07-02');
 INSERT INTO `employee_equipment_assignments` VALUES (8, 8, 4, '2022-07-02');
@@ -155,6 +158,8 @@ INSERT INTO `employee_equipment_assignments` VALUES (28, 26, 13, '2026-10-19');
 INSERT INTO `employee_equipment_assignments` VALUES (29, 27, 23, '2018-10-31');
 INSERT INTO `employee_equipment_assignments` VALUES (30, 28, 8, '2016-10-31');
 INSERT INTO `employee_equipment_assignments` VALUES (31, 16, 29, '2026-11-01');
+INSERT INTO `employee_equipment_assignments` VALUES (32, 29, 2, '2026-10-01');
+INSERT INTO `employee_equipment_assignments` VALUES (33, 30, 22, '2023-11-08');
 
 -- ----------------------------
 -- Table structure for employee_position_assignments
@@ -168,7 +173,7 @@ CREATE TABLE `employee_position_assignments`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `employee_id`(`employee_id` ASC, `valid_from` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employee_position_assignments
@@ -201,6 +206,8 @@ INSERT INTO `employee_position_assignments` VALUES (25, 25, 1, '2022-09-15');
 INSERT INTO `employee_position_assignments` VALUES (26, 26, 1, '2026-10-19');
 INSERT INTO `employee_position_assignments` VALUES (27, 27, 2, '2018-10-31');
 INSERT INTO `employee_position_assignments` VALUES (28, 28, 2, '2016-10-31');
+INSERT INTO `employee_position_assignments` VALUES (29, 29, 1, '2026-10-01');
+INSERT INTO `employee_position_assignments` VALUES (30, 30, 2, '2023-11-08');
 
 -- ----------------------------
 -- Table structure for employee_schedule_assignments
@@ -214,7 +221,7 @@ CREATE TABLE `employee_schedule_assignments`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `employee_id`(`employee_id` ASC, `valid_from` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employee_schedule_assignments
@@ -252,6 +259,9 @@ INSERT INTO `employee_schedule_assignments` VALUES (30, 21, 2, '2026-10-25');
 INSERT INTO `employee_schedule_assignments` VALUES (31, 26, 6, '2026-10-19');
 INSERT INTO `employee_schedule_assignments` VALUES (32, 27, 3, '2018-10-31');
 INSERT INTO `employee_schedule_assignments` VALUES (33, 28, 3, '2016-10-31');
+INSERT INTO `employee_schedule_assignments` VALUES (34, 22, 2, '2026-11-01');
+INSERT INTO `employee_schedule_assignments` VALUES (35, 29, 3, '2026-10-01');
+INSERT INTO `employee_schedule_assignments` VALUES (36, 30, 4, '2023-11-08');
 
 -- ----------------------------
 -- Table structure for employees
@@ -266,7 +276,7 @@ CREATE TABLE `employees`  (
   `system_role` enum('worker','master','chief') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'worker',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employees
@@ -289,7 +299,7 @@ INSERT INTO `employees` VALUES (15, 'Лойко', 'Александр', 'Пет�
 INSERT INTO `employees` VALUES (16, 'Сидоров', 'Сидор', 'Сидорович', 'Сидоров С. С.', 'worker');
 INSERT INTO `employees` VALUES (17, 'Обозный', 'Алексей', 'Андреевич', 'Обозный А. А.', 'worker');
 INSERT INTO `employees` VALUES (18, 'Мазаник', 'Сергей', 'Николаевич', 'Мазаник С. Н.', 'worker');
-INSERT INTO `employees` VALUES (19, 'Гридчин', 'Артем', '', 'Гридчин А.', 'worker');
+INSERT INTO `employees` VALUES (19, 'Гридчин', 'Артем', 'Викторович', 'Гридчин А. В.', 'worker');
 INSERT INTO `employees` VALUES (20, 'Сеньковец', 'Александр', 'Григорьевич', 'Сеньковец А. Г.', 'worker');
 INSERT INTO `employees` VALUES (21, 'Казак', 'Андрей', 'Юрьевич', 'Казак А. Ю.', 'worker');
 INSERT INTO `employees` VALUES (22, 'Алёхин', 'Вадим', 'Константинович', 'Алёхин В. К.', 'worker');
@@ -299,6 +309,8 @@ INSERT INTO `employees` VALUES (25, 'Хмельницкий', 'Дмитрий', 
 INSERT INTO `employees` VALUES (26, 'Абрамович', 'Максим', 'Викторович', 'Абрамович М. В.', 'worker');
 INSERT INTO `employees` VALUES (27, 'Авижиц', 'Алексей', 'Юрьевич', 'Авижиц А. Ю.', 'worker');
 INSERT INTO `employees` VALUES (28, 'Гуц', 'Сергей', 'Андреевич', 'Гуц С. А.', 'worker');
+INSERT INTO `employees` VALUES (29, 'Гридюшко', 'Дмитрий', 'Алексеевич', 'Гридюшко Д. А.', 'worker');
+INSERT INTO `employees` VALUES (30, 'Зеневич', 'Александр', 'Владимирович', 'Зеневич А. В.', 'worker');
 
 -- ----------------------------
 -- Table structure for employment_periods
@@ -311,7 +323,7 @@ CREATE TABLE `employment_periods`  (
   `fire_date` date NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employment_periods
@@ -346,6 +358,8 @@ INSERT INTO `employment_periods` VALUES (27, 20, '2026-09-26', '2026-11-01');
 INSERT INTO `employment_periods` VALUES (28, 26, '2026-10-19', NULL);
 INSERT INTO `employment_periods` VALUES (29, 27, '2018-10-31', NULL);
 INSERT INTO `employment_periods` VALUES (30, 28, '2016-10-31', NULL);
+INSERT INTO `employment_periods` VALUES (31, 29, '2026-10-01', NULL);
+INSERT INTO `employment_periods` VALUES (32, 30, '2023-11-08', NULL);
 
 -- ----------------------------
 -- Table structure for equipment
@@ -412,7 +426,7 @@ CREATE TABLE `equipment_daily_plan`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `equipment_id`(`equipment_id` ASC, `plan_date` ASC, `shift_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 190 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 202 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of equipment_daily_plan
@@ -471,8 +485,6 @@ INSERT INTO `equipment_daily_plan` VALUES (175, 5, '2026-10-31', 1, 1);
 INSERT INTO `equipment_daily_plan` VALUES (176, 5, '2026-11-01', 1, 1);
 INSERT INTO `equipment_daily_plan` VALUES (179, 7, '2026-11-02', 1, 0);
 INSERT INTO `equipment_daily_plan` VALUES (180, 7, '2026-11-03', 1, 0);
-INSERT INTO `equipment_daily_plan` VALUES (181, 7, '2026-11-09', 1, 0);
-INSERT INTO `equipment_daily_plan` VALUES (182, 7, '2026-11-08', 1, 0);
 INSERT INTO `equipment_daily_plan` VALUES (183, 7, '2026-11-07', 1, 0);
 INSERT INTO `equipment_daily_plan` VALUES (184, 7, '2026-11-06', 1, 0);
 INSERT INTO `equipment_daily_plan` VALUES (185, 7, '2026-11-11', 1, 0);
@@ -480,6 +492,18 @@ INSERT INTO `equipment_daily_plan` VALUES (186, 7, '2026-11-10', 1, 0);
 INSERT INTO `equipment_daily_plan` VALUES (187, 13, '2026-11-02', 1, 1);
 INSERT INTO `equipment_daily_plan` VALUES (188, 7, '2026-11-04', 1, 0);
 INSERT INTO `equipment_daily_plan` VALUES (189, 7, '2026-11-05', 1, 0);
+INSERT INTO `equipment_daily_plan` VALUES (190, 3, '2026-11-08', 1, 1);
+INSERT INTO `equipment_daily_plan` VALUES (191, 3, '2026-11-09', 1, 1);
+INSERT INTO `equipment_daily_plan` VALUES (192, 3, '2026-11-08', 2, 1);
+INSERT INTO `equipment_daily_plan` VALUES (193, 3, '2026-11-09', 2, 1);
+INSERT INTO `equipment_daily_plan` VALUES (194, 3, '2026-11-03', 2, 1);
+INSERT INTO `equipment_daily_plan` VALUES (195, 3, '2026-11-04', 2, 1);
+INSERT INTO `equipment_daily_plan` VALUES (196, 3, '2026-11-05', 2, 1);
+INSERT INTO `equipment_daily_plan` VALUES (197, 3, '2026-11-06', 2, 1);
+INSERT INTO `equipment_daily_plan` VALUES (198, 3, '2026-11-07', 2, 1);
+INSERT INTO `equipment_daily_plan` VALUES (199, 3, '2026-11-10', 2, 1);
+INSERT INTO `equipment_daily_plan` VALUES (200, 3, '2026-11-11', 2, 1);
+INSERT INTO `equipment_daily_plan` VALUES (201, 3, '2026-11-12', 2, 1);
 
 -- ----------------------------
 -- Table structure for equipment_schedule_history
@@ -556,7 +580,7 @@ INSERT INTO `equipment_staffing_history` VALUES (7, 1, 'strict_schedule', '2021-
 INSERT INTO `equipment_staffing_history` VALUES (8, 5, 'strict_schedule', '2026-06-01');
 INSERT INTO `equipment_staffing_history` VALUES (9, 5, 'manual_only', '2025-06-06');
 INSERT INTO `equipment_staffing_history` VALUES (10, 1, 'strict_schedule', '2026-06-06');
-INSERT INTO `equipment_staffing_history` VALUES (11, 6, 'strict_schedule', '2026-06-01');
+INSERT INTO `equipment_staffing_history` VALUES (11, 6, 'manual_only', '2026-06-01');
 INSERT INTO `equipment_staffing_history` VALUES (12, 4, 'strict_schedule', '2026-06-03');
 INSERT INTO `equipment_staffing_history` VALUES (13, 7, 'manual_only', '2026-06-06');
 INSERT INTO `equipment_staffing_history` VALUES (14, 8, 'strict_schedule', '2026-07-09');
@@ -686,7 +710,7 @@ CREATE TABLE `schedule_overrides`  (
   UNIQUE INDEX `employee_id`(`employee_id` ASC, `override_date` ASC, `shift_id` ASC) USING BTREE,
   INDEX `fk_overrides_parent_shift`(`parent_plan_shift_id` ASC) USING BTREE,
   CONSTRAINT `fk_overrides_parent_shift` FOREIGN KEY (`parent_plan_shift_id`) REFERENCES `shift_definitions` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 275 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 287 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of schedule_overrides
@@ -821,8 +845,6 @@ INSERT INTO `schedule_overrides` VALUES (256, 6, '2026-11-01', 2, 1, 2, NULL, 0,
 INSERT INTO `schedule_overrides` VALUES (257, 23, '2026-11-01', 2, 2, 2, NULL, 0, NULL);
 INSERT INTO `schedule_overrides` VALUES (258, 3, '2026-11-04', 1, 1, 2, NULL, 0, 1);
 INSERT INTO `schedule_overrides` VALUES (259, 4, '2026-11-05', 1, 1, 2, NULL, 0, 1);
-INSERT INTO `schedule_overrides` VALUES (261, 25, '2026-11-08', 1, 7, 2, NULL, 0, 1);
-INSERT INTO `schedule_overrides` VALUES (262, 25, '2026-11-09', 1, 7, 2, NULL, 0, 1);
 INSERT INTO `schedule_overrides` VALUES (266, 7, '2026-11-02', 1, 2, 2, NULL, 0, 1);
 INSERT INTO `schedule_overrides` VALUES (267, 17, '2026-11-03', 1, 2, 2, NULL, 0, 1);
 INSERT INTO `schedule_overrides` VALUES (268, 24, '2026-11-06', 1, 2, 2, NULL, 0, 1);
@@ -832,6 +854,17 @@ INSERT INTO `schedule_overrides` VALUES (271, 26, '2026-11-08', 2, 13, 2, NULL, 
 INSERT INTO `schedule_overrides` VALUES (272, 26, '2026-11-09', 2, 13, 2, NULL, 0, 1);
 INSERT INTO `schedule_overrides` VALUES (273, 25, '2026-11-04', 1, 7, 2, NULL, 0, 1);
 INSERT INTO `schedule_overrides` VALUES (274, 25, '2026-11-05', 1, 7, 2, NULL, 0, 1);
+INSERT INTO `schedule_overrides` VALUES (275, 19, '2026-11-06', 2, 2, 2, NULL, 0, 2);
+INSERT INTO `schedule_overrides` VALUES (276, 23, '2026-11-08', 2, 2, 2, NULL, 0, 2);
+INSERT INTO `schedule_overrides` VALUES (277, 23, '2026-11-09', 2, 2, 2, NULL, 0, 2);
+INSERT INTO `schedule_overrides` VALUES (278, 6, '2026-11-08', 2, 1, 2, NULL, 0, 2);
+INSERT INTO `schedule_overrides` VALUES (279, 6, '2026-11-09', 2, 1, 2, NULL, 0, 2);
+INSERT INTO `schedule_overrides` VALUES (280, 6, '2026-11-02', 2, 2, 2, NULL, 0, 2);
+INSERT INTO `schedule_overrides` VALUES (281, 22, '2026-11-03', 2, 2, 2, NULL, 0, 2);
+INSERT INTO `schedule_overrides` VALUES (283, 2, '2026-11-03', 1, 3, 2, NULL, 0, 1);
+INSERT INTO `schedule_overrides` VALUES (284, 22, '2026-11-10', 1, 3, 2, NULL, 0, 2);
+INSERT INTO `schedule_overrides` VALUES (285, 22, '2026-11-11', 1, 3, 2, NULL, 0, 2);
+INSERT INTO `schedule_overrides` VALUES (286, 29, '2026-11-02', 1, 3, 2, NULL, 0, 1);
 
 -- ----------------------------
 -- Table structure for schedule_templates
@@ -937,7 +970,7 @@ INSERT INTO `work_areas` VALUES (8, 'Участок маркировки', '{\"s
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `GetAvailableEmployeesForShift`;
 delimiter ;;
-CREATE PROCEDURE `GetAvailableEmployeesForShift`(IN p_target_date DATE,
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAvailableEmployeesForShift`(IN p_target_date DATE,
     IN p_target_shift_id INT,
     IN p_target_equipment_id INT)
 BEGIN
@@ -1086,7 +1119,7 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `GetEquipmentShiftCard`;
 delimiter ;;
-CREATE PROCEDURE `GetEquipmentShiftCard`(IN p_target_date DATE,
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetEquipmentShiftCard`(IN p_target_date DATE,
     IN p_target_shift_id INT,
     IN p_target_equipment_id INT)
 BEGIN
@@ -1326,7 +1359,7 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `GetEquipmentStaffingForPeriod`;
 delimiter ;;
-CREATE PROCEDURE `GetEquipmentStaffingForPeriod`(IN p_start_date DATE,
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetEquipmentStaffingForPeriod`(IN p_start_date DATE,
     IN p_end_date DATE,
     IN p_equipment_id INT)
 BEGIN
@@ -1455,7 +1488,7 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `GetEquipmentStaffingReport`;
 delimiter ;;
-CREATE PROCEDURE `GetEquipmentStaffingReport`(IN p_start_date DATE,
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetEquipmentStaffingReport`(IN p_start_date DATE,
     IN p_end_date DATE,
     IN p_target_area_id INT)
 BEGIN

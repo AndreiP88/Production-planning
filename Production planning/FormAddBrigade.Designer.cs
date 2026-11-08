@@ -30,22 +30,22 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.textBoxBrigadeName = new MaterialSkin.Controls.MaterialTextBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.comboBoxCycles = new MaterialSkin.Controls.MaterialComboBox();
             this.textBoxDate = new MaterialSkin.Controls.MaterialMaskedTextBox();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.buttonCalendar = new MaterialSkin.Controls.MaterialButton();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.comboBoxTargetType = new MaterialSkin.Controls.MaterialComboBox();
+            this.textBoxBrigadeName = new MaterialSkin.Controls.MaterialTextBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.materialButton1 = new MaterialSkin.Controls.MaterialButton();
             this.materialButton2 = new MaterialSkin.Controls.MaterialButton();
-            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.comboBoxTargetType = new MaterialSkin.Controls.MaterialComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
-            this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -80,25 +80,6 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(693, 113);
             this.tableLayoutPanel2.TabIndex = 0;
-            // 
-            // textBoxBrigadeName
-            // 
-            this.textBoxBrigadeName.AnimateReadOnly = false;
-            this.textBoxBrigadeName.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxBrigadeName.Depth = 0;
-            this.textBoxBrigadeName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxBrigadeName.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.textBoxBrigadeName.Hint = "Название";
-            this.textBoxBrigadeName.LeadingIcon = null;
-            this.textBoxBrigadeName.Location = new System.Drawing.Point(3, 3);
-            this.textBoxBrigadeName.MaxLength = 50;
-            this.textBoxBrigadeName.MouseState = MaterialSkin.MouseState.OUT;
-            this.textBoxBrigadeName.Multiline = false;
-            this.textBoxBrigadeName.Name = "textBoxBrigadeName";
-            this.textBoxBrigadeName.Size = new System.Drawing.Size(474, 50);
-            this.textBoxBrigadeName.TabIndex = 1;
-            this.textBoxBrigadeName.Text = "";
-            this.textBoxBrigadeName.TrailingIcon = null;
             // 
             // tableLayoutPanel4
             // 
@@ -221,6 +202,64 @@
             this.buttonCalendar.UseVisualStyleBackColor = true;
             this.buttonCalendar.Click += new System.EventHandler(this.buttonCalendar_Click);
             // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.ColumnCount = 2;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 480F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.Controls.Add(this.comboBoxTargetType, 1, 0);
+            this.tableLayoutPanel5.Controls.Add(this.textBoxBrigadeName, 0, 0);
+            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 1;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(687, 48);
+            this.tableLayoutPanel5.TabIndex = 3;
+            // 
+            // comboBoxTargetType
+            // 
+            this.comboBoxTargetType.AutoResize = false;
+            this.comboBoxTargetType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.comboBoxTargetType.Depth = 0;
+            this.comboBoxTargetType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxTargetType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.comboBoxTargetType.DropDownHeight = 174;
+            this.comboBoxTargetType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTargetType.DropDownWidth = 121;
+            this.comboBoxTargetType.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.comboBoxTargetType.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.comboBoxTargetType.FormattingEnabled = true;
+            this.comboBoxTargetType.Hint = "Применимость";
+            this.comboBoxTargetType.IntegralHeight = false;
+            this.comboBoxTargetType.ItemHeight = 43;
+            this.comboBoxTargetType.Location = new System.Drawing.Point(483, 3);
+            this.comboBoxTargetType.MaxDropDownItems = 4;
+            this.comboBoxTargetType.MouseState = MaterialSkin.MouseState.OUT;
+            this.comboBoxTargetType.Name = "comboBoxTargetType";
+            this.comboBoxTargetType.Size = new System.Drawing.Size(201, 49);
+            this.comboBoxTargetType.StartIndex = 0;
+            this.comboBoxTargetType.TabIndex = 2;
+            // 
+            // textBoxBrigadeName
+            // 
+            this.textBoxBrigadeName.AnimateReadOnly = false;
+            this.textBoxBrigadeName.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxBrigadeName.Depth = 0;
+            this.textBoxBrigadeName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxBrigadeName.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.textBoxBrigadeName.Hint = "Название";
+            this.textBoxBrigadeName.LeadingIcon = null;
+            this.textBoxBrigadeName.Location = new System.Drawing.Point(3, 3);
+            this.textBoxBrigadeName.MaxLength = 50;
+            this.textBoxBrigadeName.MouseState = MaterialSkin.MouseState.OUT;
+            this.textBoxBrigadeName.Multiline = false;
+            this.textBoxBrigadeName.Name = "textBoxBrigadeName";
+            this.textBoxBrigadeName.Size = new System.Drawing.Size(474, 50);
+            this.textBoxBrigadeName.TabIndex = 1;
+            this.textBoxBrigadeName.Text = "";
+            this.textBoxBrigadeName.TrailingIcon = null;
+            // 
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 3;
@@ -279,45 +318,6 @@
             this.materialButton2.UseVisualStyleBackColor = true;
             this.materialButton2.Click += new System.EventHandler(this.materialButton2_Click);
             // 
-            // tableLayoutPanel5
-            // 
-            this.tableLayoutPanel5.ColumnCount = 2;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 480F));
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Controls.Add(this.comboBoxTargetType, 1, 0);
-            this.tableLayoutPanel5.Controls.Add(this.textBoxBrigadeName, 0, 0);
-            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 1;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(687, 48);
-            this.tableLayoutPanel5.TabIndex = 3;
-            // 
-            // comboBoxTargetType
-            // 
-            this.comboBoxTargetType.AutoResize = false;
-            this.comboBoxTargetType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.comboBoxTargetType.Depth = 0;
-            this.comboBoxTargetType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.comboBoxTargetType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.comboBoxTargetType.DropDownHeight = 174;
-            this.comboBoxTargetType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTargetType.DropDownWidth = 121;
-            this.comboBoxTargetType.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.comboBoxTargetType.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.comboBoxTargetType.FormattingEnabled = true;
-            this.comboBoxTargetType.Hint = "Применимость";
-            this.comboBoxTargetType.IntegralHeight = false;
-            this.comboBoxTargetType.ItemHeight = 43;
-            this.comboBoxTargetType.Location = new System.Drawing.Point(483, 3);
-            this.comboBoxTargetType.MaxDropDownItems = 4;
-            this.comboBoxTargetType.MouseState = MaterialSkin.MouseState.OUT;
-            this.comboBoxTargetType.Name = "comboBoxTargetType";
-            this.comboBoxTargetType.Size = new System.Drawing.Size(201, 49);
-            this.comboBoxTargetType.StartIndex = 0;
-            this.comboBoxTargetType.TabIndex = 2;
-            // 
             // FormAddBrigade
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -337,9 +337,9 @@
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
+            this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
-            this.tableLayoutPanel5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

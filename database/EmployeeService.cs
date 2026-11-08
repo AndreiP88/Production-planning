@@ -809,7 +809,114 @@ namespace Production_planning
         }
 
         // =========================================================================
-        // РАЗДЕЛ 15: МОДУЛЬ УЧЕТА ОТСУТСТВИЙ (ABSENCES) С ПРОВЕРКОЙ ПЕРЕСЕЧЕНИЙ
+        // РАЗДЕЛ 4: МОДУЛЬ УЧЕТА ОТСУТСТВИЙ (ABSENCES)
+        // =========================================================================
+
+        /// <summary>
+        /// Загружает типы отсутствий с возможностью фильтрации по активности
+        /// </summary>
+        public async Task<List<AbsenceType>> GetAbsenceTypesAsync(bool showAll)
+        {
+            // Если showAll = true, выводим всё, иначе — только активные (is_active = 1)
+            string sql = @"
+                SELECT 
+                    id AS Id,
+                    name AS Name,
+                    is_end_date_required AS IsEndDateRequired,
+                    status_color AS StatusColor,
+                    is_active AS IsActive,
+                    description AS Description
+                FROM absence_types";
+
+            if (!showAll)
+            {
+                sql += " WHERE is_active = 1";
+            }
+
+            sql += " ORDER BY id;";
+
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                var result = await connection.QueryAsync<AbsenceType>(sql);
+                return result.ToList();
+            }
+        }
+
+        public async Task<bool> CreateAbsenceTypeAsync(AbsenceType model)
+        {
+            const string sql = @"
+                INSERT INTO absence_types (name, is_end_date_required, status_color, is_active, description)
+                VALUES (@Name, @IsEndDateRequired, @StatusColor, 1, @Description);";
+
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                int rows = await connection.ExecuteAsync(sql, model);
+                return rows > 0;
+            }
+        }
+
+        public async Task<bool> UpdateAbsenceTypeAsync(AbsenceType model)
+        {
+            const string sql = @"
+                UPDATE absence_types 
+                SET name = @Name, 
+                    is_end_date_required = @IsEndDateRequired, 
+                    status_color = @StatusColor,
+                    description = @Description
+                WHERE id = @Id;";
+
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                int rows = await connection.ExecuteAsync(sql, model);
+                return rows > 0;
+            }
+        }
+
+        /// <summary>
+        /// Переключает статус активности причины отсутствия
+        /// </summary>
+        public async Task<bool> UpdateAbsenceTypeStatusAsync(ulong id, bool isActive)
+        {
+            const string sql = @"
+                UPDATE absence_types 
+                SET is_active = @IsActive 
+                WHERE id = @Id;";
+
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                int rows = await connection.ExecuteAsync(sql, new { Id = id, IsActive = isActive ? 1 : 0 });
+                return rows > 0;
+            }
+        }
+        /// <summary>
+        /// Проверяет, задействован ли данный тип отсутствия в истории сотрудников
+        /// </summary>
+        public async Task<bool> IsAbsenceTypeUsedAsync(ulong id)
+        {
+            const string sql = "SELECT COUNT(1) FROM absences WHERE type_id = @Id;";
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                int count = await connection.ExecuteScalarAsync<int>(sql, new { Id = id });
+                return count > 0;
+            }
+        }
+
+        /// <summary>
+        /// Физическое удаление записи из базы (если она нигде не используется)
+        /// </summary>
+        public async Task<bool> DeleteAbsenceTypeAsync(ulong id)
+        {
+            const string sql = "DELETE FROM absence_types WHERE id = @Id;";
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                int rows = await connection.ExecuteAsync(sql, new { Id = id });
+                return rows > 0;
+            }
+        }
+
+
+        // =========================================================================
+        // МОДУЛЬ УЧЕТА ОТСУТСТВИЙ (ABSENCES) С ПРОВЕРКОЙ ПЕРЕСЕЧЕНИЙ
         // =========================================================================
 
         /// <summary>

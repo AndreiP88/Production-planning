@@ -97,9 +97,6 @@
     <Reference Include="MySqlConnector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d33d3e53aa5f8c92, processorArchitecture=MSIL">
       <HintPath>..\packages\MySqlConnector.2.6.2\lib\net471\MySqlConnector.dll</HintPath>
     </Reference>
-    <Reference Include="SourceGrid, Version=4.40.4580.29115, Culture=neutral, PublicKeyToken=df6f5e538749e85d, processorArchitecture=MSIL">
-      <HintPath>..\packages\SourceGrid.4.4.0\lib\net35\SourceGrid.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
     </Reference>
@@ -137,6 +134,12 @@
     </Compile>
     <Compile Include="FormAddArea.Designer.cs">
       <DependentUpon>FormAddArea.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAddAbsenceType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAddAbsenceType.Designer.cs">
+      <DependentUpon>FormAddAbsenceType.cs</DependentUpon>
     </Compile>
     <Compile Include="FormAddUser.cs">
       <SubType>Form</SubType>
@@ -230,6 +233,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormAddArea.resx">
       <DependentUpon>FormAddArea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAddAbsenceType.resx">
+      <DependentUpon>FormAddAbsenceType.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormAddUser.resx">
       <DependentUpon>FormAddUser.cs</DependentUpon>

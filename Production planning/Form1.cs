@@ -14,7 +14,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace Production_planning
 {
@@ -44,6 +43,7 @@ namespace Production_planning
         List<ScheduleCycleModel> scheduleCycles;
         List<ScheduleTemplateModel> scheduleTemplates;
         List<EmployeeShortRow> employeeShorts;
+        private List<AbsenceType> _absenceTypes;
         private Dictionary<int, StatusColorStyle> _colorPalette = new Dictionary<int, StatusColorStyle>();
         private Dictionary<int, DataGridViewCellStyle> _cellStyles = new Dictionary<int, DataGridViewCellStyle>();
         private Dictionary<int, DataGridViewCellStyle> _sharedStyles = new Dictionary<int, DataGridViewCellStyle>();
@@ -3081,6 +3081,13 @@ namespace Production_planning
                 await UpdateScheduleCycle();
                 await UpdateScheduleTemplate();
             }
+
+            if (index == 6)
+            {
+                await LoadAbsenceTypesGridAsync();
+                dataGridViewAbsences_SelectionChanged(null, null);
+            }
+            
         }
 
         
@@ -3116,7 +3123,7 @@ namespace Production_planning
                 e.Paint(e.CellBounds, DataGridViewPaintParts.ContentForeground | DataGridViewPaintParts.Focus);
 
                 // 4. Рисуем кастомный контур выделения
-                using (Pen strokePen = new Pen(Color.DarkOrange, 2)) // Синяя рамка толщиной 2 пикселя
+                using (Pen strokePen = new Pen(Color.DarkOrange, 2))
                 {
                     Rectangle rect = e.CellBounds;
                     rect.Width -= 1;
@@ -4537,6 +4544,343 @@ namespace Production_planning
                 {
                     // Рисуем разделительную линию под ячейками
                     e.Graphics.DrawLine(orangePen, leftCoord, rowBottom, rightCoord, rowBottom);
+                }
+            }
+        }
+
+        // =========================================================================
+        // МОДУЛЬ УПРАВЛЕНИЯ ТИПАМИ ОТСУТСТВИЙ (ABSENCES)
+        // =========================================================================
+        private async Task LoadAbsenceTypesGridAsync()
+        {
+            try
+            {
+                var param = new ConnectionParameter();
+                var service = new EmployeeManagementService(param.GetMySQLConnectionString());
+
+                // Читаем положение переключателя MaterialSwitch "отображать все"
+                bool showAll = materialSwitchAbsencesTypeShowAll.Checked;
+
+                _absenceTypes = await service.GetAbsenceTypesAsync(showAll);
+
+                DataGridView grid = dataGridViewAbsences;
+
+                grid.DefaultCellStyle.SelectionBackColor = grid.DefaultCellStyle.BackColor;
+                grid.DefaultCellStyle.SelectionForeColor = grid.DefaultCellStyle.ForeColor;
+                grid.AllowUserToResizeRows = false;
+                grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+
+
+
+                grid.SuspendLayout();
+                grid.Rows.Clear();
+                grid.Columns.Clear();
+
+                // Настройка колонок
+                grid.Columns.Add("Id", "ID");
+                grid.Columns.Add("Number", "№");
+                grid.Columns.Add("Name", "Наименование");
+                grid.Columns.Add("EndDateReq", "Обязательность даты окончания");
+                grid.Columns.Add("Color", "Цвет индикатора");
+                grid.Columns.Add("Status", "Статус");
+                grid.Columns.Add("Description", "Описание / Примечание");
+
+                grid.Columns["Id"].Visible = false; // Прячем системный ID
+
+                int rowFirst = grid.Rows.Add();
+
+                grid.Rows[rowFirst].Height = 40;
+
+                GridHelper.MergeCells(grid, "№", rowFirst, 1, 1, 1, Color.Gray, Color.White, grid.Font, StringAlignment.Center, StringAlignment.Center);
+                GridHelper.MergeCells(grid, "Наименование", rowFirst, 2, 1, 1, Color.Gray, Color.White, grid.Font, StringAlignment.Center, StringAlignment.Center);
+                GridHelper.MergeCells(grid, "Обязательность даты окончания", rowFirst, 3, 1, 1, Color.Gray, Color.White, grid.Font, StringAlignment.Center, StringAlignment.Center);
+                GridHelper.MergeCells(grid, "Цвет индикатора", rowFirst, 4, 1, 1, Color.Gray, Color.White, grid.Font, StringAlignment.Center, StringAlignment.Center);
+                GridHelper.MergeCells(grid, "Статус", rowFirst, 5, 1, 1, Color.Gray, Color.White, grid.Font, StringAlignment.Center, StringAlignment.Center);
+                GridHelper.MergeCells(grid, "Описание / Примечание", rowFirst, 6, 1, 1, Color.Gray, Color.White, grid.Font, StringAlignment.Center, StringAlignment.Center);
+
+                grid.Columns[1].Width = 20;
+                grid.Columns[2].Width = 220;
+                grid.Columns[3].Width = 200;
+                grid.Columns[4].Width = 280;
+                grid.Columns[5].Width = 280;
+
+                grid.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                grid.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+                grid.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                grid.Columns[6].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
+                foreach (var item in _absenceTypes)
+                {
+                    int rowIndex = dataGridViewAbsences.Rows.Add();
+                    var row = dataGridViewAbsences.Rows[rowIndex];
+
+                    grid.Rows[rowIndex].Height = 30;
+
+                    GridHelper.MergeCells(grid, rowIndex.ToString(), rowIndex, 1, 1, 1, Color.Gray, Color.White, grid.Font, StringAlignment.Center, StringAlignment.Center);
+
+                    row.Tag = item.Id; // Запоминаем ID в Tag строки
+                    row.Cells["Name"].Value = item.Name;
+                    row.Cells["EndDateReq"].Value = item.IsEndDateRequired ? "Да" : "Нет";
+                    row.Cells["Color"].Value = item.StatusColor;
+                    row.Cells["Status"].Value = item.IsActive ? "Активен" : "Деактивирован";
+                    row.Cells["Description"].Value = item.Description;
+
+                    // Выполняем раскраску ячейки или текста цветом из базы данных
+                    try
+                    {
+                        Color parseColor = ColorTranslator.FromHtml(item.StatusColor);
+                        row.Cells["Color"].Style.BackColor = parseColor;
+                        row.Cells["Color"].Style.ForeColor = parseColor.GetBrightness() < 0.5 ? Color.White : Color.Black;
+                    }
+                    catch { /* Защита от некорректного HEX в БД */ }
+
+                    // Визуально приглушаем деактивированные строки
+                    if (!item.IsActive)
+                    {
+                        row.DefaultCellStyle.ForeColor = Color.Gray;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки справочника: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                dataGridViewAbsences.ResumeLayout();
+            }
+        }
+        private async void materialButtonAbsencesTypeAdd_Click(object sender, EventArgs e)
+        {
+            using (var form = new FormAddAbsenceType())
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    var param = new ConnectionParameter();
+                    var service = new EmployeeManagementService(param.GetMySQLConnectionString());
+
+                    await service.CreateAbsenceTypeAsync(form.ResultModel);
+                    await LoadAbsenceTypesGridAsync(); // Обновляем Grid
+                }
+            }
+        }
+
+        private async void materialButtonAbsencesTypeEdit_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewAbsences.CurrentRow == null || dataGridViewAbsences.CurrentRow.Tag == null) return;
+
+            ulong id = (ulong)dataGridViewAbsences.CurrentRow.Tag;
+            var selectedItem = _absenceTypes.Find(x => x.Id == id);
+            if (selectedItem == null) return;
+
+            using (var form = new FormAddAbsenceType(selectedItem))
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    var param = new ConnectionParameter();
+                    var service = new EmployeeManagementService(param.GetMySQLConnectionString());
+
+                    await service.UpdateAbsenceTypeAsync(form.ResultModel);
+                    await LoadAbsenceTypesGridAsync();
+                }
+            }
+        }
+
+        private async void materialButtonAbsencesTypeDeactivate_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewAbsences.CurrentRow == null || dataGridViewAbsences.CurrentRow.Tag == null)
+            {
+                MessageBox.Show("Выберите строку для изменения статуса!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            ulong id = (ulong)dataGridViewAbsences.CurrentRow.Tag;
+            var currentItem = _absenceTypes.FirstOrDefault(x => x.Id == id);
+
+            if (currentItem == null) return;
+
+            var param = new ConnectionParameter();
+            var service = new EmployeeManagementService(param.GetMySQLConnectionString());
+
+            // Инвертируем текущее состояние активности
+            bool newStatus = !currentItem.IsActive;
+
+            bool success = await service.UpdateAbsenceTypeStatusAsync(id, newStatus);
+            if (success)
+            {
+                await LoadAbsenceTypesGridAsync();
+            }
+        }
+
+        private async void materialButtonAbsencesTypeDelete_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewAbsences.CurrentRow == null || dataGridViewAbsences.CurrentRow.Tag == null) return;
+
+            ulong id = (ulong)dataGridViewAbsences.CurrentRow.Tag;
+            var selectedItem = _absenceTypes.Find(x => x.Id == id);
+            if (selectedItem == null) return;
+
+            var param = new ConnectionParameter();
+            var service = new EmployeeManagementService(param.GetMySQLConnectionString());
+
+            // 1. Проверяем, используется ли запись в системе
+            bool isUsed = await service.IsAbsenceTypeUsedAsync(id);
+
+            if (isUsed)
+            {
+                // 🔒 Запись используется: блокируем удаление и предлагаем деактивацию
+                var result = MessageBox.Show(
+                    $"Невозможно удалить причину \"{selectedItem.Name}\", так как она уже закреплена за сотрудниками в архиве расстановок!\n\n" +
+                    "Хотите деактивировать её? Она останется в старых отчетах, но исчезнет из списков выбора для новых документов.",
+                    "Защита целостности данных",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (result == DialogResult.Yes)
+                {
+                    await service.UpdateAbsenceTypeStatusAsync(id, false); // Деактивируем
+                    await LoadAbsenceTypesGridAsync();
+                }
+            }
+            else
+            {
+                // Запись чистая: можно безопасно удалить окончательно
+                var result = MessageBox.Show(
+                    $"Вы уверены, что хотите навсегда удалить причину \"{selectedItem.Name}\"? Эту операцию нельзя будет отменить.",
+                    "Подтверждение удаления",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (result == DialogResult.Yes)
+                {
+                    await service.DeleteAbsenceTypeAsync(id);
+                    await LoadAbsenceTypesGridAsync();
+                }
+            }
+        }
+
+        private async void materialSwitchAbsencesTypeShowAll_CheckedChanged(object sender, EventArgs e)
+        {
+            await LoadAbsenceTypesGridAsync();
+        }
+
+        private void dataGridViewAbsences_SelectionChanged(object sender, EventArgs e)
+        {
+            // 1. Проверяем, выбрана ли хоть одна строка в таблице
+            bool isRowSelected = dataGridViewAbsences.CurrentRow != null && dataGridViewAbsences.CurrentRow.Tag != null;
+
+            // Управляем доступностью кнопок
+            materialButtonAbsencesTypeEdit.Enabled = isRowSelected;
+            materialButtonAbsencesTypeDelete.Enabled = isRowSelected;
+            materialButtonAbsencesTypeDeactivate.Enabled = isRowSelected;
+
+            if (isRowSelected)
+            {
+                // 2. Получаем ID выбранной строки и находим объект в нашем кэш-списке
+                ulong selectedId = (ulong)dataGridViewAbsences.CurrentRow.Tag;
+                var selectedItem = _absenceTypes.Find(x => x.Id == selectedId);
+
+                if (selectedItem != null)
+                {
+                    // 3. 🌟 УМНАЯ СМЕНА НАДПИСИ: Меняем текст кнопки в зависимости от текущего состояния IsActive
+                    if (selectedItem.IsActive)
+                    {
+                        materialButtonAbsencesTypeDeactivate.Text = "Деактивировать";
+                        materialButtonAbsencesTypeDeactivate.UseAccentColor = true;
+                        // Опционально: можно задать цвет предупреждения, если библиотека поддерживает
+                    }
+                    else
+                    {
+                        materialButtonAbsencesTypeDeactivate.Text = "Активировать";
+                        materialButtonAbsencesTypeDeactivate.UseAccentColor = false;
+                    }
+                }
+            }
+            else
+            {
+                // Дефолтное состояние, если в таблице пусто
+                materialButtonAbsencesTypeDeactivate.Text = "Деактивировать";
+                materialButtonAbsencesTypeDeactivate.UseAccentColor = true;
+            }
+        }
+
+        private void dataGridViewAbsences_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex <= 0) return;
+            // Игнорируем клики по шапке таблицы (индекс -1)
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            var grid = (DataGridView)sender;
+
+            // 1. Если кликнули по первой строке (индекс 0) — запрещаем её выделять
+            if (e.RowIndex == 0)
+            {
+                grid.ClearSelection();
+                return;
+            }
+
+            /*// 2. Если кликнули по ячейкам дней (индекс столбца >= 4)
+            if (e.ColumnIndex >= 4)
+            {
+                // Очищаем старое выделение
+                grid.ClearSelection();
+
+                // Принудительно выделяем ТОЛЬКО текстовую часть КЛИКНУТОЙ строки (e.RowIndex)
+                for (int i = 0; i < 4; i++)
+                {
+                    grid.Rows[e.RowIndex].Cells[i].Selected = true;
+                }
+            }*/
+
+            grid.Invalidate();
+        }
+
+        private void dataGridViewAbsences_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            if (e.RowIndex == 0) return;
+
+            var grid = (DataGridView)sender;
+
+            // ПРОВЕРКА №2: Проверяем, является ли текущая рисуемая строка АКТИВНОЙ (выбранной пользователем)
+            if (grid.CurrentRow != null && grid.CurrentRow.Index == e.RowIndex)
+            {
+                // Берем границы строки с небольшим отступом внутрь, чтобы линия не обрезалась
+                Rectangle bounds = new Rectangle(
+                    e.RowBounds.Left + 0,
+                    e.RowBounds.Top + 0,
+                    e.RowBounds.Width - 1,
+                    e.RowBounds.Height - 1
+                );
+
+                // Рисуем рамку ярким цветом для теста
+                using (Pen pen = new Pen(Color.Orange, 2))
+                {
+                    e.Graphics.DrawRectangle(pen, bounds);
+                }
+            }
+        }
+
+        private void dataGridViewAbsences_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            // Игнорируем шапку таблицы и пустые строки
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            // Находим ячейки, у которых задан кастомный цвет (например, колонка "Цвет индикатора" или дни в плане)
+            // Укажите здесь индекс или имя вашей цветной колонки (например, "Color" или индекс >= 4 для дней)
+            if (e.ColumnIndex == 3 || e.ColumnIndex >= 4)
+            {
+                // 🌟 ГЛАВНЫЙ СЕКРЕТ: Если ячейка выделена, мы принудительно заставляем WinForms
+                // использовать её оригинальный BackColor вместо системного SelectionBackColor!
+                if ((e.State & DataGridViewElementStates.Selected) != 0)
+                {
+                    // Задаем цвет фона выделения равным её собственному цвету ячейки
+                    e.CellStyle.SelectionBackColor = e.CellStyle.BackColor;
+
+                    // Цвет текста выделения делаем контрастным (черным)
+                    e.CellStyle.SelectionForeColor = e.CellStyle.ForeColor;
                 }
             }
         }
