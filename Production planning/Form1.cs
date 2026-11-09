@@ -854,8 +854,8 @@ namespace Production_planning
             else
             {
                 // Сценарий: Пустая смена персонала без заказов
-                formattedOrderNum = "НЕТ ЗАДАНИЯ";
-                orderName = "Смена открыта (Ожидание распределения заказов диспетчером)";
+                formattedOrderNum = "❌ НЕТ ЗАДАНИЯ";
+                orderName = "Заказы не распределены диспетчером";
 
                 TimeSpan gapDuration = end - start;
                 durationText = $"{(int)gapDuration.TotalHours:D2}:{gapDuration.Minutes:D2}";
