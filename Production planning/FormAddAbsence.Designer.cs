@@ -91,7 +91,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(475, 553);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(508, 497);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel4
@@ -108,7 +108,7 @@
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(449, 54);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(482, 54);
             this.tableLayoutPanel4.TabIndex = 2;
             // 
             // buttonCalendarStart
@@ -120,7 +120,7 @@
             this.buttonCalendarStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonCalendarStart.HighEmphasis = true;
             this.buttonCalendarStart.Icon = null;
-            this.buttonCalendarStart.Location = new System.Drawing.Point(398, 6);
+            this.buttonCalendarStart.Location = new System.Drawing.Point(431, 6);
             this.buttonCalendarStart.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonCalendarStart.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonCalendarStart.Name = "buttonCalendarStart";
@@ -166,7 +166,7 @@
             this.textBoxDateStart.SelectionLength = 0;
             this.textBoxDateStart.SelectionStart = 0;
             this.textBoxDateStart.ShortcutsEnabled = true;
-            this.textBoxDateStart.Size = new System.Drawing.Size(388, 48);
+            this.textBoxDateStart.Size = new System.Drawing.Size(421, 48);
             this.textBoxDateStart.SkipLiterals = true;
             this.textBoxDateStart.TabIndex = 4;
             this.textBoxDateStart.TabStop = false;
@@ -180,7 +180,7 @@
             // 
             // dateTimeStart
             // 
-            this.dateTimeStart.Location = new System.Drawing.Point(397, 3);
+            this.dateTimeStart.Location = new System.Drawing.Point(430, 3);
             this.dateTimeStart.Name = "dateTimeStart";
             this.dateTimeStart.Size = new System.Drawing.Size(0, 20);
             this.dateTimeStart.TabIndex = 6;
@@ -196,11 +196,11 @@
             this.tableLayoutPanel3.Controls.Add(this.materialButton1, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.materialButton2, 2, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 486);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(13, 430);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(449, 64);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(482, 64);
             this.tableLayoutPanel3.TabIndex = 2;
             // 
             // materialButton1
@@ -211,7 +211,7 @@
             this.materialButton1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.materialButton1.HighEmphasis = true;
             this.materialButton1.Icon = null;
-            this.materialButton1.Location = new System.Drawing.Point(213, 6);
+            this.materialButton1.Location = new System.Drawing.Point(246, 6);
             this.materialButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton1.Name = "materialButton1";
@@ -232,7 +232,7 @@
             this.materialButton2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.materialButton2.HighEmphasis = true;
             this.materialButton2.Icon = null;
-            this.materialButton2.Location = new System.Drawing.Point(333, 6);
+            this.materialButton2.Location = new System.Drawing.Point(366, 6);
             this.materialButton2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialButton2.Name = "materialButton2";
@@ -265,7 +265,7 @@
             this.comboBoxUsers.MaxDropDownItems = 4;
             this.comboBoxUsers.MouseState = MaterialSkin.MouseState.OUT;
             this.comboBoxUsers.Name = "comboBoxUsers";
-            this.comboBoxUsers.Size = new System.Drawing.Size(449, 49);
+            this.comboBoxUsers.Size = new System.Drawing.Size(482, 49);
             this.comboBoxUsers.StartIndex = 0;
             this.comboBoxUsers.TabIndex = 4;
             // 
@@ -280,7 +280,7 @@
             this.switchOpenDate.MouseState = MaterialSkin.MouseState.HOVER;
             this.switchOpenDate.Name = "switchOpenDate";
             this.switchOpenDate.Ripple = true;
-            this.switchOpenDate.Size = new System.Drawing.Size(455, 45);
+            this.switchOpenDate.Size = new System.Drawing.Size(488, 45);
             this.switchOpenDate.TabIndex = 4;
             this.switchOpenDate.Text = "Открытая дата завершения (без указания даты)";
             this.switchOpenDate.UseVisualStyleBackColor = true;
@@ -306,7 +306,7 @@
             this.comboBoxAbsence.MaxDropDownItems = 4;
             this.comboBoxAbsence.MouseState = MaterialSkin.MouseState.OUT;
             this.comboBoxAbsence.Name = "comboBoxAbsence";
-            this.comboBoxAbsence.Size = new System.Drawing.Size(449, 49);
+            this.comboBoxAbsence.Size = new System.Drawing.Size(482, 49);
             this.comboBoxAbsence.StartIndex = 0;
             this.comboBoxAbsence.TabIndex = 5;
             this.comboBoxAbsence.SelectedIndexChanged += new System.EventHandler(this.comboBoxAbsence_SelectedIndexChanged);
@@ -325,7 +325,7 @@
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(449, 114);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(482, 114);
             this.tableLayoutPanel7.TabIndex = 7;
             // 
             // tableLayoutPanel8
@@ -341,7 +341,7 @@
             this.tableLayoutPanel8.RowCount = 2;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(214, 108);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(231, 108);
             this.tableLayoutPanel8.TabIndex = 0;
             // 
             // radioButtonDateEnd
@@ -356,7 +356,7 @@
             this.radioButtonDateEnd.MouseState = MaterialSkin.MouseState.HOVER;
             this.radioButtonDateEnd.Name = "radioButtonDateEnd";
             this.radioButtonDateEnd.Ripple = true;
-            this.radioButtonDateEnd.Size = new System.Drawing.Size(214, 54);
+            this.radioButtonDateEnd.Size = new System.Drawing.Size(231, 54);
             this.radioButtonDateEnd.TabIndex = 0;
             this.radioButtonDateEnd.TabStop = true;
             this.radioButtonDateEnd.Text = "Дата завершения";
@@ -377,7 +377,7 @@
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(208, 48);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(225, 48);
             this.tableLayoutPanel5.TabIndex = 3;
             // 
             // buttonCalendarEnd
@@ -389,7 +389,7 @@
             this.buttonCalendarEnd.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonCalendarEnd.HighEmphasis = true;
             this.buttonCalendarEnd.Icon = null;
-            this.buttonCalendarEnd.Location = new System.Drawing.Point(157, 6);
+            this.buttonCalendarEnd.Location = new System.Drawing.Point(174, 6);
             this.buttonCalendarEnd.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonCalendarEnd.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonCalendarEnd.Name = "buttonCalendarEnd";
@@ -435,7 +435,7 @@
             this.textBoxDateEnd.SelectionLength = 0;
             this.textBoxDateEnd.SelectionStart = 0;
             this.textBoxDateEnd.ShortcutsEnabled = true;
-            this.textBoxDateEnd.Size = new System.Drawing.Size(147, 48);
+            this.textBoxDateEnd.Size = new System.Drawing.Size(164, 48);
             this.textBoxDateEnd.SkipLiterals = true;
             this.textBoxDateEnd.TabIndex = 4;
             this.textBoxDateEnd.TabStop = false;
@@ -449,7 +449,7 @@
             // 
             // dateTimeEnd
             // 
-            this.dateTimeEnd.Location = new System.Drawing.Point(156, 3);
+            this.dateTimeEnd.Location = new System.Drawing.Point(173, 3);
             this.dateTimeEnd.Name = "dateTimeEnd";
             this.dateTimeEnd.Size = new System.Drawing.Size(0, 20);
             this.dateTimeEnd.TabIndex = 6;
@@ -464,12 +464,12 @@
             this.tableLayoutPanel9.Controls.Add(this.radioButtonCountDays, 0, 0);
             this.tableLayoutPanel9.Controls.Add(this.tableLayoutPanel6, 0, 1);
             this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel9.Location = new System.Drawing.Point(231, 3);
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(248, 3);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
             this.tableLayoutPanel9.RowCount = 2;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(215, 108);
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(231, 108);
             this.tableLayoutPanel9.TabIndex = 1;
             // 
             // radioButtonCountDays
@@ -483,7 +483,7 @@
             this.radioButtonCountDays.MouseState = MaterialSkin.MouseState.HOVER;
             this.radioButtonCountDays.Name = "radioButtonCountDays";
             this.radioButtonCountDays.Ripple = true;
-            this.radioButtonCountDays.Size = new System.Drawing.Size(215, 54);
+            this.radioButtonCountDays.Size = new System.Drawing.Size(231, 54);
             this.radioButtonCountDays.TabIndex = 1;
             this.radioButtonCountDays.TabStop = true;
             this.radioButtonCountDays.Text = "Продолжительность";
@@ -505,7 +505,7 @@
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(209, 48);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(225, 48);
             this.tableLayoutPanel6.TabIndex = 4;
             // 
             // buttonDayIncrement
@@ -517,7 +517,7 @@
             this.buttonDayIncrement.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonDayIncrement.HighEmphasis = true;
             this.buttonDayIncrement.Icon = null;
-            this.buttonDayIncrement.Location = new System.Drawing.Point(158, 6);
+            this.buttonDayIncrement.Location = new System.Drawing.Point(174, 6);
             this.buttonDayIncrement.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.buttonDayIncrement.MouseState = MaterialSkin.MouseState.HOVER;
             this.buttonDayIncrement.Name = "buttonDayIncrement";
@@ -575,7 +575,7 @@
             this.materialTextBoxDays.SelectionLength = 0;
             this.materialTextBoxDays.SelectionStart = 0;
             this.materialTextBoxDays.ShortcutsEnabled = true;
-            this.materialTextBoxDays.Size = new System.Drawing.Size(93, 48);
+            this.materialTextBoxDays.Size = new System.Drawing.Size(109, 48);
             this.materialTextBoxDays.TabIndex = 1;
             this.materialTextBoxDays.TabStop = false;
             this.materialTextBoxDays.Text = "1";
@@ -590,7 +590,7 @@
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(223, 3);
+            this.panel1.Location = new System.Drawing.Point(240, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(2, 108);
             this.panel1.TabIndex = 2;
@@ -599,7 +599,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(481, 644);
+            this.ClientSize = new System.Drawing.Size(514, 588);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormStyle = MaterialSkin.Controls.MaterialForm.FormStyles.ActionBar_64;
             this.MaximizeBox = false;
