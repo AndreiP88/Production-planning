@@ -1786,7 +1786,7 @@ namespace Production_planning
             int index = materialTabControl1.SelectedIndex;
             string namePage = materialTabControl1.TabPages[index].Text;
 
-            this.Text = "Производственный план - " + namePage + " (" + index + ")";
+            this.Text = "Производственный план - " + namePage/* + " (" + index + ")"*/;
 
             await UpdateWorkAreasAsync();
 
@@ -2825,7 +2825,12 @@ namespace Production_planning
                 {
                     Thread.Sleep(200);
 
+                    int indexPosition = comboBoxUserPosition.SelectedIndex;
+
+                    await UpdateUsersShortInfo();
                     await LoadUserListToListBox();
+
+                    comboBoxUserPosition.SelectedIndex = indexPosition;
                 }
             }
             catch (Exception ex)
