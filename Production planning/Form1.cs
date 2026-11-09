@@ -161,7 +161,7 @@ namespace Production_planning
 */
         }
 
-        private async Task LoadSingleEquipmentPlanAsync(DateTime start, DateTime end, int mySqlEquipmentId, int externalEquipId, WorkAreaVisibleColumns columnsSettings)
+        /*private async Task LoadSingleEquipmentPlanAsync(DateTime start, DateTime end, int mySqlEquipmentId, int externalEquipId, WorkAreaVisibleColumns columnsSettings)
         {
             try
             {
@@ -567,7 +567,496 @@ namespace Production_planning
                 GridHelper.MergeCells(dataGridViewPlan, validStaffText, startStaffRow, 0, staffMergedCount, 1, Color.White, Color.Black, boldFont, StringAlignment.Center, StringAlignment.Center);
                 startStaffRow += staffMergedCount;
             }
+        }*/
+
+
+
+        private async Task LoadSingleEquipmentPlanAsync(DateTime start, DateTime end, int mySqlEquipmentId, int externalEquipId, WorkAreaVisibleColumns columnsSettings)
+        {
+            try
+            {
+                this.UseWaitCursor = true;
+                Cursor.Current = Cursors.WaitCursor;
+
+                dataGridViewPlan.SuspendLayout();
+                dataGridViewPlan.Rows.Clear();
+                dataGridViewPlan.Columns.Clear();
+
+                // Инициализация колонок
+                dataGridViewPlan.Columns.Add("Staff", "Исполнитель");              // 0
+                dataGridViewPlan.Columns.Add("OrderNum", "Номер заказа");         // 1
+                dataGridViewPlan.Columns.Add("Customer", "Заказчик");             // 2
+                dataGridViewPlan.Columns.Add("OrderName", "Наименование заказа"); // 3
+                dataGridViewPlan.Columns.Add("ItemName", "Элемент");               // 4
+                dataGridViewPlan.Columns.Add("OperProp", "Краски");               // 5
+                dataGridViewPlan.Columns.Add("Material", "Материал");             // 6
+                dataGridViewPlan.Columns.Add("TechNote", "Заметки технолога");    // 7
+                dataGridViewPlan.Columns.Add("Qty", "Плановая выработка");        // 8
+                dataGridViewPlan.Columns.Add("Start", "Дата и время начала");     // 9
+                dataGridViewPlan.Columns.Add("End", "Дата и время окончания");     // 10
+                dataGridViewPlan.Columns.Add("Duration", "Длительность");         // 11
+                dataGridViewPlan.Columns.Add("ToolName", "Штамп");                // 12
+                dataGridViewPlan.Columns.Add("Cutting", "Подрезка листа");        // 13
+
+                foreach (DataGridViewColumn column in dataGridViewPlan.Columns)
+                {
+                    column.SortMode = DataGridViewColumnSortMode.NotSortable;
+                }
+
+                dataGridViewPlan.SelectionMode = DataGridViewSelectionMode.CellSelect;
+                dataGridViewPlan.DefaultCellStyle.SelectionBackColor = Color.White;
+                dataGridViewPlan.DefaultCellStyle.SelectionForeColor = Color.Black;
+
+                dataGridViewPlan.EnableHeadersVisualStyles = false;
+                dataGridViewPlan.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(240, 240, 240);
+                dataGridViewPlan.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+                dataGridViewPlan.ColumnHeadersDefaultCellStyle.Font = new Font(dataGridViewPlan.Font, FontStyle.Bold);
+                dataGridViewPlan.ColumnHeadersHeight = 50;
+
+                dataGridViewPlan.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+                dataGridViewPlan.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                dataGridViewPlan.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+
+                // Настройка ширины
+                dataGridViewPlan.Columns["Staff"].Width = 140;
+                dataGridViewPlan.Columns["OrderNum"].Width = 110;
+                dataGridViewPlan.Columns["Customer"].Width = 120;
+                dataGridViewPlan.Columns["OrderName"].Width = 170;
+                dataGridViewPlan.Columns["ItemName"].Width = 140;
+                dataGridViewPlan.Columns["OperProp"].Width = 140;
+                dataGridViewPlan.Columns["Material"].Width = 160;
+                dataGridViewPlan.Columns["TechNote"].Width = 140;
+                dataGridViewPlan.Columns["Qty"].Width = 80;
+                dataGridViewPlan.Columns["Start"].Width = 110;
+                dataGridViewPlan.Columns["End"].Width = 110;
+                dataGridViewPlan.Columns["Duration"].Width = 110;
+                dataGridViewPlan.Columns["ToolName"].Width = 110;
+                dataGridViewPlan.Columns["Cutting"].Width = 100;
+
+                // Настройка шаблонов видимости столбцов участка
+                var settings = columnsSettings ?? WorkAreaVisibleColumns.GetDefaultSettings();
+                dataGridViewPlan.Columns["OrderName"].Visible = settings.OrderName;
+                dataGridViewPlan.Columns["ItemName"].Visible = settings.Element;
+                dataGridViewPlan.Columns["OperProp"].Visible = settings.Colors;
+                dataGridViewPlan.Columns["Material"].Visible = settings.Material;
+                dataGridViewPlan.Columns["TechNote"].Visible = settings.TechNotes;
+                dataGridViewPlan.Columns["Qty"].Visible = settings.PlannedOutput;
+                dataGridViewPlan.Columns["Start"].Visible = settings.DateTimeStart;
+                dataGridViewPlan.Columns["End"].Visible = settings.DateTimeEnd;
+                dataGridViewPlan.Columns["Duration"].Visible = settings.Duration;
+                dataGridViewPlan.Columns["ToolName"].Visible = settings.Stamp;
+                dataGridViewPlan.Columns["Cutting"].Visible = settings.SheetTrimming;
+
+                var valueOrders = new ValueOrders();
+                var param = new ConnectionParameter();
+
+                // Загружаем исходные данные
+                List<ProductionJobCard> jobs = await valueOrders.GetProductionJobsAsync(start, end, param.GetSQLServerConnectionString(), externalEquipId);
+
+                // Очищаем выборку от обедов на дальних подступах
+                var filteredJobs = (jobs ?? new List<ProductionJobCard>())
+                    .Where(j => j.IdEquip == externalEquipId)
+                    .Where(j => !(j.OrderNum?.ToString() ?? "").Contains("***") && !(j.IdleTimeName?.ToString() ?? "").ToLower().Contains("обед"))
+                    .OrderBy(j => j.DateBegin)
+                    .ToList();
+
+                // 🌟 Вычисляем начальную точку, сжимая пустые дни в начале диапазона
+                DateTime effectiveStart = start;
+                DateTime today = DateTime.Today;
+
+                if (filteredJobs.Count > 0)
+                {
+                    DateTime firstJobDate = filteredJobs.Min(j => j.DateBegin).Date;
+                    effectiveStart = firstJobDate < today ? firstJobDate : today;
+                }
+                else
+                {
+                    effectiveStart = today;
+                }
+
+                List<EquipmentStaffingPeriodRow> shifts = await valueOrders.GetEquipmentStaffingForPeriodAsync(effectiveStart.AddDays(-1), end.AddDays(1), mySqlEquipmentId, param.GetMySQLConnectionString());
+
+                var shiftIntervals = (shifts ?? new List<EquipmentStaffingPeriodRow>()).Select(s => new {
+                    Start = s.Date.Date.Add(s.TimeStart),
+                    End = s.TimeEnd < s.TimeStart ? s.Date.Date.AddDays(1).Add(s.TimeEnd) : s.Date.Date.Add(s.TimeEnd),
+                    Data = s
+                }).Where(s => s.End > effectiveStart).OrderBy(s => s.Start).ToList();
+
+                var rowsToInsert = new List<DataGridViewRow>();
+                bool isFirstRow = true;
+
+                DateTime globalTimelineCursor = effectiveStart;
+                var usedShiftKeys = new HashSet<string>();
+
+                // ВАШ РОДНОЙ ЦИКЛ ПО ЗАКАЗАМ
+                foreach (var job in filteredJobs)
+                {
+                    if (job.DateEnd <= effectiveStart) continue;
+
+                    DateTime currentJobCursor = job.DateBegin < globalTimelineCursor ? globalTimelineCursor : job.DateBegin;
+                    DateTime jobEnd = job.DateEnd;
+
+                    if (jobEnd <= currentJobCursor)
+                    {
+                        jobEnd = currentJobCursor.AddMinutes(5);
+                    }
+
+                    var crossedShifts = shiftIntervals.Where(s => s.Start < jobEnd && s.End > currentJobCursor).ToList();
+
+                    if (crossedShifts.Count == 0)
+                    {
+                        var prevShift = shiftIntervals.LastOrDefault(s => s.End <= currentJobCursor);
+                        var nextShift = shiftIntervals.FirstOrDefault(s => s.Start >= jobEnd);
+                        DateTime gapStart = prevShift != null ? prevShift.End : effectiveStart;
+                        DateTime gapEnd = nextShift != null ? nextShift.Start : end.Date.AddDays(1);
+
+                        AddTimelineRow(rowsToInsert, currentJobCursor, jobEnd, job, null, $"GAP_SHIFT_{gapStart:yyyyMMddHHmm}_{gapEnd:yyyyMMmm}", ref isFirstRow);
+
+                        if (jobEnd > globalTimelineCursor) globalTimelineCursor = jobEnd;
+                        continue;
+                    }
+
+                    foreach (var shift in crossedShifts)
+                    {
+                        DateTime segmentStart = currentJobCursor > shift.Start ? currentJobCursor : shift.Start;
+                        DateTime segmentEnd = jobEnd < shift.End ? jobEnd : shift.End;
+
+                        if ((segmentEnd - segmentStart).TotalMinutes < 2 && segmentStart != job.DateBegin && segmentEnd != job.DateEnd) continue;
+
+                        string currentShiftKey = $"SHIFT_{shift.Start:yyyyMMdd_HHmm}_{shift.Data.ShiftNum}";
+                        usedShiftKeys.Add(currentShiftKey);
+
+                        EquipmentStaffingPeriodRow shiftDataToSend = shift.Data;
+
+                        if (shift.Data.IsCancelled == 1)
+                        {
+                            bool hasJobBoundary = filteredJobs.Any(j => (j.DateBegin >= shift.Start && j.DateBegin <= shift.End) || (j.DateEnd >= shift.Start && j.DateEnd <= shift.End));
+                            if (hasJobBoundary) currentShiftKey += "_CANCELLED";
+                            else { currentJobCursor = segmentEnd; continue; }
+                        }
+
+                        AddTimelineRow(rowsToInsert, segmentStart, segmentEnd, job, shiftDataToSend, currentShiftKey, ref isFirstRow);
+
+                        currentJobCursor = segmentEnd;
+
+                        if (segmentEnd > globalTimelineCursor) globalTimelineCursor = segmentEnd;
+                        if (currentJobCursor >= jobEnd) break;
+                    }
+                }
+
+                // Вывод абсолютно пустых смен диспетчера
+                foreach (var shift in shiftIntervals)
+                {
+                    // Строго отсекаем смены, которые выходят за рамки эффективного диапазона
+                    // 🌟 КЛЮЧЕВАЯ ПРАВКА: shift.Start >= effectiveStart гарантирует, 
+                    // что пустые смены из "вчерашнего" дня больше не попадут на экран!
+                    if (shift.End <= effectiveStart || shift.Start >= end || shift.Start < effectiveStart) continue;
+
+                    string currentShiftKey = $"SHIFT_{shift.Start:yyyyMMdd_HHmm}_{shift.Data.ShiftNum}";
+
+                    if (usedShiftKeys.Contains(currentShiftKey)) continue;
+                    if (shift.Data.IsCancelled == 1) continue; // Не выводим отмененные
+
+                    AddTimelineRow(rowsToInsert, shift.Start, shift.End, null, shift.Data, currentShiftKey, ref isFirstRow);
+                }
+
+                // Финальная сортировка строк по дате и времени начала (столбец 9)
+                rowsToInsert = rowsToInsert.OrderBy(r => {
+                    string val = r.Cells[9].Value?.ToString(); // Явно завязали на индекс 9 для надежности
+                    if (DateTime.TryParseExact(val, "dd.MM.yy H:mm",
+                        System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime parsed))
+                    {
+                        return parsed;
+                    }
+                    return DateTime.MaxValue;
+                }).ToList();
+
+                dataGridViewPlan.Rows.AddRange(rowsToInsert.ToArray());
+                ApplySmartTimelineMerging();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка генерации: {ex.Message}");
+            }
+            finally
+            {
+                dataGridViewPlan.ResumeLayout(true);
+                this.UseWaitCursor = false;
+                Cursor.Current = Cursors.Default;
+                dataGridViewPlan.Refresh();
+            }
         }
+
+        private void AddTimelineRow(List<DataGridViewRow> list, DateTime start, DateTime end, ProductionJobCard job, EquipmentStaffingPeriodRow shift, string shiftKey, ref bool isFirstRow)
+        {
+            string staffText = "—";
+            if (shift != null)
+            {
+                string empName = string.IsNullOrEmpty(shift.StaffNames) ? "???" : shift.StaffNames;
+                staffText = shift.IsCancelled == 1
+                    ? $"{shift.Date:dd.MM.yy}\n{shift.ShiftName}\n{empName}\n(Отменена)"
+                    : $"{shift.Date:dd.MM.yy}\n{shift.ShiftName}\n{empName}";
+            }
+
+            isFirstRow = false;
+
+            string formattedOrderNum = "—";
+            string customer = "—";
+            string orderName = "—";
+            string itemName = "—";
+            string operProp = "—";
+            string materialText = "—";
+            string techNote = "—";
+            string qty = "—";
+            string timeStartText = $"{start:dd.MM.yy H:mm}";
+            string timeEndText = $"{end:dd.MM.yy H:mm}";
+            string durationText = "—";
+            string toolText = "—";
+            string cuttingText = "—";
+            string orderKey = "GAP_" + start.ToString("yyyyMMddHHmm");
+            bool isJobIdle = false;
+
+            if (job != null)
+            {
+                isJobIdle = job.IsIdleTime;
+                orderKey = isJobIdle ? $"IDLE_{job.IdPlanJob}" : $"JOB_{job.IdPlanJob}";
+
+                string orderNum = isJobIdle ? "—" : job.OrderNum;
+                customer = isJobIdle ? "—" : job.CustomerName;
+                orderName = isJobIdle ? $"⚙ {job.IdleTimeName}" : job.OrderName;
+
+                itemName = (isJobIdle || string.IsNullOrEmpty(job.ItemName)) ? "—" : job.ItemName;
+                operProp = (isJobIdle || string.IsNullOrEmpty(job.OperProp)) ? "—" : job.OperProp;
+                materialText = isJobIdle ? "—" : job.FullMaterialText;
+                techNote = (isJobIdle || string.IsNullOrEmpty(job.NoteManagerTech)) ? "—" : job.NoteManagerTech;
+
+                formattedOrderNum = FormatOrderNumberWithTechNotes(orderNum, itemName, techNote);
+
+                if (!isJobIdle)
+                {
+                    if (job.RunQtyFact <= 0)
+                    {
+                        qty = $"{job.RunQty:N0}";
+                    }
+                    else
+                    {
+                        qty = $"{(job.RunQty - job.RunQtyFact):N0}/{job.RunQty:N0}";
+                    }
+                }
+
+                // 🌟 ВОЗВРАЩАЕМ РОДНОЕ СТАРЕЙШЕЕ ОТОБРАЖЕНИЕ ВРЕМЕНИ ДЛЯ ЗАКАЗОВ ИЗ БАЗЫ
+                timeStartText = $"{job.DateBegin:dd.MM.yy H:mm}";
+                timeEndText = $"{job.DateEnd:dd.MM.yy H:mm}";
+                durationText = job.NormTime;
+                toolText = isJobIdle ? "—" : job.ShortToolName;
+                cuttingText = isJobIdle ? "—" : (job.CuttingPart > 1 ? "Да" : "Нет");
+            }
+            else
+            {
+                // Сценарий: Пустая смена персонала без заказов
+                formattedOrderNum = "НЕТ ЗАДАНИЯ";
+                orderName = "Смена открыта (Ожидание распределения заказов диспетчером)";
+
+                TimeSpan gapDuration = end - start;
+                durationText = $"{(int)gapDuration.TotalHours:D2}:{gapDuration.Minutes:D2}";
+            }
+
+            var row = new DataGridViewRow();
+            row.CreateCells(dataGridViewPlan);
+
+            // Заполнение ячеек 0 - 13
+            row.Cells[0].Value = staffText;
+            row.Cells[1].Value = formattedOrderNum;
+            row.Cells[2].Value = customer;
+            row.Cells[3].Value = orderName;
+            row.Cells[4].Value = itemName;
+            row.Cells[5].Value = operProp;
+            row.Cells[6].Value = materialText;
+            row.Cells[7].Value = techNote;
+            row.Cells[8].Value = qty;
+            row.Cells[9].Value = timeStartText;
+            row.Cells[10].Value = timeEndText;
+            row.Cells[11].Value = durationText;
+            row.Cells[12].Value = toolText;
+            row.Cells[13].Value = cuttingText;
+
+            row.Cells[0].Tag = shiftKey;
+
+            if (job != null && isJobIdle)
+            {
+                string horizKey = $"HORIZ_{orderKey}";
+                for (int c = 1; c <= 7; c++) row.Cells[c].Tag = horizKey;
+                for (int c = 8; c <= 13; c++) row.Cells[c].Tag = horizKey;
+            }
+            else
+            {
+                for (int c = 1; c <= 8; c++) row.Cells[c].Tag = $"COL{c}_{orderKey}";
+                row.Cells[12].Tag = $"COL12_{orderKey}";
+                row.Cells[13].Tag = $"COL13_{orderKey}";
+            }
+
+            row.Cells[9].Tag = $"COL9_{orderKey}";
+            row.Cells[10].Tag = $"COL10_{orderKey}";
+            row.Cells[11].Tag = $"COL11_{orderKey}";
+
+            if (job == null)
+            {
+                row.DefaultCellStyle.BackColor = Color.FromArgb(253, 253, 253);
+                row.DefaultCellStyle.ForeColor = Color.Gray;
+            }
+            else if (isJobIdle)
+            {
+                row.DefaultCellStyle.BackColor = Color.FromArgb(248, 249, 250);
+                row.DefaultCellStyle.ForeColor = Color.DimGray;
+            }
+
+            int baseHeight = 65;
+            int nameLength = orderName.Length;
+            int estimatedTextLines = (int)Math.Ceiling((double)nameLength / 20);
+            if (estimatedTextLines > 2)
+            {
+                int calculatedHeight = 30 + (estimatedTextLines * 15);
+                if (calculatedHeight > baseHeight) baseHeight = calculatedHeight;
+            }
+
+            row.Height = baseHeight;
+            list.Add(row);
+        }
+
+
+
+        private void ApplySmartTimelineMerging()
+        {
+            if (dataGridViewPlan.Rows.Count == 0 || dataGridViewPlan.Columns.Count < 14) return;
+
+            Font boldFont = new Font(dataGridViewPlan.Font, FontStyle.Bold);
+            Font regularFont = new Font(dataGridViewPlan.Font, FontStyle.Regular);
+            Font fontBig = new Font(new Font("Arial", 14), FontStyle.Regular);
+
+            // -----------------------------------------------------------------
+            // ШАГ 1: ВЕРТИКАЛЬНОЕ И ГОРИЗОНТАЛЬНОЕ СЛИЯНИЕ ЗАКАЗОВ (КОЛОНКИ 1 - 13)
+            // -----------------------------------------------------------------
+            int rIndex = 0;
+            while (rIndex < dataGridViewPlan.Rows.Count)
+            {
+                string cell1Tag = dataGridViewPlan.Rows[rIndex].Cells[1].Tag?.ToString();
+                int maxRowsMergedInThisStep = 1;
+
+                if (cell1Tag != null && cell1Tag.StartsWith("HORIZ_"))
+                {
+                    string idleNameText = dataGridViewPlan.Rows[rIndex].Cells[3].Value?.ToString() ?? "⚙️ Технологический простой";
+
+                    int idleVerticalCount = 1;
+                    while (rIndex + idleVerticalCount < dataGridViewPlan.Rows.Count &&
+                           dataGridViewPlan.Rows[rIndex + idleVerticalCount].Cells[1].Tag?.ToString() == cell1Tag)
+                    {
+                        idleVerticalCount++;
+                    }
+
+                    // Пул слияния текстовой части
+                    GridHelper.MergeCells(dataGridViewPlan, idleNameText, rIndex, 1, idleVerticalCount, 7,
+                                         dataGridViewPlan.Rows[rIndex].DefaultCellStyle.BackColor, dataGridViewPlan.Rows[rIndex].DefaultCellStyle.ForeColor, fontBig, StringAlignment.Center, StringAlignment.Center);
+
+                    int[] extraCols = { 8, 9, 10, 11, 12, 13 };
+                    foreach (int col in extraCols)
+                    {
+                        string orderText = (col == 12 || col == 13) ? "—" : (dataGridViewPlan.Rows[rIndex].Cells[col].Value?.ToString() ?? "");
+                        GridHelper.MergeCells(dataGridViewPlan, orderText, rIndex, col, idleVerticalCount, 1,
+                                             dataGridViewPlan.Rows[rIndex].DefaultCellStyle.BackColor, dataGridViewPlan.Rows[rIndex].DefaultCellStyle.ForeColor, regularFont, StringAlignment.Center, StringAlignment.Center);
+                    }
+
+                    if (idleVerticalCount > maxRowsMergedInThisStep) maxRowsMergedInThisStep = idleVerticalCount;
+                }
+                else
+                {
+                    // Слияние текстовой части, выработки, штампа и подрезки (1-8, 12-13)
+                    int[] orderTextCols = { 1, 2, 3, 4, 5, 6, 7, 8, 12, 13 };
+                    foreach (int col in orderTextCols)
+                    {
+                        int startOrderRow = rIndex;
+                        string orderTag = dataGridViewPlan.Rows[rIndex].Cells[col].Tag?.ToString();
+                        string orderText = dataGridViewPlan.Rows[rIndex].Cells[col].Value?.ToString() ?? "";
+
+                        int count = 1;
+                        while (rIndex + count < dataGridViewPlan.Rows.Count && dataGridViewPlan.Rows[rIndex + count].Cells[col].Tag?.ToString() == orderTag)
+                        {
+                            count++;
+                        }
+
+                        GridHelper.MergeCells(dataGridViewPlan, orderText, startOrderRow, col, count, 1, Color.White, Color.Black, regularFont, StringAlignment.Center, StringAlignment.Center);
+                        if (count > maxRowsMergedInThisStep) maxRowsMergedInThisStep = count;
+                    }
+
+                    // Слияние временной зоны дат (9 - 11)
+                    for (int col = 9; col <= 11; col++)
+                    {
+                        int startOrderRow = rIndex;
+                        string orderTag = dataGridViewPlan.Rows[rIndex].Cells[col].Tag?.ToString();
+                        string orderText = dataGridViewPlan.Rows[rIndex].Cells[col].Value?.ToString() ?? "";
+
+                        int count = 1;
+                        while (rIndex + count < dataGridViewPlan.Rows.Count && dataGridViewPlan.Rows[rIndex + count].Cells[col].Tag?.ToString() == orderTag)
+                        {
+                            count++;
+                        }
+
+                        GridHelper.MergeCells(dataGridViewPlan, orderText, startOrderRow, col, count, 1, Color.White, Color.Black, regularFont, StringAlignment.Center, StringAlignment.Center);
+                        if (count > maxRowsMergedInThisStep) maxRowsMergedInThisStep = count;
+                    }
+                }
+
+                rIndex += maxRowsMergedInThisStep;
+            }
+
+            // -----------------------------------------------------------------
+            // ШАГ 2: КОРРЕКТНОЕ СЛИЯНИЕ КОЛОНКИ СМЕН И ИСПОЛНИТЕЛЕЙ (СТОЛБЕЦ 0)
+            // -----------------------------------------------------------------
+            int startStaffRow = 0;
+            while (startStaffRow < dataGridViewPlan.Rows.Count)
+            {
+                string currentStaffTag = dataGridViewPlan.Rows[startStaffRow].Cells[0].Tag?.ToString();
+
+                if (string.IsNullOrEmpty(currentStaffTag))
+                {
+                    startStaffRow++;
+                    continue;
+                }
+
+                int staffMergedCount = 1;
+                string validStaffText = dataGridViewPlan.Rows[startStaffRow].Cells[0].Value?.ToString();
+
+                while (startStaffRow + staffMergedCount < dataGridViewPlan.Rows.Count)
+                {
+                    string nextStaffTag = dataGridViewPlan.Rows[startStaffRow + staffMergedCount].Cells[0].Tag?.ToString();
+                    string nextStaffText = dataGridViewPlan.Rows[startStaffRow + staffMergedCount].Cells[0].Value?.ToString();
+
+                    // 🌟 ИСПРАВЛЕНО: Сливаем ячейку смены исключительно по совпадению тега смены currentStaffTag.
+                    // Теперь колонка исполнителя станет единым красивым монолитным блоком на всю длину смены!
+                    if (currentStaffTag == nextStaffTag)
+                    {
+                        if ((string.IsNullOrEmpty(validStaffText) || validStaffText == "—") && !string.IsNullOrEmpty(nextStaffText) && nextStaffText != "—")
+                        {
+                            validStaffText = nextStaffText;
+                        }
+                        staffMergedCount++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(validStaffText) || validStaffText == "—")
+                {
+                    validStaffText = "Дежурная смена\nПерсонал не назначен";
+                }
+
+                GridHelper.MergeCells(dataGridViewPlan, validStaffText, startStaffRow, 0, staffMergedCount, 1, Color.White, Color.Black, boldFont, StringAlignment.Center, StringAlignment.Center);
+                startStaffRow += staffMergedCount;
+            }
+        }
+
+
 
         private string FormatOrderNumberWithTechNotes(string originalOrderNum, string elementText, string techNotesText)
         {
