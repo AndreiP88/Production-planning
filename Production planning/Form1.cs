@@ -1103,22 +1103,22 @@ namespace Production_planning
 
             // 1 строка: План (с причинами отсутствия, если есть в данных)
             if (s.PlannedStaff.Any())
-                sb.AppendLine(string.Join(", ", s.PlannedStaff));
+                sb.AppendLine(string.Join("\n", s.PlannedStaff));
 
             // 2 строка: На согласовании (Черновики)
             if (s.Drafts.Any())
-                sb.AppendLine(/*"📝 " + */string.Join(", ", s.Drafts));
+                sb.AppendLine(/*"📝 " + */string.Join("\n", s.Drafts));
 
             // 3 строка: Утвержденные (Факт)
             if (s.Assignments.Any())
             {
                 if (s.PlannedStaff.Any())
                 {
-                    sb.Append(/*"✅ " + */string.Join(", ", s.Assignments));
+                    sb.Append(/*"✅ " + */string.Join("\n", s.Assignments));
                 }
                 else
                 {
-                    sb.AppendLine(/*"✅ " + */string.Join(", ", s.Assignments));
+                    sb.AppendLine(/*"✅ " + */string.Join("\n", s.Assignments));
                 }
             }
 
