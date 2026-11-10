@@ -489,7 +489,7 @@ namespace Production_planning
         /// <summary>
         /// ЗАПРОС ВОЗРАСТА ЗАПИСЕЙ: Считает возраст записей в днях от даты их valid_from
         /// </summary>
-        public async Task<(int PositionAge, int EquipmentAge, int ScheduleAge)> GetCurrentAssignmentsAgeAsync(int employeeId)
+        public async Task<(int PositionAge, int EquipmentAge, int ScheduleAge)> GetCurrentAssignmentsAgeAsync(ulong employeeId)
         {
             const string qPosition = "SELECT DATEDIFF(CURDATE(), MAX(valid_from)) FROM employee_position_assignments WHERE employee_id = @EmployeeId;";
             const string qEquipment = "SELECT DATEDIFF(CURDATE(), MAX(valid_from)) FROM employee_equipment_assignments WHERE employee_id = @EmployeeId;";

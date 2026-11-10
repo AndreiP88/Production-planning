@@ -11,14 +11,14 @@ namespace Production_planning
     public partial class FormSelectUserAssignmentSchedule : MaterialForm
     {
         private List<ScheduleTemplateModel> _scheduleTemplates;
-        private int _userId;
+        private ulong _userId;
 
         // ПУБЛИЧНЫЕ СВОЙСТВА: Их будет считывать основная форма после закрытия этого окна
         public int SelectedTemplateId { get; private set; }
         public string SelectedTemplateName { get; private set; }
         public DateTime SelectedDate { get; private set; }
 
-        public FormSelectUserAssignmentSchedule(int userId)
+        public FormSelectUserAssignmentSchedule(ulong userId)
         {
             InitializeComponent();
 

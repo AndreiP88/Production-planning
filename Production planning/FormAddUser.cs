@@ -10,7 +10,7 @@ namespace Production_planning
 {
     public partial class FormAddUser : MaterialForm
     {
-        private int _userID;
+        private ulong _userID;
 
         private EmployeeFullCard _employee;
 
@@ -39,12 +39,12 @@ namespace Production_planning
         private bool _isLoad;
         private bool _isDataLoading = false;
 
-        public FormAddUser(int userId = -1)
+        public FormAddUser(ulong userId = 0)
         {
             InitializeComponent();
 
             _userID = userId;
-            _edit = userId != -1;
+            _edit = userId != 0;
 
             _employee = _employee ?? new EmployeeFullCard();
 

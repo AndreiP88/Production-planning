@@ -11,14 +11,14 @@ namespace Production_planning
     public partial class FormSelectUserAssignmentEquip : MaterialForm
     {
         private List<EquipmentLookupDto> _equips;
-        private int _userId;
+        private ulong _userId;
 
         // ПУБЛИЧНЫЕ СВОЙСТВА: Их будет считывать основная форма после закрытия этого окна
         public int SelectedEquipId { get; private set; }
         public string SelectedEquipName { get; private set; }
         public DateTime SelectedDate { get; private set; }
 
-        public FormSelectUserAssignmentEquip(int userId)
+        public FormSelectUserAssignmentEquip(ulong userId)
         {
             InitializeComponent();
 

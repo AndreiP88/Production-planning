@@ -3,6 +3,7 @@ using data.Models;
 using database;
 using MaterialSkin;
 using MaterialSkin.Controls;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -2793,19 +2794,26 @@ namespace Production_planning
             try
             {
                 int selecredIndex = listBoxUsers.SelectedIndex;
-                int index = _employeeShortsIndexes[selecredIndex];
 
-                FormAddUser form = new FormAddUser((int)employeeShorts[index].Id);
+                int index = _employeeShortsIndexes[selecredIndex];
+                ulong userId = employeeShorts[index].Id;
+
+                MaterialListBoxItem item = listBoxUsers.SelectedItem;
+
+                FormAddUser form = new FormAddUser(employeeShorts[index].Id);
                 DialogResult = form.ShowDialog();
                 
                 if (DialogResult == DialogResult.OK)
                 {
+                    await UpdateUsersShortInfo();
+                    await LoadPositions();
                     await LoadUserListToListBox();
                     
-                    listBoxUsers.SelectedIndex = -1;
+                    /*listBoxUsers.SelectedIndex = -1;
                     listBoxUsers.Update();
-                    listBoxUsers.Refresh();
+                    listBoxUsers.Refresh();*/
                     listBoxUsers.SelectedIndex = selecredIndex;
+                    listBoxUsers_SelectedIndexChanged(sender, item);
                 }
             }
             catch (Exception ex)
@@ -2851,7 +2859,7 @@ namespace Production_planning
                 int selecredIndex = listBoxUsers.SelectedIndex;
                 int index = _employeeShortsIndexes[selecredIndex];
 
-                FormAddUser form = new FormAddUser((int)employeeShorts[index].Id);
+                FormAddUser form = new FormAddUser(employeeShorts[index].Id);
                 DialogResult = form.ShowDialog();
 
                 if (DialogResult == DialogResult.OK)

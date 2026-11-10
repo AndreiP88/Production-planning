@@ -11,14 +11,14 @@ namespace Production_planning
     public partial class FormSelectUserPosition : MaterialForm
     {
         private List<PositionLookupDto> _positions;
-        private int _userId;
+        private ulong _userId;
 
         // ПУБЛИЧНЫЕ СВОЙСТВА: Их будет считывать основная форма после закрытия этого окна
         public int SelectedPositionId { get; private set; }
         public string SelectedPositionName { get; private set; }
         public DateTime SelectedDate { get; private set; }
 
-        public FormSelectUserPosition(int userId)
+        public FormSelectUserPosition(ulong userId)
         {
             InitializeComponent();
 
