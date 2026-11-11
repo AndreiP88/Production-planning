@@ -11,7 +11,7 @@
  Target Server Version : 80046 (8.0.46)
  File Encoding         : 65001
 
- Date: 08/11/2026 19:21:13
+ Date: 11/11/2026 07:16:09
 */
 
 SET NAMES utf8mb4;
@@ -52,7 +52,7 @@ CREATE TABLE `absences`  (
   `end_date` date NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of absences
@@ -73,6 +73,7 @@ INSERT INTO `absences` VALUES (14, 1, 1, '2026-10-06', '2026-10-14');
 INSERT INTO `absences` VALUES (15, 22, 1, '2026-10-09', '2026-10-20');
 INSERT INTO `absences` VALUES (16, 19, 3, '2026-10-31', '2026-11-01');
 INSERT INTO `absences` VALUES (17, 8, 1, '2026-10-28', '2026-11-01');
+INSERT INTO `absences` VALUES (19, 1, 1, '2026-11-12', NULL);
 
 -- ----------------------------
 -- Table structure for contact_types
@@ -122,7 +123,7 @@ CREATE TABLE `employee_equipment_assignments`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `employee_id`(`employee_id` ASC, `valid_from` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employee_equipment_assignments
@@ -131,7 +132,7 @@ INSERT INTO `employee_equipment_assignments` VALUES (1, 1, 1, '2014-08-14');
 INSERT INTO `employee_equipment_assignments` VALUES (2, 2, 1, '2010-01-01');
 INSERT INTO `employee_equipment_assignments` VALUES (3, 3, 1, '2010-01-01');
 INSERT INTO `employee_equipment_assignments` VALUES (4, 4, 1, '2010-01-01');
-INSERT INTO `employee_equipment_assignments` VALUES (5, 5, 29, '2010-01-01');
+INSERT INTO `employee_equipment_assignments` VALUES (5, 5, 31, '2010-01-01');
 INSERT INTO `employee_equipment_assignments` VALUES (6, 6, 2, '2017-06-20');
 INSERT INTO `employee_equipment_assignments` VALUES (7, 7, 2, '2012-07-02');
 INSERT INTO `employee_equipment_assignments` VALUES (8, 8, 4, '2022-07-02');
@@ -160,6 +161,9 @@ INSERT INTO `employee_equipment_assignments` VALUES (30, 28, 8, '2016-10-31');
 INSERT INTO `employee_equipment_assignments` VALUES (31, 16, 29, '2026-11-01');
 INSERT INTO `employee_equipment_assignments` VALUES (32, 29, 2, '2026-10-01');
 INSERT INTO `employee_equipment_assignments` VALUES (33, 30, 22, '2023-11-08');
+INSERT INTO `employee_equipment_assignments` VALUES (34, 31, 8, '2019-11-09');
+INSERT INTO `employee_equipment_assignments` VALUES (35, 32, 26, '2011-11-11');
+INSERT INTO `employee_equipment_assignments` VALUES (36, 33, 25, '2019-11-11');
 
 -- ----------------------------
 -- Table structure for employee_position_assignments
@@ -173,7 +177,7 @@ CREATE TABLE `employee_position_assignments`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `employee_id`(`employee_id` ASC, `valid_from` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employee_position_assignments
@@ -208,6 +212,12 @@ INSERT INTO `employee_position_assignments` VALUES (27, 27, 2, '2018-10-31');
 INSERT INTO `employee_position_assignments` VALUES (28, 28, 2, '2016-10-31');
 INSERT INTO `employee_position_assignments` VALUES (29, 29, 1, '2026-10-01');
 INSERT INTO `employee_position_assignments` VALUES (30, 30, 2, '2023-11-08');
+INSERT INTO `employee_position_assignments` VALUES (31, 31, 2, '2019-11-09');
+INSERT INTO `employee_position_assignments` VALUES (32, 4, 1, '2026-11-08');
+INSERT INTO `employee_position_assignments` VALUES (33, 29, 2, '2026-11-11');
+INSERT INTO `employee_position_assignments` VALUES (34, 29, 1, '2026-11-12');
+INSERT INTO `employee_position_assignments` VALUES (35, 32, 2, '2011-11-11');
+INSERT INTO `employee_position_assignments` VALUES (36, 33, 2, '2019-11-11');
 
 -- ----------------------------
 -- Table structure for employee_schedule_assignments
@@ -221,7 +231,7 @@ CREATE TABLE `employee_schedule_assignments`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `employee_id`(`employee_id` ASC, `valid_from` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 40 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employee_schedule_assignments
@@ -262,6 +272,9 @@ INSERT INTO `employee_schedule_assignments` VALUES (33, 28, 3, '2016-10-31');
 INSERT INTO `employee_schedule_assignments` VALUES (34, 22, 2, '2026-11-01');
 INSERT INTO `employee_schedule_assignments` VALUES (35, 29, 3, '2026-10-01');
 INSERT INTO `employee_schedule_assignments` VALUES (36, 30, 4, '2023-11-08');
+INSERT INTO `employee_schedule_assignments` VALUES (37, 31, 2, '2019-11-09');
+INSERT INTO `employee_schedule_assignments` VALUES (38, 32, 2, '2011-11-11');
+INSERT INTO `employee_schedule_assignments` VALUES (39, 33, 3, '2019-11-11');
 
 -- ----------------------------
 -- Table structure for employees
@@ -276,7 +289,7 @@ CREATE TABLE `employees`  (
   `system_role` enum('worker','master','chief') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'worker',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employees
@@ -311,6 +324,9 @@ INSERT INTO `employees` VALUES (27, 'Авижиц', 'Алексей', 'Юрье�
 INSERT INTO `employees` VALUES (28, 'Гуц', 'Сергей', 'Андреевич', 'Гуц С. А.', 'worker');
 INSERT INTO `employees` VALUES (29, 'Гридюшко', 'Дмитрий', 'Алексеевич', 'Гридюшко Д. А.', 'worker');
 INSERT INTO `employees` VALUES (30, 'Зеневич', 'Александр', 'Владимирович', 'Зеневич А. В.', 'worker');
+INSERT INTO `employees` VALUES (31, 'Козлов', 'Алексей', 'Леонидович', 'Козлов А. Л.', 'worker');
+INSERT INTO `employees` VALUES (32, 'Колбыко', 'Виталий', 'Михайлович', 'Колбыко В. М.', 'worker');
+INSERT INTO `employees` VALUES (33, 'Кремень', 'Андрей', 'Вячеславович', 'Кремень А. В.', 'worker');
 
 -- ----------------------------
 -- Table structure for employment_periods
@@ -323,7 +339,7 @@ CREATE TABLE `employment_periods`  (
   `fire_date` date NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of employment_periods
@@ -360,6 +376,10 @@ INSERT INTO `employment_periods` VALUES (29, 27, '2018-10-31', NULL);
 INSERT INTO `employment_periods` VALUES (30, 28, '2016-10-31', NULL);
 INSERT INTO `employment_periods` VALUES (31, 29, '2026-10-01', NULL);
 INSERT INTO `employment_periods` VALUES (32, 30, '2023-11-08', NULL);
+INSERT INTO `employment_periods` VALUES (33, 31, '2019-11-09', NULL);
+INSERT INTO `employment_periods` VALUES (34, 32, '2011-11-11', NULL);
+INSERT INTO `employment_periods` VALUES (35, 33, '2019-11-11', NULL);
+INSERT INTO `employment_periods` VALUES (36, 5, '2026-11-01', NULL);
 
 -- ----------------------------
 -- Table structure for equipment
@@ -378,7 +398,7 @@ CREATE TABLE `equipment`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   INDEX `code`(`code` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of equipment
@@ -412,6 +432,7 @@ INSERT INTO `equipment` VALUES (27, 4, 8, 'KBA RA 106-6+L CX ALV 2', '57', '2026
 INSERT INTO `equipment` VALUES (28, 6, 7, 'TCH-1', '18', '2026-10-31', NULL, 'strict_schedule', 2);
 INSERT INTO `equipment` VALUES (29, 7, 8, 'Резерв', '', '2006-10-01', NULL, 'manual_only', 1);
 INSERT INTO `equipment` VALUES (30, 8, 7, 'Листотранспортнная машина PMM-LUV800', '53', '2025-11-25', NULL, 'manual_only', 1);
+INSERT INTO `equipment` VALUES (31, 4, 7, 'Rolland R 705 3B', '3', '2014-11-11', '2026-11-11', 'strict_schedule', 5);
 
 -- ----------------------------
 -- Table structure for equipment_daily_plan
@@ -426,7 +447,7 @@ CREATE TABLE `equipment_daily_plan`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `equipment_id`(`equipment_id` ASC, `plan_date` ASC, `shift_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 202 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 206 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of equipment_daily_plan
@@ -504,6 +525,9 @@ INSERT INTO `equipment_daily_plan` VALUES (198, 3, '2026-11-07', 2, 1);
 INSERT INTO `equipment_daily_plan` VALUES (199, 3, '2026-11-10', 2, 1);
 INSERT INTO `equipment_daily_plan` VALUES (200, 3, '2026-11-11', 2, 1);
 INSERT INTO `equipment_daily_plan` VALUES (201, 3, '2026-11-12', 2, 1);
+INSERT INTO `equipment_daily_plan` VALUES (203, 3, '2026-11-13', 2, 1);
+INSERT INTO `equipment_daily_plan` VALUES (204, 3, '2026-11-14', 2, 1);
+INSERT INTO `equipment_daily_plan` VALUES (205, 3, '2026-11-15', 2, 1);
 
 -- ----------------------------
 -- Table structure for equipment_schedule_history
@@ -517,7 +541,7 @@ CREATE TABLE `equipment_schedule_history`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `equipment_id`(`equipment_id` ASC, `valid_from` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of equipment_schedule_history
@@ -555,6 +579,7 @@ INSERT INTO `equipment_schedule_history` VALUES (31, 27, 8, '2026-08-31');
 INSERT INTO `equipment_schedule_history` VALUES (32, 28, 7, '2026-10-31');
 INSERT INTO `equipment_schedule_history` VALUES (33, 29, 8, '2006-10-01');
 INSERT INTO `equipment_schedule_history` VALUES (34, 30, 7, '2025-11-25');
+INSERT INTO `equipment_schedule_history` VALUES (35, 31, 7, '2014-11-11');
 
 -- ----------------------------
 -- Table structure for equipment_staffing_history
@@ -568,7 +593,7 @@ CREATE TABLE `equipment_staffing_history`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id` ASC) USING BTREE,
   UNIQUE INDEX `equipment_id`(`equipment_id` ASC, `valid_from` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of equipment_staffing_history
@@ -605,6 +630,7 @@ INSERT INTO `equipment_staffing_history` VALUES (32, 27, 'strict_schedule', '202
 INSERT INTO `equipment_staffing_history` VALUES (33, 28, 'strict_schedule', '2026-10-31');
 INSERT INTO `equipment_staffing_history` VALUES (34, 29, 'manual_only', '2006-10-01');
 INSERT INTO `equipment_staffing_history` VALUES (35, 30, 'manual_only', '2025-11-25');
+INSERT INTO `equipment_staffing_history` VALUES (36, 31, 'strict_schedule', '2014-11-11');
 
 -- ----------------------------
 -- Table structure for positions
@@ -710,7 +736,7 @@ CREATE TABLE `schedule_overrides`  (
   UNIQUE INDEX `employee_id`(`employee_id` ASC, `override_date` ASC, `shift_id` ASC) USING BTREE,
   INDEX `fk_overrides_parent_shift`(`parent_plan_shift_id` ASC) USING BTREE,
   CONSTRAINT `fk_overrides_parent_shift` FOREIGN KEY (`parent_plan_shift_id`) REFERENCES `shift_definitions` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 287 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 292 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of schedule_overrides
@@ -865,6 +891,9 @@ INSERT INTO `schedule_overrides` VALUES (283, 2, '2026-11-03', 1, 3, 2, NULL, 0,
 INSERT INTO `schedule_overrides` VALUES (284, 22, '2026-11-10', 1, 3, 2, NULL, 0, 2);
 INSERT INTO `schedule_overrides` VALUES (285, 22, '2026-11-11', 1, 3, 2, NULL, 0, 2);
 INSERT INTO `schedule_overrides` VALUES (286, 29, '2026-11-02', 1, 3, 2, NULL, 0, 1);
+INSERT INTO `schedule_overrides` VALUES (289, 1, '2026-11-10', 2, 13, 2, NULL, 0, 2);
+INSERT INTO `schedule_overrides` VALUES (290, 2, '2026-11-11', 1, 2, 2, NULL, 0, 1);
+INSERT INTO `schedule_overrides` VALUES (291, 19, '2026-11-11', 2, 2, 2, NULL, 0, 2);
 
 -- ----------------------------
 -- Table structure for schedule_templates
@@ -1488,11 +1517,12 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `GetEquipmentStaffingReport`;
 delimiter ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetEquipmentStaffingReport`(IN p_start_date DATE,
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetEquipmentStaffingReport`(
+    IN p_start_date DATE,
     IN p_end_date DATE,
-    IN p_target_area_id INT)
+    IN p_target_area_id INT
+)
 BEGIN
-    -- Локальные переменные для обхода бага MySQL с рекурсией
     DECLARE v_start_date DATE;
     DECLARE v_end_date DATE;
     
@@ -1532,6 +1562,9 @@ BEGIN
                 + sc.cycle_length) % sc.cycle_length + 1)
         JOIN shift_definitions sd ON sci.shift_id = sd.id
         WHERE eq.work_area_id = p_target_area_id
+          -- Фильтрация по датам ввода и вывода станка из эксплуатации
+          AND (eq.commissioned_at IS NULL OR c.day_date >= eq.commissioned_at)
+          AND (eq.decommissioned_at IS NULL OR c.day_date <= eq.decommissioned_at)
     ),
     EmployeeLinks AS (
         SELECT c.day_date, e.id AS emp_id, e.full_name, eqa.equipment_id AS eq_id, 
@@ -1576,6 +1609,9 @@ BEGIN
         JOIN shift_definitions sd_m ON edp_m.shift_id = sd_m.id
         WHERE eq_m.work_area_id = p_target_area_id
           AND edp_m.plan_date BETWEEN v_start_date AND v_end_date
+          -- Защита от ручных планов на списанном оборудовании
+          AND (eq_m.commissioned_at IS NULL OR edp_m.plan_date >= eq_m.commissioned_at)
+          AND (eq_m.decommissioned_at IS NULL OR edp_m.plan_date <= eq_m.decommissioned_at)
           AND edp_m.is_cancelled = 0
           AND NOT EXISTS (
               SELECT 1 FROM EquipmentShifts es_chk 
@@ -1587,88 +1623,9 @@ BEGIN
         SELECT * FROM EquipmentShifts
         UNION ALL
         SELECT * FROM ManualEquipmentActivities
-    ),
-    
-    -- АВТОНОМНЫЙ ПРЕДРАСЧЕТ ВСЕХ СТАТУСОВ СОТРУДНИКОВ (НЕЛОМАЮЩИЙСЯ И ЧИСТЫЙ)
-    EmployeeShiftStatuses AS (
-        SELECT 
-            el_s.day_date,
-            el_s.emp_id,
-            el_s.shift_id,
-            el_s.eq_id,
-            CASE 
-                -- 1. Больничный / отпуск
-                WHEN EXISTS (SELECT 1 FROM absences a WHERE a.employee_id = el_s.emp_id AND el_s.day_date BETWEEN a.start_date AND COALESCE(a.end_date, '2099-12-31'))
-                    THEN COALESCE((SELECT CONCAT(' (❌ ', abt.name, ')') FROM absences abs_in JOIN absence_types abt ON abs_in.type_id = abt.id WHERE abs_in.employee_id = el_s.emp_id AND el_s.day_date BETWEEN abs_in.start_date AND COALESCE(abs_in.end_date, '2099-12-31') LIMIT 1), ' (❌ Отсутствует)')
-                
-                -- 2. Отмена смены мастером
-                WHEN EXISTS (SELECT 1 FROM schedule_overrides o_c WHERE o_c.employee_id = el_s.emp_id AND o_c.override_date = el_s.day_date AND o_c.shift_id = el_s.shift_id AND o_c.status = 2 AND o_c.is_cancellation = 1) 
-                    THEN ' (🚫 Отмена)'
-                
-                -- 3. Межсменный перевод (в другую смену и/или станок)
-                WHEN EXISTS (SELECT 1 FROM schedule_overrides o_cross WHERE o_cross.employee_id = el_s.emp_id AND o_cross.override_date = el_s.day_date AND o_cross.status = 2 AND o_cross.is_cancellation = 0 AND o_cross.parent_plan_shift_id = el_s.shift_id)
-                    THEN COALESCE((
-                        SELECT 
-                            CASE 
-                                WHEN o_cr.equipment_id != el_s.eq_id THEN CONCAT(' (➡️ ', eq_dest.name, ' в ', sd_dest.name, ')')
-                                ELSE CONCAT(' (➡️ ', sd_dest.name, ')')
-                            END
-                        FROM schedule_overrides o_cr
-                        JOIN equipment eq_dest ON o_cr.equipment_id = eq_dest.id
-                        JOIN shift_definitions sd_dest ON o_cr.shift_id = sd_dest.id
-                        WHERE o_cr.employee_id = el_s.emp_id AND o_cr.override_date = el_s.day_date AND o_cr.status = 2 AND o_cr.is_cancellation = 0 AND o_cr.parent_plan_shift_id = el_s.shift_id
-                        LIMIT 1
-                    ), ' (➡️ Переведен)')
-                
-                -- 4. Внутрисменный перевод (смена та же, изменился станок)
-                WHEN EXISTS (SELECT 1 FROM schedule_overrides o_m WHERE o_m.employee_id = el_s.emp_id AND o_m.override_date = el_s.day_date AND o_m.shift_id = el_s.shift_id AND o_m.status = 2 AND o_m.equipment_id != el_s.eq_id AND o_m.is_cancellation = 0) 
-                    THEN CONCAT(' (➡️ ', COALESCE((SELECT name FROM equipment WHERE id = (SELECT equipment_id FROM schedule_overrides WHERE employee_id = el_s.emp_id AND override_date = el_s.day_date AND shift_id = el_s.shift_id AND status = 2 AND is_cancellation = 0 LIMIT 1)), 'другой станок'), ')')
-                
-                ELSE ' (✅)'
-            END AS status_text
-        FROM EmployeeLinks el_s
-        WHERE el_s.l_type = 'PLAN'
-    ),
-    
-    PreCalculatedReport AS (
-        SELECT 
-            qs.day_date, qs.eq_id, qs.eq_name, qs.eq_code, qs.eq_sort,
-            qs.shift_id, qs.shift_name, qs.shift_number, qs.shift_start_time, qs.shift_end_time,
-            qs.is_cancelled, qs.active_mode, qs.has_plan_entry,
-            
-            -- СБОРКА СТРОКИ ПЛАНА С ГОТОВЫМИ СТАТУСАМИ ИЗ НАШЕГО CTE
-            GROUP_CONCAT(DISTINCT 
-                CASE WHEN esl.l_type = 'PLAN' AND esl.eq_id = qs.eq_id AND esl.shift_id = qs.shift_id THEN
-                    CONCAT(esl.full_name, COALESCE(ess.status_text, ' (✅)'))
-                END 
-            SEPARATOR ' | ') AS `PlanAndStatuses`,
-            
-            GROUP_CONCAT(DISTINCT CASE WHEN esl.l_type = 'OVR' && esl.l_status = 2 && esl.eq_id = qs.eq_id && esl.shift_id = qs.shift_id && esl.is_cancellation = 0 THEN CONCAT('✅ ', esl.full_name) END SEPARATOR ', ') AS `Assignments`,
-            GROUP_CONCAT(DISTINCT CASE WHEN esl.l_type = 'OVR' && esl.l_status < 2 && esl.eq_id = qs.eq_id && esl.shift_id = qs.shift_id && esl.is_cancellation = 0 THEN CONCAT('📝 ', esl.full_name) END SEPARATOR ', ') AS `Drafts`,
-            
-            GROUP_CONCAT(DISTINCT 
-                CASE 
-                    WHEN esl.l_type = 'OVR' AND esl.l_status = 2 AND esl.eq_id = qs.eq_id AND esl.shift_id = qs.shift_id AND esl.is_cancellation = 0 
-                    THEN esl.full_name
-                    
-                    WHEN esl.l_type = 'PLAN' AND esl.eq_id = qs.eq_id AND esl.shift_id = qs.shift_id 
-AND NOT EXISTS (SELECT 1 FROM absences a WHERE a.employee_id = esl.emp_id AND qs.day_date BETWEEN a.start_date AND COALESCE(a.end_date, '2099-12-31'))
-AND NOT EXISTS (SELECT 1 FROM schedule_overrides o4 WHERE o4.employee_id = esl.emp_id AND o4.override_date = qs.day_date AND o4.shift_id = qs.shift_id AND o4.status = 2 AND o4.is_cancellation = 1)
-AND NOT EXISTS (SELECT 1 FROM schedule_overrides o5 WHERE o5.employee_id = esl.emp_id AND o5.override_date = qs.day_date AND o5.shift_id = qs.shift_id AND o5.status = 2 AND o5.equipment_id != qs.eq_id AND o5.is_cancellation = 0)
-AND NOT EXISTS (SELECT 1 FROM schedule_overrides o6 WHERE o6.employee_id = esl.emp_id AND o6.override_date = qs.day_date AND o6.status = 2 AND o6.parent_plan_shift_id = qs.shift_id)
-THEN esl.full_name
-ELSE NULL
-END
-SEPARATOR ', ') AS ApprovedFact
-FROM CombinedGrid qs
-LEFT JOIN EmployeeLinks esl ON qs.day_date = esl.day_date AND qs.shift_id = esl.shift_id
-LEFT JOIN EmployeeShiftStatuses ess ON esl.day_date = ess.day_date AND esl.emp_id = ess.emp_id AND esl.shift_id = ess.shift_id AND esl.eq_id = ess.eq_id
-GROUP BY qs.day_date, qs.eq_id, qs.eq_name, qs.eq_code, qs.shift_id, qs.shift_name,
-qs.shift_number, qs.shift_start_time, qs.shift_end_time, qs.is_cancelled,
-qs.active_mode, qs.has_plan_entry, qs.eq_sort
-)
--- ЖЕСТКОЕ СВЯЗЫВАНИЕ ЦВЕТА К ОДОБРЕННОМУ ФАКТУ
-        SELECT 
+    )
+
+    SELECT 
         qs.day_date AS Date, 
         qs.eq_id AS EquipId, 
         qs.eq_name AS EquipName, 
@@ -1691,7 +1648,6 @@ qs.active_mode, qs.has_plan_entry, qs.eq_sort
                     (el.l_type = 'PLAN' AND el.eq_id = qs.eq_id
                      AND NOT EXISTS (SELECT 1 FROM absences a WHERE a.employee_id = el.emp_id AND qs.day_date BETWEEN a.start_date AND COALESCE(a.end_date, '2099-12-31'))
                      AND NOT EXISTS (SELECT 1 FROM schedule_overrides o4 WHERE o4.employee_id = el.emp_id AND o4.override_date = qs.day_date AND o4.shift_id = qs.shift_id AND o4.status = 2 AND o4.is_cancellation = 1)
-                     -- ИСПРАВЛЕНО И СИНХРОНИЗИРОВАННО С КОДОМ НИЖЕ (Анализ межсменных и внутрисменных уводов)
                      AND NOT EXISTS (SELECT 1 FROM schedule_overrides o5 WHERE o5.employee_id = el.emp_id AND o5.override_date = qs.day_date AND o5.status = 2 AND o5.is_cancellation = 0 AND ((o5.shift_id = qs.shift_id AND o5.equipment_id != qs.eq_id) OR o5.parent_plan_shift_id = qs.shift_id))
                     )
                   )
@@ -1712,7 +1668,6 @@ qs.active_mode, qs.has_plan_entry, qs.eq_sort
                     (el.l_type = 'PLAN' AND el.eq_id = qs.eq_id
                      AND NOT EXISTS (SELECT 1 FROM absences a WHERE a.employee_id = el.emp_id AND qs.day_date BETWEEN a.start_date AND COALESCE(a.end_date, '2099-12-31'))
                      AND NOT EXISTS (SELECT 1 FROM schedule_overrides o4 WHERE o4.employee_id = el.emp_id AND o4.override_date = qs.day_date AND o4.shift_id = qs.shift_id AND o4.status = 2 AND o4.is_cancellation = 1)
-                     -- ИСПРАВЛЕНО И СИНХРОНИЗИРОВАННО С КОДОМ НИЖЕ
                      AND NOT EXISTS (SELECT 1 FROM schedule_overrides o5 WHERE o5.employee_id = el.emp_id AND o5.override_date = qs.day_date AND o5.status = 2 AND o5.is_cancellation = 0 AND ((o5.shift_id = qs.shift_id AND o5.equipment_id != qs.eq_id) OR o5.parent_plan_shift_id = qs.shift_id))
                     )
                   )
@@ -1728,65 +1683,57 @@ qs.active_mode, qs.has_plan_entry, qs.eq_sort
                         WHEN EXISTS (SELECT 1 FROM absences a WHERE a.employee_id = esl.emp_id AND qs.day_date BETWEEN a.start_date AND COALESCE(a.end_date, '2099-12-31')) 
                             THEN (SELECT CONCAT(' (Х ', abt.name, ')') FROM absences abs_in JOIN absence_types abt ON abs_in.type_id = abt.id WHERE abs_in.employee_id = esl.emp_id AND qs.day_date BETWEEN abs_in.start_date AND COALESCE(abs_in.end_date, '2099-12-31') LIMIT 1)
                         
-                        WHEN EXISTS (SELECT 1 FROM schedule_overrides o_mov WHERE o_mov.employee_id = esl.emp_id AND o_mov.override_date = qs.day_date AND o_mov.status = 2 AND o_mov.is_cancellation = 0 AND ((o_mov.shift_id = qs.shift_id AND o_mov.equipment_id != qs.eq_id) OR o_mov.parent_plan_shift_id = qs.shift_id))
-                            THEN (
-                                SELECT 
-                                    CASE 
-                                        WHEN o_s.equipment_id != qs.eq_id AND o_s.parent_plan_shift_id = qs.shift_id AND o_s.shift_id != qs.shift_id
-                                            THEN CONCAT(' (➡️ ', (SELECT name FROM equipment WHERE id = o_s.equipment_id), ' в ', (SELECT name FROM shift_definitions WHERE id = o_s.shift_id), ')')
-                                        WHEN o_s.equipment_id = qs.eq_id AND o_s.parent_plan_shift_id = qs.shift_id AND o_s.shift_id != qs.shift_id
-                                            THEN CONCAT(' (➡️ ', (SELECT name FROM shift_definitions WHERE id = o_s.shift_id), ')')
-                                        WHEN o_s.equipment_id != qs.eq_id AND o_s.shift_id = qs.shift_id
-                                            THEN CONCAT(' (➡️ ', (SELECT name FROM equipment WHERE id = o_s.equipment_id), ')')
-                                        ELSE ' (➡️ Переведен)'
-                                    END
-                                FROM schedule_overrides o_s
-                                WHERE o_s.employee_id = esl.emp_id AND o_s.override_date = qs.day_date AND o_s.status = 2 AND o_s.is_cancellation = 0 AND ((o_s.shift_id = qs.shift_id AND o_s.equipment_id != qs.eq_id) OR o_s.parent_plan_shift_id = qs.shift_id)
-                                LIMIT 1
-                            )
-                        
-                        WHEN EXISTS (SELECT 1 FROM schedule_overrides o_c WHERE o_c.employee_id = esl.emp_id AND o_c.override_date = qs.day_date AND o_c.shift_id = qs.shift_id AND o_c.status = 2 AND o_c.is_cancellation = 1)
-                            THEN ' (Отменен)' 
-                        
-                        WHEN qs.is_cancelled = 1 THEN ' (Без рабочего места)' 
-                            
-                        ELSE '' 
-                    END
-                ) 
-            END 
-        SEPARATOR ' | ') AS PlanAndStatuses,
-        
-        GROUP_CONCAT(DISTINCT 
-            CASE WHEN esl.l_type = 'OVR' AND esl.l_status = 2 AND esl.eq_id = qs.eq_id AND esl.shift_id = qs.shift_id AND esl.is_cancellation = 0 
-                THEN CONCAT('✅ ', esl.full_name, 
-                    CASE 
-                        WHEN qs.is_cancelled = 1 THEN ' (Без рабочего места)' 
-                        ELSE '' 
-                    END
-                ) 
-            END 
-        SEPARATOR ', ') AS Assignments,
-        
-        GROUP_CONCAT(DISTINCT CASE WHEN esl.l_type = 'OVR' && esl.l_status < 2 && esl.eq_id = qs.eq_id && esl.shift_id = qs.shift_id && esl.is_cancellation = 0 THEN CONCAT('📝 ', esl.full_name) END SEPARATOR ', ') AS Drafts,
-        
-        -- СЕКЦИЯ APPROVEDFACT ТЕПЕРЬ ПОЛНОСТЬЮ СИНХРОННА С ВЕРХНИМИ КАСКАДАМИ CASE
-        GROUP_CONCAT(DISTINCT 
-            CASE 
-                WHEN esl.l_type = 'OVR' AND esl.l_status = 2 AND esl.eq_id = qs.eq_id AND esl.shift_id = qs.shift_id AND esl.is_cancellation = 0 THEN esl.full_name
-                WHEN esl.l_type = 'PLAN' AND esl.eq_id = qs.eq_id AND esl.shift_id = qs.shift_id 
-                     AND NOT EXISTS (SELECT 1 FROM absences a WHERE a.employee_id = esl.emp_id AND qs.day_date BETWEEN a.start_date AND COALESCE(a.end_date, '2099-12-31')) 
-                     AND NOT EXISTS (SELECT 1 FROM schedule_overrides o4 WHERE o4.employee_id = esl.emp_id AND o4.override_date = qs.day_date AND o4.shift_id = qs.shift_id AND o4.status = 2 AND o4.is_cancellation = 1)
-                     -- ИСПРАВЛЕНО: Теперь и факт учитывает кросс-сменные переводы!
-                     AND NOT EXISTS (SELECT 1 FROM schedule_overrides o5 WHERE o5.employee_id = esl.emp_id AND o5.override_date = qs.day_date AND o5.status = 2 AND o5.is_cancellation = 0 AND ((o5.shift_id = qs.shift_id AND o5.equipment_id != qs.eq_id) OR o5.parent_plan_shift_id = qs.shift_id))
-                THEN esl.full_name ELSE NULL
-            END
-        SEPARATOR ', ') AS ApprovedFact
-    FROM CombinedGrid qs
-    LEFT JOIN EmployeeLinks esl ON qs.day_date = esl.day_date AND qs.shift_id = esl.shift_id
-    GROUP BY qs.day_date, qs.eq_id, qs.eq_name, qs.eq_code, qs.shift_id, qs.shift_name, 
-             qs.shift_number, qs.shift_start_time, qs.shift_end_time, qs.is_cancelled, 
-             qs.active_mode, qs.has_plan_entry, qs.eq_sort
-    ORDER BY qs.day_date, qs.eq_sort, qs.eq_id, qs.shift_number;
+WHEN EXISTS (SELECT 1 FROM schedule_overrides o_mov WHERE o_mov.employee_id = esl.emp_id AND o_mov.override_date = qs.day_date AND o_mov.status = 2 AND o_mov.is_cancellation = 0 AND ((o_mov.shift_id = qs.shift_id AND o_mov.equipment_id != qs.eq_id) OR o_mov.parent_plan_shift_id = qs.shift_id))
+THEN (
+SELECT
+CASE
+WHEN o_s.equipment_id != qs.eq_id AND o_s.parent_plan_shift_id = qs.shift_id AND o_s.shift_id != qs.shift_id
+THEN CONCAT(' (➡️ ', (SELECT name FROM equipment WHERE id = o_s.equipment_id), ' в ', (SELECT name FROM shift_definitions WHERE id = o_s.shift_id), ')')
+WHEN o_s.equipment_id = qs.eq_id AND o_s.parent_plan_shift_id = qs.shift_id AND o_s.shift_id != qs.shift_id
+THEN CONCAT(' (➡️ ', (SELECT name FROM shift_definitions WHERE id = o_s.shift_id), ')')
+WHEN o_s.equipment_id != qs.eq_id AND o_s.shift_id = qs.shift_id
+THEN CONCAT(' (➡️ ', (SELECT name FROM equipment WHERE id = o_s.equipment_id), ')')
+ELSE ' (➡️ Переведен)'
+END
+FROM schedule_overrides o_s
+WHERE o_s.employee_id = esl.emp_id AND o_s.override_date = qs.day_date AND o_s.status = 2 AND o_s.is_cancellation = 0 AND ((o_s.shift_id = qs.shift_id AND o_s.equipment_id != qs.eq_id) OR o_s.parent_plan_shift_id = qs.shift_id)
+LIMIT 1
+)
+WHEN EXISTS (SELECT 1 FROM schedule_overrides o_c WHERE o_c.employee_id = esl.emp_id AND o_c.override_date = qs.day_date AND o_c.shift_id = qs.shift_id AND o_c.status = 2 AND o_c.is_cancellation = 1)
+THEN ' (Отменен)'
+WHEN qs.is_cancelled = 1 THEN ' (Без рабочего места)'
+ELSE ''
+END
+)
+END
+SEPARATOR ' | ') AS PlanAndStatuses,
+GROUP_CONCAT(DISTINCT
+CASE WHEN esl.l_type = 'OVR' AND esl.l_status = 2 AND esl.eq_id = qs.eq_id AND esl.shift_id = qs.shift_id AND esl.is_cancellation = 0
+THEN CONCAT('✅ ', esl.full_name,
+CASE
+WHEN qs.is_cancelled = 1 THEN ' (Без рабочего места)'
+ELSE ''
+END
+)
+END
+SEPARATOR ', ') AS Assignments,
+GROUP_CONCAT(DISTINCT CASE WHEN esl.l_type = 'OVR' AND esl.l_status < 2 AND esl.eq_id = qs.eq_id AND esl.shift_id = qs.shift_id AND esl.is_cancellation = 0 THEN CONCAT('📝 ', esl.full_name) END SEPARATOR ', ') AS Drafts,
+GROUP_CONCAT(DISTINCT
+CASE
+WHEN esl.l_type = 'OVR' AND esl.l_status = 2 AND esl.eq_id = qs.eq_id AND esl.shift_id = qs.shift_id AND esl.is_cancellation = 0 THEN esl.full_name
+WHEN esl.l_type = 'PLAN' AND esl.eq_id = qs.eq_id AND esl.shift_id = qs.shift_id
+AND NOT EXISTS (SELECT 1 FROM absences a WHERE a.employee_id = esl.emp_id AND qs.day_date BETWEEN a.start_date AND COALESCE(a.end_date, '2099-12-31'))
+AND NOT EXISTS (SELECT 1 FROM schedule_overrides o4 WHERE o4.employee_id = esl.emp_id AND o4.override_date = qs.day_date AND o4.shift_id = qs.shift_id AND o4.status = 2 AND o4.is_cancellation = 1)
+AND NOT EXISTS (SELECT 1 FROM schedule_overrides o5 WHERE o5.employee_id = esl.emp_id AND o5.override_date = qs.day_date AND o5.status = 2 AND o5.is_cancellation = 0 AND ((o5.shift_id = qs.shift_id AND o5.equipment_id != qs.eq_id) OR o5.parent_plan_shift_id = qs.shift_id))
+THEN esl.full_name ELSE NULL
+END
+SEPARATOR ', ') AS ApprovedFact
+FROM CombinedGrid qs
+LEFT JOIN EmployeeLinks esl ON qs.day_date = esl.day_date AND qs.shift_id = esl.shift_id
+GROUP BY qs.day_date, qs.eq_id, qs.eq_name, qs.eq_code, qs.shift_id, qs.shift_name,
+qs.shift_number, qs.shift_start_time, qs.shift_end_time, qs.is_cancelled,
+qs.active_mode, qs.has_plan_entry, qs.eq_sort
+ORDER BY qs.day_date, qs.eq_sort, qs.eq_id, qs.shift_number;
 END
 ;;
 delimiter ;
