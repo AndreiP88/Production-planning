@@ -10,6 +10,7 @@ namespace Production_planning
 {
     public partial class FormAddUser : MaterialForm
     {
+        public ulong SavedUserId { get; private set; }
         private ulong _userID;
 
         private EmployeeFullCard _employee;
@@ -339,7 +340,7 @@ namespace Production_planning
                 {
                     //_equipment.WorkAreaId = _areaID;
 
-                    await employeeService.CreateEmployeeWithAssignmentsAsync(_employee);
+                    SavedUserId = await employeeService.CreateEmployeeWithAssignmentsAsync(_employee);
                 }
                 else
                 {

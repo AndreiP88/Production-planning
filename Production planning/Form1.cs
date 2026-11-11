@@ -2733,6 +2733,112 @@ namespace Production_planning
                 buttonUserAbsenceAdd.Enabled = false;
             }
         }
+
+        private async Task EditUser()
+        {
+            if (listBoxUsers.SelectedIndex == -1 || comboBoxUserPosition.SelectedIndex == -1) return;
+            int index = _employeeShortsIndexes[listBoxUsers.SelectedIndex];
+            ulong userId = employeeShorts[index].Id;
+
+            await OpenUserCardAsync(userId);
+        }
+
+        private async Task OpenUserCardAsync(ulong userId = 0)
+        {
+            try
+            {
+                bool isNewUser = (userId == 0);
+                ulong currentSelectedPositionId = 0;
+
+                // Если это редактирование, запоминаем текущую открытую должность
+                if (!isNewUser)
+                {
+                    if (listBoxUsers.SelectedIndex == -1 || comboBoxUserPosition.SelectedIndex == -1) return;
+                    currentSelectedPositionId = _positions[comboBoxUserPosition.SelectedIndex].Id;
+                }
+
+                // Открываем универсальную форму (передаем 0 для нового или ID для редактирования)
+                FormAddUser form = new FormAddUser(userId);
+                DialogResult result = form.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    // Получаем актуальный ID (для нового сотрудника берем из свойства формы, для старого оставляем прежний)
+                    ulong targetUserId = isNewUser ? form.SavedUserId : userId;
+
+                    // 1. Обновляем общий список сотрудников и должностей из базы данных
+                    await UpdateUsersShortInfo();
+                    await LoadPositions();
+
+                    if (isNewUser)
+                    {
+                        // СЦЕНАРИЙ А: ДОБАВЛЕН НОВЫЙ СОТРУДНИК
+                        // Ищем созданного сотрудника в обновленном кэше, чтобы узнать его должность
+                        var createdUser = employeeShorts.Find(u => u.Id == targetUserId);
+
+                        if (createdUser != null)
+                        {
+                            // Переключаем комбобокс на должность нового сотрудника
+                            int newPosIndex = _positions.FindIndex(p => p.Id == createdUser.CurrentPositionID);
+                            if (newPosIndex != -1)
+                            {
+                                comboBoxUserPosition.SelectedIndex = newPosIndex;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // СЦЕНАРИЙ Б: РЕДАКТИРОВАНИЕ СУЩЕСТВУЮЩЕГО СОТРУДНИКА
+                        // Остаемся в той должности, которая была открыта до редактирования
+                        int targetPosIndex = _positions.FindIndex(p => p.Id == currentSelectedPositionId);
+                        if (targetPosIndex != -1)
+                        {
+                            comboBoxUserPosition.SelectedIndex = targetPosIndex;
+                        }
+                        else if (comboBoxUserPosition.Items.Count > 0)
+                        {
+                            comboBoxUserPosition.SelectedIndex = 0;
+                        }
+                    }
+
+                    // 2. Перегружаем список сотрудников для активной в комбобоксе должности
+                    await LoadUserListToListBox();
+
+                    // 3. Ищем сотрудника в списке ListBox по targetUserId
+                    int targetUserListBoxIndex = -1;
+                    for (int i = 0; i < _employeeShortsIndexes.Count; i++)
+                    {
+                        int cacheIndex = _employeeShortsIndexes[i];
+                        if (employeeShorts[cacheIndex].Id == targetUserId)
+                        {
+                            targetUserListBoxIndex = i;
+                            break;
+                        }
+                    }
+
+                    // 4. Выделяем сотрудника и обновляем правую панель с краткой информацией
+                    if (targetUserListBoxIndex != -1)
+                    {
+                        listBoxUsers.SelectedIndex = targetUserListBoxIndex;
+                        listBoxUsers_SelectedIndexChanged(listBoxUsers, listBoxUsers.SelectedItem);
+                    }
+                    else
+                    {
+                        // Если при редактировании сотрудника перевели на другую должность, остаемся в текущей и сбрасываем выбор
+                        listBoxUsers.SelectedIndex = -1;
+                        ClearUserShortInfo();
+                    }
+
+                    listBoxUsers.Refresh();
+                    comboBoxUserPosition.Refresh();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при работе с карточкой сотрудника:\n{ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private async Task ViewFullUserCard()
         {
             try
@@ -2862,32 +2968,13 @@ namespace Production_planning
 
         private async void materialButtonUserViewFullCard_Click(object sender, EventArgs e)
         {
-            await ViewFullUserCard();
+            //await ViewFullUserCard();
+            await EditUser();
         }
 
         private async void materialButtonUserAdd_Click(object sender, EventArgs e)
         {
-            try
-            {
-                FormAddUser form = new FormAddUser();
-                DialogResult = form.ShowDialog();
-
-                if (DialogResult == DialogResult.OK)
-                {
-                    Thread.Sleep(200);
-
-                    int indexPosition = comboBoxUserPosition.SelectedIndex;
-
-                    await UpdateUsersShortInfo();
-                    await LoadUserListToListBox();
-
-                    comboBoxUserPosition.SelectedIndex = indexPosition;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка получения полной информации сотрудника:\n {ex}");
-            }
+            await OpenUserCardAsync();
         }
 
         private async void comboBoxUserPosition_SelectedIndexChanged(object sender, EventArgs e)
@@ -2897,7 +2984,8 @@ namespace Production_planning
 
         private async void listBoxUsers_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            await ViewFullUserCard();
+            //await ViewFullUserCard();
+            await EditUser();
         }
 
         ///Блок отображения, заполнения и редактирования отсутствий
