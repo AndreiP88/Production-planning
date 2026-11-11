@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace Production_planning
 {
@@ -2732,6 +2733,76 @@ namespace Production_planning
                 buttonUserAbsenceAdd.Enabled = false;
             }
         }
+        private async Task ViewFullUserCard()
+        {
+            try
+            {
+                if (listBoxUsers.SelectedIndex == -1 || comboBoxUserPosition.SelectedIndex == -1) return;
+
+                // 1. Запоминаем ID текущей должности и ID выбранного сотрудника
+                ulong currentSelectedPositionId = _positions[comboBoxUserPosition.SelectedIndex].Id;
+                int selectedUserIndex = listBoxUsers.SelectedIndex;
+                int index = _employeeShortsIndexes[selectedUserIndex];
+                ulong userId = employeeShorts[index].Id;
+
+                FormAddUser form = new FormAddUser(userId);
+                DialogResult result = form.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    // 2. Перезагружаем данные из базы
+                    await UpdateUsersShortInfo();
+                    await LoadPositions();
+
+                    // 3. Ищем индекс сохраненной должности в обновленном списке _positions
+                    int targetPosIndex = _positions.FindIndex(p => p.Id == currentSelectedPositionId);
+
+                    if (targetPosIndex != -1)
+                    {
+                        comboBoxUserPosition.SelectedIndex = targetPosIndex;
+                    }
+                    else if (comboBoxUserPosition.Items.Count > 0)
+                    {
+                        comboBoxUserPosition.SelectedIndex = 0;
+                    }
+
+                    // 4. Загружаем список сотрудников для выбранной должности
+                    await LoadUserListToListBox();
+
+                    // 5. Ищем отредактированного сотрудника в новом списке по его ID
+                    int targetUserListBoxIndex = -1;
+                    for (int i = 0; i < _employeeShortsIndexes.Count; i++)
+                    {
+                        int cacheIndex = _employeeShortsIndexes[i];
+                        if (employeeShorts[cacheIndex].Id == userId)
+                        {
+                            targetUserListBoxIndex = i;
+                            break;
+                        }
+                    }
+
+                    // 6. Восстанавливаем выделение (или сбрасываем, если должность изменилась)
+                    if (targetUserListBoxIndex != -1)
+                    {
+                        listBoxUsers.SelectedIndex = targetUserListBoxIndex;
+
+                        // Вызываем обновление правых полей (замените на имя вашего обработчика клика по списку)
+                        listBoxUsers_SelectedIndexChanged(listBoxUsers, listBoxUsers.SelectedItem);
+                    }
+                    else
+                    {
+                        listBoxUsers.SelectedIndex = -1;
+                        ClearUserShortInfo();
+                    }
+
+                    listBoxUsers.Refresh();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка получения полной информации сотрудника:\n {ex}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void ClearUserShortInfo()
         {
@@ -2791,35 +2862,7 @@ namespace Production_planning
 
         private async void materialButtonUserViewFullCard_Click(object sender, EventArgs e)
         {
-            try
-            {
-                int selecredIndex = listBoxUsers.SelectedIndex;
-
-                int index = _employeeShortsIndexes[selecredIndex];
-                ulong userId = employeeShorts[index].Id;
-
-                MaterialListBoxItem item = listBoxUsers.SelectedItem;
-
-                FormAddUser form = new FormAddUser(employeeShorts[index].Id);
-                DialogResult = form.ShowDialog();
-                
-                if (DialogResult == DialogResult.OK)
-                {
-                    await UpdateUsersShortInfo();
-                    await LoadPositions();
-                    await LoadUserListToListBox();
-                    
-                    /*listBoxUsers.SelectedIndex = -1;
-                    listBoxUsers.Update();
-                    listBoxUsers.Refresh();*/
-                    listBoxUsers.SelectedIndex = selecredIndex;
-                    listBoxUsers_SelectedIndexChanged(sender, item);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка получения полной информации сотрудника:\n {ex}");
-            }
+            await ViewFullUserCard();
         }
 
         private async void materialButtonUserAdd_Click(object sender, EventArgs e)
@@ -2854,28 +2897,7 @@ namespace Production_planning
 
         private async void listBoxUsers_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            try
-            {
-                int selecredIndex = listBoxUsers.SelectedIndex;
-                int index = _employeeShortsIndexes[selecredIndex];
-
-                FormAddUser form = new FormAddUser(employeeShorts[index].Id);
-                DialogResult = form.ShowDialog();
-
-                if (DialogResult == DialogResult.OK)
-                {
-                    await LoadUserListToListBox();
-
-                    listBoxUsers.SelectedIndex = -1;
-                    listBoxUsers.Update();
-                    listBoxUsers.Refresh();
-                    listBoxUsers.SelectedIndex = selecredIndex;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка получения полной информации сотрудника:\n {ex}");
-            }
+            await ViewFullUserCard();
         }
 
         ///Блок отображения, заполнения и редактирования отсутствий
