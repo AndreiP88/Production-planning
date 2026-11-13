@@ -1854,20 +1854,6 @@ namespace Production_planning
             {
                 await LoadAreaListToListBox();
             }
-
-            if (index == 5)
-            {
-                await UpdateShiftsDefinitionAsync();
-                await UpdateScheduleCycle();
-                await UpdateScheduleTemplate();
-            }
-
-            if (index == 6)
-            {
-                await LoadAbsenceTypesGridAsync();
-                dataGridViewAbsences_SelectionChanged(null, null);
-            }
-            
         }
 
         
@@ -3449,6 +3435,24 @@ namespace Production_planning
             }
         }
 
+        private async void materialTabControl2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int index = materialTabControl2.SelectedIndex;
+
+            if (index == 0)
+            {
+                await UpdateShiftsDefinitionAsync();
+                await UpdateScheduleCycle();
+                await UpdateScheduleTemplate();
+            }
+
+            if (index == 1)
+            {
+                await LoadAbsenceTypesGridAsync();
+                dataGridViewAbsences_SelectionChanged(null, null);
+            }
+        }
+
         // =========================================================================
         // МОДУЛЬ УПРАВЛЕНИЯ ТИПАМИ ОТСУТСТВИЙ (ABSENCES)
         // =========================================================================
@@ -3867,5 +3871,6 @@ namespace Production_planning
             }
         }
 
+        
     }
 }

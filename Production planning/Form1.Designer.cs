@@ -45,17 +45,17 @@ namespace Production_planning
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle122 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle123 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle124 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle125 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle126 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle127 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle128 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle129 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle130 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle131 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle132 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -129,6 +129,9 @@ namespace Production_planning
             this.columnHeader16 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel22 = new System.Windows.Forms.TableLayoutPanel();
+            this.materialTabControl2 = new MaterialSkin.Controls.MaterialTabControl();
+            this.tabPageShiftSchedule = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
@@ -162,7 +165,7 @@ namespace Production_planning
             this.columnHeader32 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader33 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader34 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.tabPageAbsenceType = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel17 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel21 = new System.Windows.Forms.TableLayoutPanel();
@@ -172,7 +175,9 @@ namespace Production_planning
             this.materialButtonAbsencesTypeDelete = new MaterialSkin.Controls.MaterialButton();
             this.materialSwitchAbsencesTypeShowAll = new MaterialSkin.Controls.MaterialSwitch();
             this.dataGridViewAbsences = new Production_planning.Form1.DoubleBufferedDataGridView();
-            this.label1 = new System.Windows.Forms.Label();
+            this.tabPagePositions = new System.Windows.Forms.TabPage();
+            this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.materialCheckbox1 = new MaterialSkin.Controls.MaterialCheckbox();
             this.materialCheckbox2 = new MaterialSkin.Controls.MaterialCheckbox();
@@ -206,6 +211,9 @@ namespace Production_planning
             this.tableLayoutPanel15.SuspendLayout();
             this.tableLayoutPanel16.SuspendLayout();
             this.tabPage6.SuspendLayout();
+            this.tableLayoutPanel22.SuspendLayout();
+            this.materialTabControl2.SuspendLayout();
+            this.tabPageShiftSchedule.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
             this.tableLayoutPanel10.SuspendLayout();
@@ -213,7 +221,7 @@ namespace Production_planning
             this.tableLayoutPanel12.SuspendLayout();
             this.tableLayoutPanel13.SuspendLayout();
             this.tableLayoutPanel14.SuspendLayout();
-            this.tabPage7.SuspendLayout();
+            this.tabPageAbsenceType.SuspendLayout();
             this.tableLayoutPanel17.SuspendLayout();
             this.tableLayoutPanel18.SuspendLayout();
             this.tableLayoutPanel21.SuspendLayout();
@@ -274,30 +282,30 @@ namespace Production_planning
             // 
             this.dataGridPlanning.AllowUserToAddRows = false;
             this.dataGridPlanning.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dataGridPlanning.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle122.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dataGridPlanning.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle122;
             this.dataGridPlanning.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             this.dataGridPlanning.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridPlanning.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridPlanning.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle123.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle123.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle123.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle123.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle123.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle123.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle123.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridPlanning.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle123;
             this.dataGridPlanning.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridPlanning.ColumnHeadersVisible = false;
             this.dataGridPlanning.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridPlanning.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle124.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle124.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle124.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle124.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle124.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle124.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle124.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridPlanning.DefaultCellStyle = dataGridViewCellStyle124;
             this.dataGridPlanning.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridPlanning.Location = new System.Drawing.Point(3, 63);
             this.dataGridPlanning.MultiSelect = false;
@@ -563,14 +571,14 @@ namespace Production_planning
             this.dataGridViewPlan.AllowUserToDeleteRows = false;
             this.dataGridViewPlan.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewPlan.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewPlan.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle125.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle125.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle125.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle125.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle125.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle125.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle125.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewPlan.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle125;
             this.dataGridViewPlan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPlan.Cursor = System.Windows.Forms.Cursors.Hand;
             this.dataGridViewPlan.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -779,42 +787,42 @@ namespace Production_planning
             this.gridViewAbsence.AllowUserToDeleteRows = false;
             this.gridViewAbsence.AllowUserToResizeColumns = false;
             this.gridViewAbsence.AllowUserToResizeRows = false;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.gridViewAbsence.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle126.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.gridViewAbsence.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle126;
             this.gridViewAbsence.BackgroundColor = System.Drawing.SystemColors.Control;
             this.gridViewAbsence.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridViewAbsence.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle127.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle127.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle127.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle127.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle127.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle127.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle127.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridViewAbsence.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle127;
             this.gridViewAbsence.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridViewAbsence.ColumnHeadersVisible = false;
             this.gridViewAbsence.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridViewAbsence.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle128.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle128.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle128.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle128.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle128.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle128.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle128.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridViewAbsence.DefaultCellStyle = dataGridViewCellStyle128;
             this.gridViewAbsence.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridViewAbsence.Location = new System.Drawing.Point(3, 8);
             this.gridViewAbsence.MultiSelect = false;
             this.gridViewAbsence.Name = "gridViewAbsence";
             this.gridViewAbsence.ReadOnly = true;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridViewAbsence.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle129.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle129.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle129.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle129.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle129.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle129.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle129.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridViewAbsence.RowHeadersDefaultCellStyle = dataGridViewCellStyle129;
             this.gridViewAbsence.RowHeadersVisible = false;
             this.gridViewAbsence.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.gridViewAbsence.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -1664,14 +1672,58 @@ namespace Production_planning
             // 
             // tabPage6
             // 
-            this.tabPage6.Controls.Add(this.tableLayoutPanel8);
+            this.tabPage6.Controls.Add(this.tableLayoutPanel22);
             this.tabPage6.ImageKey = "free-icon-indent-3917045.png";
             this.tabPage6.Location = new System.Drawing.Point(4, 39);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Size = new System.Drawing.Size(1240, 597);
             this.tabPage6.TabIndex = 8;
-            this.tabPage6.Text = "График смен";
+            this.tabPage6.Text = "Данные";
             this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel22
+            // 
+            this.tableLayoutPanel22.ColumnCount = 1;
+            this.tableLayoutPanel22.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel22.Controls.Add(this.materialTabControl2, 0, 1);
+            this.tableLayoutPanel22.Controls.Add(this.materialTabSelector1, 0, 0);
+            this.tableLayoutPanel22.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel22.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel22.Name = "tableLayoutPanel22";
+            this.tableLayoutPanel22.RowCount = 2;
+            this.tableLayoutPanel22.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tableLayoutPanel22.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel22.Size = new System.Drawing.Size(1240, 597);
+            this.tableLayoutPanel22.TabIndex = 2;
+            // 
+            // materialTabControl2
+            // 
+            this.materialTabControl2.Controls.Add(this.tabPageShiftSchedule);
+            this.materialTabControl2.Controls.Add(this.tabPageAbsenceType);
+            this.materialTabControl2.Controls.Add(this.tabPagePositions);
+            this.materialTabControl2.Depth = 0;
+            this.materialTabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialTabControl2.Location = new System.Drawing.Point(3, 48);
+            this.materialTabControl2.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialTabControl2.Multiline = true;
+            this.materialTabControl2.Name = "materialTabControl2";
+            this.materialTabControl2.SelectedIndex = 0;
+            this.materialTabControl2.ShowToolTips = true;
+            this.materialTabControl2.Size = new System.Drawing.Size(1234, 546);
+            this.materialTabControl2.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            this.materialTabControl2.TabIndex = 1;
+            this.materialTabControl2.SelectedIndexChanged += new System.EventHandler(this.materialTabControl2_SelectedIndexChanged);
+            // 
+            // tabPageShiftSchedule
+            // 
+            this.tabPageShiftSchedule.Controls.Add(this.tableLayoutPanel8);
+            this.tabPageShiftSchedule.Location = new System.Drawing.Point(4, 22);
+            this.tabPageShiftSchedule.Name = "tabPageShiftSchedule";
+            this.tabPageShiftSchedule.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageShiftSchedule.Size = new System.Drawing.Size(1226, 520);
+            this.tabPageShiftSchedule.TabIndex = 0;
+            this.tabPageShiftSchedule.Text = "График смен";
+            this.tabPageShiftSchedule.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel8
             // 
@@ -1683,12 +1735,13 @@ namespace Production_planning
             this.tableLayoutPanel8.Controls.Add(this.tableLayoutPanel11, 0, 1);
             this.tableLayoutPanel8.Controls.Add(this.tableLayoutPanel13, 2, 0);
             this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel8.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 2;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(1240, 597);
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(1220, 514);
             this.tableLayoutPanel8.TabIndex = 0;
             // 
             // tableLayoutPanel9
@@ -1706,7 +1759,7 @@ namespace Production_planning
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(604, 292);
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(594, 251);
             this.tableLayoutPanel9.TabIndex = 0;
             // 
             // tableLayoutPanel10
@@ -1717,7 +1770,7 @@ namespace Production_planning
             this.tableLayoutPanel10.Controls.Add(this.buttonShiftAdd, 0, 0);
             this.tableLayoutPanel10.Controls.Add(this.buttonShiftDelete, 0, 2);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel10.Location = new System.Drawing.Point(557, 23);
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(547, 23);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
             this.tableLayoutPanel10.RowCount = 5;
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -1725,7 +1778,7 @@ namespace Production_planning
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(44, 246);
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(44, 205);
             this.tableLayoutPanel10.TabIndex = 0;
             // 
             // buttonShiftEdit
@@ -1817,7 +1870,7 @@ namespace Production_planning
             this.listViewShiftsDef.MultiSelect = false;
             this.listViewShiftsDef.Name = "listViewShiftsDef";
             this.listViewShiftsDef.OwnerDraw = true;
-            this.listViewShiftsDef.Size = new System.Drawing.Size(548, 246);
+            this.listViewShiftsDef.Size = new System.Drawing.Size(538, 205);
             this.listViewShiftsDef.TabIndex = 1;
             this.listViewShiftsDef.UseCompatibleStateImageBehavior = false;
             this.listViewShiftsDef.View = System.Windows.Forms.View.Details;
@@ -1857,7 +1910,7 @@ namespace Production_planning
             this.materialLabel3.Location = new System.Drawing.Point(3, 0);
             this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel3.Name = "materialLabel3";
-            this.materialLabel3.Size = new System.Drawing.Size(548, 20);
+            this.materialLabel3.Size = new System.Drawing.Size(538, 20);
             this.materialLabel3.TabIndex = 2;
             this.materialLabel3.Text = "Список смен";
             // 
@@ -1869,13 +1922,13 @@ namespace Production_planning
             this.tableLayoutPanel11.Controls.Add(this.tableLayoutPanel12, 1, 1);
             this.tableLayoutPanel11.Controls.Add(this.listViewShiftCycle, 0, 1);
             this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel11.Location = new System.Drawing.Point(3, 301);
+            this.tableLayoutPanel11.Location = new System.Drawing.Point(3, 260);
             this.tableLayoutPanel11.Name = "tableLayoutPanel11";
             this.tableLayoutPanel11.RowCount = 3;
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel11.Size = new System.Drawing.Size(604, 293);
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(594, 251);
             this.tableLayoutPanel11.TabIndex = 1;
             // 
             // tableLayoutPanel12
@@ -1886,7 +1939,7 @@ namespace Production_planning
             this.tableLayoutPanel12.Controls.Add(this.buttonTemplateEdit, 0, 1);
             this.tableLayoutPanel12.Controls.Add(this.buttonTemplateAdd, 0, 0);
             this.tableLayoutPanel12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel12.Location = new System.Drawing.Point(557, 23);
+            this.tableLayoutPanel12.Location = new System.Drawing.Point(547, 23);
             this.tableLayoutPanel12.Name = "tableLayoutPanel12";
             this.tableLayoutPanel12.RowCount = 5;
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -1894,7 +1947,7 @@ namespace Production_planning
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel12.Size = new System.Drawing.Size(44, 247);
+            this.tableLayoutPanel12.Size = new System.Drawing.Size(44, 205);
             this.tableLayoutPanel12.TabIndex = 0;
             // 
             // buttonTemplateDelete
@@ -1985,7 +2038,7 @@ namespace Production_planning
             this.listViewShiftCycle.MultiSelect = false;
             this.listViewShiftCycle.Name = "listViewShiftCycle";
             this.listViewShiftCycle.OwnerDraw = true;
-            this.listViewShiftCycle.Size = new System.Drawing.Size(548, 247);
+            this.listViewShiftCycle.Size = new System.Drawing.Size(538, 205);
             this.listViewShiftCycle.TabIndex = 1;
             this.listViewShiftCycle.UseCompatibleStateImageBehavior = false;
             this.listViewShiftCycle.View = System.Windows.Forms.View.Details;
@@ -2020,13 +2073,13 @@ namespace Production_planning
             this.tableLayoutPanel13.Controls.Add(this.tableLayoutPanel14, 1, 1);
             this.tableLayoutPanel13.Controls.Add(this.listViewShiftTemplate, 0, 1);
             this.tableLayoutPanel13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel13.Location = new System.Drawing.Point(633, 3);
+            this.tableLayoutPanel13.Location = new System.Drawing.Point(623, 3);
             this.tableLayoutPanel13.Name = "tableLayoutPanel13";
             this.tableLayoutPanel13.RowCount = 3;
             this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel13.Size = new System.Drawing.Size(604, 292);
+            this.tableLayoutPanel13.Size = new System.Drawing.Size(594, 251);
             this.tableLayoutPanel13.TabIndex = 2;
             // 
             // tableLayoutPanel14
@@ -2037,7 +2090,7 @@ namespace Production_planning
             this.tableLayoutPanel14.Controls.Add(this.buttonBrigadeEdit, 0, 1);
             this.tableLayoutPanel14.Controls.Add(this.buttonBrigadeAdd, 0, 0);
             this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel14.Location = new System.Drawing.Point(557, 23);
+            this.tableLayoutPanel14.Location = new System.Drawing.Point(547, 23);
             this.tableLayoutPanel14.Name = "tableLayoutPanel14";
             this.tableLayoutPanel14.RowCount = 5;
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -2045,7 +2098,7 @@ namespace Production_planning
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel14.Size = new System.Drawing.Size(44, 246);
+            this.tableLayoutPanel14.Size = new System.Drawing.Size(44, 205);
             this.tableLayoutPanel14.TabIndex = 0;
             // 
             // buttonBrigadeDelete
@@ -2136,7 +2189,7 @@ namespace Production_planning
             this.listViewShiftTemplate.MultiSelect = false;
             this.listViewShiftTemplate.Name = "listViewShiftTemplate";
             this.listViewShiftTemplate.OwnerDraw = true;
-            this.listViewShiftTemplate.Size = new System.Drawing.Size(548, 246);
+            this.listViewShiftTemplate.Size = new System.Drawing.Size(538, 205);
             this.listViewShiftTemplate.TabIndex = 1;
             this.listViewShiftTemplate.UseCompatibleStateImageBehavior = false;
             this.listViewShiftTemplate.View = System.Windows.Forms.View.Details;
@@ -2163,16 +2216,16 @@ namespace Production_planning
             this.columnHeader34.Text = "Начальная дата";
             this.columnHeader34.Width = 120;
             // 
-            // tabPage7
+            // tabPageAbsenceType
             // 
-            this.tabPage7.Controls.Add(this.tableLayoutPanel17);
-            this.tabPage7.ImageKey = "++++.png";
-            this.tabPage7.Location = new System.Drawing.Point(4, 39);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(1240, 597);
-            this.tabPage7.TabIndex = 9;
-            this.tabPage7.Text = "Параметры";
-            this.tabPage7.UseVisualStyleBackColor = true;
+            this.tabPageAbsenceType.Controls.Add(this.tableLayoutPanel17);
+            this.tabPageAbsenceType.Location = new System.Drawing.Point(4, 22);
+            this.tabPageAbsenceType.Name = "tabPageAbsenceType";
+            this.tabPageAbsenceType.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageAbsenceType.Size = new System.Drawing.Size(1226, 520);
+            this.tabPageAbsenceType.TabIndex = 1;
+            this.tabPageAbsenceType.Text = "Причины отсутствия";
+            this.tabPageAbsenceType.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel17
             // 
@@ -2183,33 +2236,32 @@ namespace Production_planning
             this.tableLayoutPanel17.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tableLayoutPanel17.Controls.Add(this.tableLayoutPanel18, 1, 3);
             this.tableLayoutPanel17.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel17.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel17.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel17.Name = "tableLayoutPanel17";
             this.tableLayoutPanel17.RowCount = 4;
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel17.Size = new System.Drawing.Size(1240, 597);
-            this.tableLayoutPanel17.TabIndex = 3;
+            this.tableLayoutPanel17.Size = new System.Drawing.Size(1220, 514);
+            this.tableLayoutPanel17.TabIndex = 4;
             // 
             // tableLayoutPanel18
             // 
             this.tableLayoutPanel18.ColumnCount = 1;
             this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel18.Controls.Add(this.tableLayoutPanel21, 0, 1);
-            this.tableLayoutPanel18.Controls.Add(this.dataGridViewAbsences, 0, 2);
-            this.tableLayoutPanel18.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel18.Controls.Add(this.tableLayoutPanel21, 0, 0);
+            this.tableLayoutPanel18.Controls.Add(this.dataGridViewAbsences, 0, 1);
             this.tableLayoutPanel18.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel18.Location = new System.Drawing.Point(8, 3);
             this.tableLayoutPanel18.Name = "tableLayoutPanel18";
-            this.tableLayoutPanel18.RowCount = 5;
-            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel18.RowCount = 4;
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel18.Size = new System.Drawing.Size(1224, 591);
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel18.Size = new System.Drawing.Size(1204, 508);
             this.tableLayoutPanel18.TabIndex = 0;
             // 
             // tableLayoutPanel21
@@ -2227,11 +2279,11 @@ namespace Production_planning
             this.tableLayoutPanel21.Controls.Add(this.materialButtonAbsencesTypeDelete, 3, 0);
             this.tableLayoutPanel21.Controls.Add(this.materialSwitchAbsencesTypeShowAll, 4, 0);
             this.tableLayoutPanel21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel21.Location = new System.Drawing.Point(3, 43);
+            this.tableLayoutPanel21.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel21.Name = "tableLayoutPanel21";
             this.tableLayoutPanel21.RowCount = 1;
             this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel21.Size = new System.Drawing.Size(1218, 49);
+            this.tableLayoutPanel21.Size = new System.Drawing.Size(1198, 49);
             this.tableLayoutPanel21.TabIndex = 0;
             // 
             // materialButtonAbsencesTypeAdd
@@ -2340,41 +2392,41 @@ namespace Production_planning
             this.dataGridViewAbsences.AllowUserToAddRows = false;
             this.dataGridViewAbsences.AllowUserToDeleteRows = false;
             this.dataGridViewAbsences.BackgroundColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewAbsences.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle130.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle130.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle130.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle130.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle130.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle130.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle130.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewAbsences.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle130;
             this.dataGridViewAbsences.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewAbsences.ColumnHeadersVisible = false;
             this.dataGridViewAbsences.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewAbsences.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle131.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle131.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle131.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle131.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle131.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle131.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle131.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewAbsences.DefaultCellStyle = dataGridViewCellStyle131;
             this.dataGridViewAbsences.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewAbsences.Location = new System.Drawing.Point(3, 98);
+            this.dataGridViewAbsences.Location = new System.Drawing.Point(3, 58);
             this.dataGridViewAbsences.MultiSelect = false;
             this.dataGridViewAbsences.Name = "dataGridViewAbsences";
             this.dataGridViewAbsences.ReadOnly = true;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewAbsences.RowHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle132.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle132.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle132.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle132.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle132.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle132.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle132.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewAbsences.RowHeadersDefaultCellStyle = dataGridViewCellStyle132;
             this.dataGridViewAbsences.RowHeadersVisible = false;
             this.dataGridViewAbsences.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewAbsences.Size = new System.Drawing.Size(1218, 410);
+            this.dataGridViewAbsences.Size = new System.Drawing.Size(1198, 367);
             this.dataGridViewAbsences.TabIndex = 2;
             this.dataGridViewAbsences.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewAbsences_CellDoubleClick);
             this.dataGridViewAbsences.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewAbsences_CellMouseDown);
@@ -2382,16 +2434,39 @@ namespace Production_planning
             this.dataGridViewAbsences.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewAbsences_RowPostPaint);
             this.dataGridViewAbsences.SelectionChanged += new System.EventHandler(this.dataGridViewAbsences_SelectionChanged);
             // 
-            // label1
+            // tabPagePositions
             // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(1218, 40);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Причины отсутствия";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.tabPagePositions.Location = new System.Drawing.Point(4, 22);
+            this.tabPagePositions.Name = "tabPagePositions";
+            this.tabPagePositions.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPagePositions.Size = new System.Drawing.Size(1226, 520);
+            this.tabPagePositions.TabIndex = 2;
+            this.tabPagePositions.Text = "Должности";
+            this.tabPagePositions.UseVisualStyleBackColor = true;
+            // 
+            // materialTabSelector1
+            // 
+            this.materialTabSelector1.BaseTabControl = this.materialTabControl2;
+            this.materialTabSelector1.CharacterCasing = MaterialSkin.Controls.MaterialTabSelector.CustomCharacterCasing.Normal;
+            this.materialTabSelector1.Depth = 0;
+            this.materialTabSelector1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialTabSelector1.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialTabSelector1.Location = new System.Drawing.Point(3, 3);
+            this.materialTabSelector1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialTabSelector1.Name = "materialTabSelector1";
+            this.materialTabSelector1.Size = new System.Drawing.Size(1234, 39);
+            this.materialTabSelector1.TabIndex = 2;
+            this.materialTabSelector1.Text = "materialTabSelector1";
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.ImageKey = "++++.png";
+            this.tabPage7.Location = new System.Drawing.Point(4, 39);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Size = new System.Drawing.Size(1240, 597);
+            this.tabPage7.TabIndex = 9;
+            this.tabPage7.Text = "Параметры";
+            this.tabPage7.UseVisualStyleBackColor = true;
             // 
             // imageList
             // 
@@ -2598,6 +2673,9 @@ namespace Production_planning
             this.tableLayoutPanel16.ResumeLayout(false);
             this.tableLayoutPanel16.PerformLayout();
             this.tabPage6.ResumeLayout(false);
+            this.tableLayoutPanel22.ResumeLayout(false);
+            this.materialTabControl2.ResumeLayout(false);
+            this.tabPageShiftSchedule.ResumeLayout(false);
             this.tableLayoutPanel8.ResumeLayout(false);
             this.tableLayoutPanel9.ResumeLayout(false);
             this.tableLayoutPanel9.PerformLayout();
@@ -2609,10 +2687,9 @@ namespace Production_planning
             this.tableLayoutPanel13.ResumeLayout(false);
             this.tableLayoutPanel14.ResumeLayout(false);
             this.tableLayoutPanel14.PerformLayout();
-            this.tabPage7.ResumeLayout(false);
+            this.tabPageAbsenceType.ResumeLayout(false);
             this.tableLayoutPanel17.ResumeLayout(false);
             this.tableLayoutPanel18.ResumeLayout(false);
-            this.tableLayoutPanel18.PerformLayout();
             this.tableLayoutPanel21.ResumeLayout(false);
             this.tableLayoutPanel21.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAbsences)).EndInit();
@@ -2710,7 +2787,6 @@ namespace Production_planning
         private ColumnHeader columnHeader15;
         private ColumnHeader columnHeader16;
         private ColumnHeader columnHeader6;
-        private TableLayoutPanel tableLayoutPanel17;
         private TableLayoutPanel tableLayoutPanel19;
         private MaterialSkin.Controls.MaterialListBox listBoxUsers;
         private TableLayoutPanel tableLayoutPanel20;
@@ -2739,15 +2815,21 @@ namespace Production_planning
         private DoubleBufferedDataGridView gridViewAbsence;
         private MaterialSkin.Controls.MaterialButton buttonAbsenceDelete;
         private MaterialSkin.Controls.MaterialButton buttonUserAbsenceAdd;
+        private MaterialSkin.Controls.MaterialTabControl materialTabControl2;
+        private TabPage tabPageShiftSchedule;
+        private TabPage tabPageAbsenceType;
+        private TabPage tabPagePositions;
+        private TableLayoutPanel tableLayoutPanel17;
         private TableLayoutPanel tableLayoutPanel18;
         private TableLayoutPanel tableLayoutPanel21;
         private MaterialSkin.Controls.MaterialButton materialButtonAbsencesTypeAdd;
         private MaterialSkin.Controls.MaterialButton materialButtonAbsencesTypeEdit;
-        private DoubleBufferedDataGridView dataGridViewAbsences;
         private MaterialSkin.Controls.MaterialButton materialButtonAbsencesTypeDeactivate;
         private MaterialSkin.Controls.MaterialButton materialButtonAbsencesTypeDelete;
         private MaterialSkin.Controls.MaterialSwitch materialSwitchAbsencesTypeShowAll;
-        private Label label1;
+        private DoubleBufferedDataGridView dataGridViewAbsences;
+        private TableLayoutPanel tableLayoutPanel22;
+        private MaterialSkin.Controls.MaterialTabSelector materialTabSelector1;
     }
 }
 
