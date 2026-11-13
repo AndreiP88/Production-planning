@@ -1954,7 +1954,7 @@ namespace Production_planning
 
             if (workPlanAreaComboBox.SelectedItem is WorkAreaInfo workArea)
             {
-                List<EquipmentShortInfo> equipments = workArea.Equipments.Where(equipment => equipment.Code != "").ToList();
+                List<EquipmentShortInfo> equipments = workArea.Equipments.Where(equipment => equipment.Code != "" && (equipment.DecommissionedAt == null || equipment.DecommissionedAt > DateTime.Now)).ToList();
 
                 workPlanEquipComboBox.DataSource = equipments;
                 workPlanEquipComboBox.DisplayMember = "Name";
