@@ -93,7 +93,7 @@ namespace data
     /// </summary>
     public class EquipmentShortInfo : EquipmentModel
     {
-        public bool IsActive => !DecommissionedAt.HasValue;
+        public bool IsActive => (DecommissionedAt > DateTime.Now || !DecommissionedAt.HasValue);
         public string TemplateName { get; set; }
         public DateTime? StaffingModeValidFrom { get; set; }
         public DateTime? TemplateValidFrom { get; set; }
