@@ -45,18 +45,21 @@ namespace Production_planning
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle122 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle123 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle124 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle125 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle126 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle127 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle128 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle129 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle130 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle131 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle132 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -188,6 +191,15 @@ namespace Production_planning
             this.materialCheckbox7 = new MaterialSkin.Controls.MaterialCheckbox();
             this.materialCheckbox8 = new MaterialSkin.Controls.MaterialCheckbox();
             this.materialCheckbox9 = new MaterialSkin.Controls.MaterialCheckbox();
+            this.tableLayoutPanel27 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel28 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel29 = new System.Windows.Forms.TableLayoutPanel();
+            this.materialButtonPositionAdd = new MaterialSkin.Controls.MaterialButton();
+            this.materialButtonPositionEdit = new MaterialSkin.Controls.MaterialButton();
+            this.materialButtonPositionDeactivate = new MaterialSkin.Controls.MaterialButton();
+            this.materialButtonPositionDelete = new MaterialSkin.Controls.MaterialButton();
+            this.materialSwitchPositionShowAll = new MaterialSkin.Controls.MaterialSwitch();
+            this.dataGridViewPositions = new Production_planning.Form1.DoubleBufferedDataGridView();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -226,6 +238,11 @@ namespace Production_planning
             this.tableLayoutPanel18.SuspendLayout();
             this.tableLayoutPanel21.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAbsences)).BeginInit();
+            this.tabPagePositions.SuspendLayout();
+            this.tableLayoutPanel27.SuspendLayout();
+            this.tableLayoutPanel28.SuspendLayout();
+            this.tableLayoutPanel29.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPositions)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -282,30 +299,30 @@ namespace Production_planning
             // 
             this.dataGridPlanning.AllowUserToAddRows = false;
             this.dataGridPlanning.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle122.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dataGridPlanning.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle122;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dataGridPlanning.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridPlanning.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             this.dataGridPlanning.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridPlanning.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle123.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle123.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle123.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle123.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle123.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle123.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle123.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridPlanning.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle123;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridPlanning.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridPlanning.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridPlanning.ColumnHeadersVisible = false;
             this.dataGridPlanning.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle124.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle124.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle124.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle124.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle124.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle124.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle124.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridPlanning.DefaultCellStyle = dataGridViewCellStyle124;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridPlanning.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridPlanning.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridPlanning.Location = new System.Drawing.Point(3, 63);
             this.dataGridPlanning.MultiSelect = false;
@@ -571,14 +588,14 @@ namespace Production_planning
             this.dataGridViewPlan.AllowUserToDeleteRows = false;
             this.dataGridViewPlan.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewPlan.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle125.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle125.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle125.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle125.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle125.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle125.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle125.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewPlan.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle125;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewPlan.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewPlan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPlan.Cursor = System.Windows.Forms.Cursors.Hand;
             this.dataGridViewPlan.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -787,42 +804,42 @@ namespace Production_planning
             this.gridViewAbsence.AllowUserToDeleteRows = false;
             this.gridViewAbsence.AllowUserToResizeColumns = false;
             this.gridViewAbsence.AllowUserToResizeRows = false;
-            dataGridViewCellStyle126.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.gridViewAbsence.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle126;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.gridViewAbsence.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             this.gridViewAbsence.BackgroundColor = System.Drawing.SystemColors.Control;
             this.gridViewAbsence.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle127.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle127.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle127.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle127.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle127.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle127.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle127.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridViewAbsence.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle127;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridViewAbsence.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.gridViewAbsence.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridViewAbsence.ColumnHeadersVisible = false;
             this.gridViewAbsence.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle128.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle128.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle128.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle128.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle128.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle128.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle128.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridViewAbsence.DefaultCellStyle = dataGridViewCellStyle128;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridViewAbsence.DefaultCellStyle = dataGridViewCellStyle7;
             this.gridViewAbsence.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridViewAbsence.Location = new System.Drawing.Point(3, 8);
             this.gridViewAbsence.MultiSelect = false;
             this.gridViewAbsence.Name = "gridViewAbsence";
             this.gridViewAbsence.ReadOnly = true;
-            dataGridViewCellStyle129.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle129.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle129.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle129.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle129.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle129.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle129.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridViewAbsence.RowHeadersDefaultCellStyle = dataGridViewCellStyle129;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridViewAbsence.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
             this.gridViewAbsence.RowHeadersVisible = false;
             this.gridViewAbsence.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.gridViewAbsence.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -2255,11 +2272,10 @@ namespace Production_planning
             this.tableLayoutPanel18.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel18.Location = new System.Drawing.Point(8, 3);
             this.tableLayoutPanel18.Name = "tableLayoutPanel18";
-            this.tableLayoutPanel18.RowCount = 4;
+            this.tableLayoutPanel18.RowCount = 2;
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel18.Size = new System.Drawing.Size(1204, 508);
             this.tableLayoutPanel18.TabIndex = 0;
@@ -2392,41 +2408,41 @@ namespace Production_planning
             this.dataGridViewAbsences.AllowUserToAddRows = false;
             this.dataGridViewAbsences.AllowUserToDeleteRows = false;
             this.dataGridViewAbsences.BackgroundColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle130.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle130.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle130.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle130.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle130.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle130.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle130.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewAbsences.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle130;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewAbsences.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dataGridViewAbsences.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewAbsences.ColumnHeadersVisible = false;
             this.dataGridViewAbsences.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle131.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle131.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle131.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle131.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle131.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle131.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle131.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewAbsences.DefaultCellStyle = dataGridViewCellStyle131;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewAbsences.DefaultCellStyle = dataGridViewCellStyle10;
             this.dataGridViewAbsences.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewAbsences.Location = new System.Drawing.Point(3, 58);
             this.dataGridViewAbsences.MultiSelect = false;
             this.dataGridViewAbsences.Name = "dataGridViewAbsences";
             this.dataGridViewAbsences.ReadOnly = true;
-            dataGridViewCellStyle132.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle132.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle132.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle132.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle132.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle132.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle132.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewAbsences.RowHeadersDefaultCellStyle = dataGridViewCellStyle132;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewAbsences.RowHeadersDefaultCellStyle = dataGridViewCellStyle11;
             this.dataGridViewAbsences.RowHeadersVisible = false;
             this.dataGridViewAbsences.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewAbsences.Size = new System.Drawing.Size(1198, 367);
+            this.dataGridViewAbsences.Size = new System.Drawing.Size(1198, 447);
             this.dataGridViewAbsences.TabIndex = 2;
             this.dataGridViewAbsences.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewAbsences_CellDoubleClick);
             this.dataGridViewAbsences.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewAbsences_CellMouseDown);
@@ -2436,6 +2452,7 @@ namespace Production_planning
             // 
             // tabPagePositions
             // 
+            this.tabPagePositions.Controls.Add(this.tableLayoutPanel27);
             this.tabPagePositions.Location = new System.Drawing.Point(4, 22);
             this.tabPagePositions.Name = "tabPagePositions";
             this.tabPagePositions.Padding = new System.Windows.Forms.Padding(3);
@@ -2626,6 +2643,202 @@ namespace Production_planning
             this.materialCheckbox9.ThreeState = true;
             this.materialCheckbox9.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanel27
+            // 
+            this.tableLayoutPanel27.AutoScroll = true;
+            this.tableLayoutPanel27.ColumnCount = 3;
+            this.tableLayoutPanel27.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
+            this.tableLayoutPanel27.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel27.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
+            this.tableLayoutPanel27.Controls.Add(this.tableLayoutPanel28, 1, 3);
+            this.tableLayoutPanel27.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel27.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel27.Name = "tableLayoutPanel27";
+            this.tableLayoutPanel27.RowCount = 4;
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel27.Size = new System.Drawing.Size(1220, 514);
+            this.tableLayoutPanel27.TabIndex = 5;
+            // 
+            // tableLayoutPanel28
+            // 
+            this.tableLayoutPanel28.ColumnCount = 1;
+            this.tableLayoutPanel28.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel28.Controls.Add(this.tableLayoutPanel29, 0, 0);
+            this.tableLayoutPanel28.Controls.Add(this.dataGridViewPositions, 0, 1);
+            this.tableLayoutPanel28.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel28.Location = new System.Drawing.Point(8, 3);
+            this.tableLayoutPanel28.Name = "tableLayoutPanel28";
+            this.tableLayoutPanel28.RowCount = 2;
+            this.tableLayoutPanel28.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel28.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel28.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel28.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel28.Size = new System.Drawing.Size(1204, 508);
+            this.tableLayoutPanel28.TabIndex = 0;
+            // 
+            // tableLayoutPanel29
+            // 
+            this.tableLayoutPanel29.ColumnCount = 6;
+            this.tableLayoutPanel29.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tableLayoutPanel29.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tableLayoutPanel29.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tableLayoutPanel29.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel29.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutPanel29.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel29.Controls.Add(this.materialButtonPositionAdd, 0, 0);
+            this.tableLayoutPanel29.Controls.Add(this.materialButtonPositionEdit, 1, 0);
+            this.tableLayoutPanel29.Controls.Add(this.materialButtonPositionDeactivate, 2, 0);
+            this.tableLayoutPanel29.Controls.Add(this.materialButtonPositionDelete, 3, 0);
+            this.tableLayoutPanel29.Controls.Add(this.materialSwitchPositionShowAll, 4, 0);
+            this.tableLayoutPanel29.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel29.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel29.Name = "tableLayoutPanel29";
+            this.tableLayoutPanel29.RowCount = 1;
+            this.tableLayoutPanel29.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel29.Size = new System.Drawing.Size(1198, 49);
+            this.tableLayoutPanel29.TabIndex = 0;
+            // 
+            // materialButtonPositionAdd
+            // 
+            this.materialButtonPositionAdd.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButtonPositionAdd.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButtonPositionAdd.Depth = 0;
+            this.materialButtonPositionAdd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialButtonPositionAdd.HighEmphasis = true;
+            this.materialButtonPositionAdd.Icon = null;
+            this.materialButtonPositionAdd.Location = new System.Drawing.Point(4, 6);
+            this.materialButtonPositionAdd.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButtonPositionAdd.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButtonPositionAdd.Name = "materialButtonPositionAdd";
+            this.materialButtonPositionAdd.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButtonPositionAdd.Size = new System.Drawing.Size(152, 37);
+            this.materialButtonPositionAdd.TabIndex = 0;
+            this.materialButtonPositionAdd.Text = "Добавить";
+            this.materialButtonPositionAdd.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButtonPositionAdd.UseAccentColor = false;
+            this.materialButtonPositionAdd.UseVisualStyleBackColor = true;
+            // 
+            // materialButtonPositionEdit
+            // 
+            this.materialButtonPositionEdit.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButtonPositionEdit.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButtonPositionEdit.Depth = 0;
+            this.materialButtonPositionEdit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialButtonPositionEdit.HighEmphasis = true;
+            this.materialButtonPositionEdit.Icon = null;
+            this.materialButtonPositionEdit.Location = new System.Drawing.Point(164, 6);
+            this.materialButtonPositionEdit.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButtonPositionEdit.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButtonPositionEdit.Name = "materialButtonPositionEdit";
+            this.materialButtonPositionEdit.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButtonPositionEdit.Size = new System.Drawing.Size(152, 37);
+            this.materialButtonPositionEdit.TabIndex = 1;
+            this.materialButtonPositionEdit.Text = "Редактировать";
+            this.materialButtonPositionEdit.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButtonPositionEdit.UseAccentColor = false;
+            this.materialButtonPositionEdit.UseVisualStyleBackColor = true;
+            // 
+            // materialButtonPositionDeactivate
+            // 
+            this.materialButtonPositionDeactivate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButtonPositionDeactivate.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButtonPositionDeactivate.Depth = 0;
+            this.materialButtonPositionDeactivate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialButtonPositionDeactivate.HighEmphasis = true;
+            this.materialButtonPositionDeactivate.Icon = null;
+            this.materialButtonPositionDeactivate.Location = new System.Drawing.Point(324, 6);
+            this.materialButtonPositionDeactivate.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButtonPositionDeactivate.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButtonPositionDeactivate.Name = "materialButtonPositionDeactivate";
+            this.materialButtonPositionDeactivate.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButtonPositionDeactivate.Size = new System.Drawing.Size(152, 37);
+            this.materialButtonPositionDeactivate.TabIndex = 2;
+            this.materialButtonPositionDeactivate.Text = "Деактивировать";
+            this.materialButtonPositionDeactivate.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButtonPositionDeactivate.UseAccentColor = false;
+            this.materialButtonPositionDeactivate.UseVisualStyleBackColor = true;
+            // 
+            // materialButtonPositionDelete
+            // 
+            this.materialButtonPositionDelete.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButtonPositionDelete.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButtonPositionDelete.Depth = 0;
+            this.materialButtonPositionDelete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialButtonPositionDelete.HighEmphasis = true;
+            this.materialButtonPositionDelete.Icon = null;
+            this.materialButtonPositionDelete.Location = new System.Drawing.Point(484, 6);
+            this.materialButtonPositionDelete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButtonPositionDelete.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButtonPositionDelete.Name = "materialButtonPositionDelete";
+            this.materialButtonPositionDelete.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButtonPositionDelete.Size = new System.Drawing.Size(42, 37);
+            this.materialButtonPositionDelete.TabIndex = 3;
+            this.materialButtonPositionDelete.Text = "🗑";
+            this.materialButtonPositionDelete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButtonPositionDelete.UseAccentColor = true;
+            this.materialButtonPositionDelete.UseVisualStyleBackColor = true;
+            // 
+            // materialSwitchPositionShowAll
+            // 
+            this.materialSwitchPositionShowAll.AutoSize = true;
+            this.materialSwitchPositionShowAll.Depth = 0;
+            this.materialSwitchPositionShowAll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.materialSwitchPositionShowAll.Location = new System.Drawing.Point(530, 0);
+            this.materialSwitchPositionShowAll.Margin = new System.Windows.Forms.Padding(0);
+            this.materialSwitchPositionShowAll.MouseLocation = new System.Drawing.Point(-1, -1);
+            this.materialSwitchPositionShowAll.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialSwitchPositionShowAll.Name = "materialSwitchPositionShowAll";
+            this.materialSwitchPositionShowAll.Ripple = true;
+            this.materialSwitchPositionShowAll.Size = new System.Drawing.Size(200, 49);
+            this.materialSwitchPositionShowAll.TabIndex = 4;
+            this.materialSwitchPositionShowAll.Text = "  отображать все";
+            this.materialSwitchPositionShowAll.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewPositions
+            // 
+            this.dataGridViewPositions.AllowUserToAddRows = false;
+            this.dataGridViewPositions.AllowUserToDeleteRows = false;
+            this.dataGridViewPositions.BackgroundColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewPositions.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            this.dataGridViewPositions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewPositions.ColumnHeadersVisible = false;
+            this.dataGridViewPositions.Cursor = System.Windows.Forms.Cursors.Hand;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewPositions.DefaultCellStyle = dataGridViewCellStyle13;
+            this.dataGridViewPositions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewPositions.Location = new System.Drawing.Point(3, 58);
+            this.dataGridViewPositions.MultiSelect = false;
+            this.dataGridViewPositions.Name = "dataGridViewPositions";
+            this.dataGridViewPositions.ReadOnly = true;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewPositions.RowHeadersDefaultCellStyle = dataGridViewCellStyle14;
+            this.dataGridViewPositions.RowHeadersVisible = false;
+            this.dataGridViewPositions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewPositions.Size = new System.Drawing.Size(1198, 447);
+            this.dataGridViewPositions.TabIndex = 2;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2693,6 +2906,12 @@ namespace Production_planning
             this.tableLayoutPanel21.ResumeLayout(false);
             this.tableLayoutPanel21.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAbsences)).EndInit();
+            this.tabPagePositions.ResumeLayout(false);
+            this.tableLayoutPanel27.ResumeLayout(false);
+            this.tableLayoutPanel28.ResumeLayout(false);
+            this.tableLayoutPanel29.ResumeLayout(false);
+            this.tableLayoutPanel29.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPositions)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2830,6 +3049,15 @@ namespace Production_planning
         private DoubleBufferedDataGridView dataGridViewAbsences;
         private TableLayoutPanel tableLayoutPanel22;
         private MaterialSkin.Controls.MaterialTabSelector materialTabSelector1;
+        private TableLayoutPanel tableLayoutPanel27;
+        private TableLayoutPanel tableLayoutPanel28;
+        private TableLayoutPanel tableLayoutPanel29;
+        private MaterialSkin.Controls.MaterialButton materialButtonPositionAdd;
+        private MaterialSkin.Controls.MaterialButton materialButtonPositionEdit;
+        private MaterialSkin.Controls.MaterialButton materialButtonPositionDeactivate;
+        private MaterialSkin.Controls.MaterialButton materialButtonPositionDelete;
+        private MaterialSkin.Controls.MaterialSwitch materialSwitchPositionShowAll;
+        private DoubleBufferedDataGridView dataGridViewPositions;
     }
 }
 
